@@ -10,9 +10,6 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
-from pathlib import Path
-
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 import os
 from pathlib import Path
 from dotenv import load_dotenv
@@ -81,6 +78,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'ecotrack.wsgi.application'
 
+import dj_database_url
 
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
@@ -92,6 +90,10 @@ DATABASES = {
     }
 }
 
+# In production, use the DATABASE_URL environment variable if provided
+db_from_env = dj_database_url.config(conn_max_age=600, ssl_require=True)
+if db_from_env:
+    DATABASES['default'].update(db_from_env)
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
