@@ -4,7 +4,7 @@ import api from '../services/api';
 import { LogIn, User, Lock, ArrowRight, Wallet } from 'lucide-react';
 
 const Login = () => {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -16,14 +16,14 @@ const Login = () => {
     setError('');
     try {
       const res = await api.post('/auth/login/', {
-        username,
+        username: email,
         password
       });
       localStorage.setItem('access_token', res.data.access);
       localStorage.setItem('refresh_token', res.data.refresh);
       navigate('/dashboard');
     } catch (err) {
-      setError('Invalid username or password. Please try again.');
+      setError('Invalid email or password. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -67,15 +67,15 @@ const Login = () => {
 
         <form onSubmit={handleLogin}>
           <div className="auth-form-group">
-            <label className="auth-label">Username</label>
+            <label className="auth-label">Email Address</label>
             <div className="auth-input-wrapper">
               <User size={18} className="auth-input-icon" />
               <input 
-                type="text" 
+                type="email" 
                 className="auth-input" 
-                placeholder="e.g. johndoe" 
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                placeholder="name@example.com" 
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 required
               />
             </div>

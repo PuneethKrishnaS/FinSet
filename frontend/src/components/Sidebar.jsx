@@ -7,7 +7,8 @@ import {
   Target,
   Users,
   Settings as SettingsIcon,
-  LogOut
+  LogOut,
+  User
 } from 'lucide-react';
 
 const Sidebar = () => {
@@ -52,6 +53,10 @@ const Sidebar = () => {
       </nav>
 
       <div className="bottom-nav">
+        <Link to="/profile" className={`nav-item ${location.pathname === '/profile' ? 'active' : ''}`}>
+          <User size={18} />
+          Profile
+        </Link>
         <Link to="/settings" className={`nav-item ${location.pathname === '/settings' ? 'active' : ''}`}>
           <SettingsIcon size={18} />
           Settings

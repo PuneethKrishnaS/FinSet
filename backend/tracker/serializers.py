@@ -10,13 +10,16 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
 class UserSerializer(serializers.ModelSerializer):
     profile = UserProfileSerializer(read_only=True)
+    username = serializers.CharField(required=False)
 
     class Meta:
         model = User
-        fields = ('id', 'username', 'email', 'password', 'profile')
+        fields = ('id', 'username', 'email', 'password', 'first_name', 'last_name', 'profile')
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
+        if 'username' not in validated_data:
+            validated_data['username'] = validated_data.get('email')
         user = User.objects.create_user(**validated_data)
         return user
 

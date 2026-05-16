@@ -4,7 +4,8 @@ import api from '../services/api';
 import { UserPlus, User, Lock, Mail, ArrowRight, Wallet } from 'lucide-react';
 
 const Register = () => {
-  const [username, setUsername] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -17,20 +18,21 @@ const Register = () => {
     setError('');
     try {
       await api.post('/auth/register/', {
-        username,
+        first_name: firstName,
+        last_name: lastName,
         email,
         password
       });
       // Automatically login after register
       const res = await api.post('/auth/login/', {
-        username,
+        username: email,
         password
       });
       localStorage.setItem('access_token', res.data.access);
       localStorage.setItem('refresh_token', res.data.refresh);
       navigate('/dashboard');
     } catch (err) {
-      setError('Registration failed. This username may already be taken.');
+      setError('Registration failed. This email may already be in use or password is too simple.');
     } finally {
       setLoading(false);
     }
@@ -74,15 +76,30 @@ const Register = () => {
 
         <form onSubmit={handleRegister}>
           <div className="auth-form-group">
-            <label className="auth-label">Username</label>
+            <label className="auth-label">First Name</label>
             <div className="auth-input-wrapper">
               <User size={18} className="auth-input-icon" />
               <input 
                 type="text" 
                 className="auth-input" 
-                placeholder="Choose a username" 
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                placeholder="John" 
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                required
+              />
+            </div>
+          </div>
+
+          <div className="auth-form-group">
+            <label className="auth-label">Last Name</label>
+            <div className="auth-input-wrapper">
+              <User size={18} className="auth-input-icon" />
+              <input 
+                type="text" 
+                className="auth-input" 
+                placeholder="Doe" 
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
                 required
               />
             </div>

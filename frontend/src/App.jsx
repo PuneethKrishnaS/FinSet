@@ -11,6 +11,7 @@ import Budget from './components/Budget';
 import Debts from './components/Debts';
 import Sidebar from './components/Sidebar';
 import Settings from './components/Settings';
+import Profile from './components/Profile';
 
 const AppLayout = ({ children }) => {
   const location = useLocation();
@@ -54,6 +55,7 @@ function App() {
             <Route path="/history" element={<History />} />
             <Route path="/budgets" element={<Budget />} />
             <Route path="/debts" element={<Debts />} />
+            <Route path="/profile" element={<Profile />} />
             <Route path="/settings" element={<Settings />} />
           </Routes>
         </AppLayout>
