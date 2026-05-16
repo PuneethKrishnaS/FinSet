@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import axios from 'axios';
+import api from '../services/api';
 import { LogIn, User, Lock, ArrowRight, Wallet } from 'lucide-react';
 
 const Login = () => {
@@ -15,7 +15,7 @@ const Login = () => {
     setLoading(true);
     setError('');
     try {
-      const res = await axios.post('http://127.0.0.1:8001/api/auth/login/', {
+      const res = await api.post('/auth/login/', {
         username,
         password
       });

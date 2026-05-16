@@ -1,7 +1,11 @@
 import axios from 'axios';
 
+const API_BASE_URL = import.meta.env.VITE_API_URL || (import.meta.env.PROD 
+  ? 'https://fin-set-backend.vercel.app/api' 
+  : 'http://127.0.0.1:8001/api');
+
 const api = axios.create({
-  baseURL: 'http://127.0.0.1:8001/api',
+  baseURL: API_BASE_URL,
 });
 
 api.interceptors.request.use((config) => {
@@ -20,7 +24,7 @@ api.interceptors.response.use(
       originalRequest._retry = true;
       try {
         const refreshToken = localStorage.getItem('refresh_token');
-        const res = await axios.post('http://127.0.0.1:8001/api/auth/refresh/', { refresh: refreshToken });
+        const res = await axios.post(`${API_BASE_URL}/auth/refresh/`, { refresh: refreshToken });
         localStorage.setItem('access_token', res.data.access);
         api.defaults.headers.common['Authorization'] = `Bearer ${res.data.access}`;
         return api(originalRequest);

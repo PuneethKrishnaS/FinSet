@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import axios from 'axios';
+import api from '../services/api';
 import { UserPlus, User, Lock, Mail, ArrowRight, Wallet } from 'lucide-react';
 
 const Register = () => {
@@ -16,13 +16,13 @@ const Register = () => {
     setLoading(true);
     setError('');
     try {
-      await axios.post('http://127.0.0.1:8001/api/auth/register/', {
+      await api.post('/auth/register/', {
         username,
         email,
         password
       });
       // Automatically login after register
-      const res = await axios.post('http://127.0.0.1:8001/api/auth/login/', {
+      const res = await api.post('/auth/login/', {
         username,
         password
       });
