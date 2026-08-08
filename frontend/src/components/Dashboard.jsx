@@ -11,6 +11,7 @@ import {
   Briefcase, History, Calendar as CalendarIcon, X, ChevronLeft, ChevronRight
 } from 'lucide-react';
 import { useSettings } from '../context/SettingsContext';
+import useFinanceStore from '../store/useFinanceStore';
 
 const COLORS = ['#4f46e5', '#8b5cf6', '#ec4899', '#f59e0b', '#10b981', '#14b8a6', '#3b82f6', '#6366f1'];
 
@@ -146,84 +147,69 @@ const CalendarOverlay = ({ isOpen, onClose, transactions, formatCurrency }) => {
 
 
 const Dashboard = () => {
-  const [data, setData] = useState({
-    total_income: 0, total_expense: 0, balance: 0, expenses_by_category: []
-  });
-  const [cashFlowData, setCashFlowData] = useState([]);
-  const [recentActivity, setRecentActivity] = useState([]);
-  const [allTransactions, setAllTransactions] = useState([]);
-  const [budgets, setBudgets] = useState([]);
-  const [budgetSpends, setBudgetSpends] = useState({});
-  const [loading, setLoading] = useState(true);
-  
+  const { 
+    dashboardData, dashboardLoaded, fetchDashboard, 
+    incomes, incomesLoaded, fetchIncomes, 
+    expenses, expensesLoaded, fetchExpenses, 
+    budgets, budgetsLoaded, fetchBudgets 
+  } = useFinanceStore();
+
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
-  
   const { formatCurrency } = useSettings();
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchAllData = async () => {
-      try {
-        // Process recurring transactions before fetching data
-        try {
-          await api.post('/process-recurring/');
-        } catch (e) {
-          console.error("Failed to process recurring transactions", e);
-        }
+    fetchDashboard();
+    fetchIncomes();
+    fetchExpenses();
+    fetchBudgets();
+  }, [fetchDashboard, fetchIncomes, fetchExpenses, fetchBudgets]);
 
-        const [dashRes, incRes, expRes, budRes] = await Promise.all([
-          api.get('/dashboard/'),
-          api.get('/incomes/'),
-          api.get('/expenses/'),
-          api.get('/budgets/')
-        ]);
+  const loading = !dashboardLoaded || !incomesLoaded || !expensesLoaded || !budgetsLoaded || !dashboardData;
 
-        const formattedPieData = dashRes.data.expenses_by_category.map(item => ({
-          name: CATEGORY_LABELS[item.category] || item.category,
-          value: parseFloat(item.amount),
-          originalCategory: item.category
-        }));
+  const processedData = React.useMemo(() => {
+    if (loading) return null;
 
-        setData({ ...dashRes.data, expenses_by_category: formattedPieData });
+    const formattedPieData = dashboardData.expenses_by_category.map(item => ({
+      name: CATEGORY_LABELS[item.category] || item.category,
+      value: parseFloat(item.amount),
+      originalCategory: item.category
+    }));
 
-        const incomes = incRes.data.map(i => ({ ...i, type: 'income', title: i.source, amount: parseFloat(i.amount) }));
-        const expenses = expRes.data.map(e => ({ ...e, type: 'expense', title: e.description || e.category, amount: parseFloat(e.amount) }));
-        const combined = [...incomes, ...expenses].sort((a, b) => new Date(b.date || b.created_at) - new Date(a.date || a.created_at));
-        
-        setAllTransactions(combined);
-        setRecentActivity(combined.slice(0, 5));
-
-        const daysMap = {};
-        const currentMonthPrefix = new Date().toISOString().slice(0, 7); 
-        
-        incomes.forEach(i => { if(i.date.startsWith(currentMonthPrefix)) { daysMap[i.date] = { name: i.date.split('-')[2], income: 0, expense: 0 }; }});
-        expenses.forEach(e => { if(e.date.startsWith(currentMonthPrefix)) { daysMap[e.date] = { name: e.date.split('-')[2], income: 0, expense: 0 }; }});
-        
-        incomes.forEach(i => { if(daysMap[i.date]) daysMap[i.date].income += i.amount; });
-        expenses.forEach(e => { if(daysMap[e.date]) daysMap[e.date].expense += e.amount; });
-        
-        const chartData = Object.keys(daysMap).sort().map(date => daysMap[date]);
-        setCashFlowData(chartData);
-
-        setBudgets(budRes.data.slice(0, 3)); 
-        const spends = {};
-        expenses.forEach(e => {
-          if (e.date.startsWith(currentMonthPrefix)) {
-            spends[e.category] = (spends[e.category] || 0) + e.amount;
-          }
-        });
-        setBudgetSpends(spends);
-
-        setLoading(false);
-      } catch (err) {
-        if (err.response && err.response.status === 401) navigate('/login');
-        setLoading(false);
+    const mappedIncomes = incomes.map(i => ({ ...i, type: 'income', title: i.source, amount: parseFloat(i.amount) }));
+    const mappedExpenses = expenses.map(e => ({ ...e, type: 'expense', title: e.description || e.category, amount: parseFloat(e.amount) }));
+    const combined = [...mappedIncomes, ...mappedExpenses].sort((a, b) => new Date(b.date || b.created_at) - new Date(a.date || a.created_at));
+    
+    const daysMap = {};
+    const currentMonthPrefix = new Date().toISOString().slice(0, 7); 
+    
+    mappedIncomes.forEach(i => { if(i.date.startsWith(currentMonthPrefix)) { daysMap[i.date] = { name: i.date.split('-')[2], income: 0, expense: 0 }; }});
+    mappedExpenses.forEach(e => { if(e.date.startsWith(currentMonthPrefix)) { daysMap[e.date] = { name: e.date.split('-')[2], income: 0, expense: 0 }; }});
+    
+    mappedIncomes.forEach(i => { if(daysMap[i.date]) daysMap[i.date].income += i.amount; });
+    mappedExpenses.forEach(e => { if(daysMap[e.date]) daysMap[e.date].expense += e.amount; });
+    
+    const cashFlowData = Object.keys(daysMap).sort().map(date => daysMap[date]);
+    
+    const topBudgets = budgets.slice(0, 3);
+    const spends = {};
+    mappedExpenses.forEach(e => {
+      if (e.date.startsWith(currentMonthPrefix)) {
+        spends[e.category] = (spends[e.category] || 0) + e.amount;
       }
-    };
-    fetchAllData();
-  }, [navigate]);
+    });
 
-  if (loading) return <div style={{ textAlign: 'center', marginTop: '4rem', color: 'var(--text-muted)' }}>Loading Analytics...</div>;
+    return {
+      pieData: formattedPieData,
+      allTransactions: combined,
+      recentActivity: combined.slice(0, 5),
+      cashFlowData,
+      topBudgets,
+      budgetSpends: spends
+    };
+  }, [loading, dashboardData, incomes, expenses, budgets]);
+
+  if (loading || !processedData) return <div style={{ textAlign: 'center', marginTop: '4rem', color: 'var(--text-muted)' }}>Loading Analytics...</div>;
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', height: '100%', fontSize: '0.85rem', width: '100%' }}>
@@ -231,7 +217,7 @@ const Dashboard = () => {
       <CalendarOverlay 
         isOpen={isCalendarOpen} 
         onClose={() => setIsCalendarOpen(false)} 
-        transactions={allTransactions} 
+        transactions={processedData.allTransactions} 
         formatCurrency={formatCurrency} 
       />
 
@@ -252,29 +238,29 @@ const Dashboard = () => {
           <div style={{ color: 'var(--text-muted)', fontSize: '0.75rem', fontWeight: 600, textTransform: 'uppercase', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
             <Wallet size={14} className="text-primary" /> Current Balance
           </div>
-          <div style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--text-main)' }}>{formatCurrency(data.balance)}</div>
+          <div style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--text-main)' }}>{formatCurrency(dashboardData.balance)}</div>
         </div>
 
         <div className="card" style={{ padding: '1.25rem', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
           <div style={{ color: 'var(--text-muted)', fontSize: '0.75rem', fontWeight: 600, textTransform: 'uppercase', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
             <TrendingUp size={14} className="text-success" /> Monthly Income
           </div>
-          <div style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--success)' }}>{formatCurrency(data.total_income)}</div>
+          <div style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--success)' }}>{formatCurrency(dashboardData.total_income)}</div>
         </div>
 
         <div className="card" style={{ padding: '1.25rem', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
           <div style={{ color: 'var(--text-muted)', fontSize: '0.75rem', fontWeight: 600, textTransform: 'uppercase', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
             <TrendingDown size={14} className="text-danger" /> Monthly Expenses
           </div>
-          <div style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--danger)' }}>{formatCurrency(data.total_expense)}</div>
+          <div style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--danger)' }}>{formatCurrency(dashboardData.total_expense)}</div>
         </div>
 
         <div className="card" style={{ padding: '1.25rem', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
           <div style={{ color: 'var(--text-muted)', fontSize: '0.75rem', fontWeight: 600, textTransform: 'uppercase', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
             <Target size={14} color="#f59e0b" /> Net Savings
           </div>
-          <div style={{ fontSize: '1.75rem', fontWeight: 800, color: (data.total_income - data.total_expense) >= 0 ? 'var(--primary-color)' : 'var(--danger)' }}>
-            {formatCurrency(data.total_income - data.total_expense)}
+          <div style={{ fontSize: '1.75rem', fontWeight: 800, color: (dashboardData.total_income - dashboardData.total_expense) >= 0 ? 'var(--primary-color)' : 'var(--danger)' }}>
+            {formatCurrency(dashboardData.total_income - dashboardData.total_expense)}
           </div>
         </div>
 
@@ -288,9 +274,9 @@ const Dashboard = () => {
             <TrendingUp size={18} className="text-primary" /> Cash Flow Analysis
           </h3>
           <div style={{ flex: 1, minHeight: '250px' }}>
-            {cashFlowData.length > 0 ? (
+            {processedData.cashFlowData.length > 0 ? (
               <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={cashFlowData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                <AreaChart data={processedData.cashFlowData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                   <defs>
                     <linearGradient id="colorInc" x1="0" y1="0" x2="0" y2="1">
                       <stop offset="5%" stopColor="var(--success)" stopOpacity={0.3}/>
@@ -324,13 +310,13 @@ const Dashboard = () => {
             <button onClick={() => navigate('/history')} style={{ background: 'none', border: 'none', color: 'var(--primary-color)', fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer' }}>View All</button>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-            {recentActivity.length === 0 ? (
+            {processedData.recentActivity.length === 0 ? (
               <div style={{ textAlign: 'center', padding: '2rem 0', color: 'var(--text-muted)' }}>No recent activity.</div>
             ) : (
-              recentActivity.map((t, i) => {
+              processedData.recentActivity.map((t, i) => {
                 const isInc = t.type === 'income';
                 return (
-                  <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '1rem', paddingBottom: '1rem', borderBottom: i !== recentActivity.length -1 ? '1px solid var(--border-color)' : 'none' }}>
+                  <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '1rem', paddingBottom: '1rem', borderBottom: i !== processedData.recentActivity.length -1 ? '1px solid var(--border-color)' : 'none' }}>
                     <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: isInc ? 'var(--success-light)' : 'var(--bg-main)', color: isInc ? 'var(--success)' : 'var(--text-light)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                       {isInc ? <ArrowDownRight size={16} /> : <ArrowUpRight size={16} />}
                     </div>
@@ -357,19 +343,19 @@ const Dashboard = () => {
           <h3 style={{ fontSize: '1rem', marginBottom: '1rem' }}>Category Breakdown</h3>
           <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '2rem' }}>
             <div style={{ width: '200px', height: '200px', position: 'relative' }}>
-              {data.expenses_by_category.length > 0 ? (
+              {processedData.pieData.length > 0 ? (
                 <>
                   <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
-                      <Pie data={data.expenses_by_category} cx="50%" cy="50%" innerRadius={60} outerRadius={80} paddingAngle={5} dataKey="value" stroke="none">
-                        {data.expenses_by_category.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)}
+                      <Pie data={processedData.pieData} cx="50%" cy="50%" innerRadius={60} outerRadius={80} paddingAngle={5} dataKey="value" stroke="none">
+                        {processedData.pieData.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)}
                       </Pie>
                       <Tooltip formatter={val => formatCurrency(val)} contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: 'var(--shadow-md)', fontSize: '0.8rem' }} />
                     </PieChart>
                   </ResponsiveContainer>
                   <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', textAlign: 'center' }}>
                     <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>Total</div>
-                    <div style={{ fontSize: '1rem', fontWeight: 800 }}>{formatCurrency(data.total_expense)}</div>
+                    <div style={{ fontSize: '1rem', fontWeight: 800 }}>{formatCurrency(dashboardData.total_expense)}</div>
                   </div>
                 </>
               ) : (
@@ -378,9 +364,9 @@ const Dashboard = () => {
             </div>
             
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-              {data.expenses_by_category.slice(0, 5).map((cat, i) => {
+              {processedData.pieData.slice(0, 5).map((cat, i) => {
                 const icon = CATEGORY_ICONS[cat.originalCategory] || <MoreHorizontal size={14} />;
-                const percentage = ((cat.value / data.total_expense) * 100).toFixed(0);
+                const percentage = ((cat.value / dashboardData.total_expense) * 100).toFixed(0);
                 return (
                   <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '0.8rem' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
@@ -408,12 +394,12 @@ const Dashboard = () => {
           </div>
           
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-            {budgets.length === 0 ? (
+            {processedData.topBudgets.length === 0 ? (
               <div style={{ textAlign: 'center', padding: '1rem 0', color: 'var(--text-muted)' }}>No active budgets.</div>
             ) : (
-              budgets.map(b => {
+              processedData.topBudgets.map(b => {
                 const limit = parseFloat(b.amount);
-                const spent = budgetSpends[b.category] || 0;
+                const spent = processedData.budgetSpends[b.category] || 0;
                 const percentage = Math.min((spent / limit) * 100, 100);
                 const isOver = spent > limit;
                 const catLabel = CATEGORY_LABELS[b.category] || b.category;

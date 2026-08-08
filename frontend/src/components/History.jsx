@@ -8,6 +8,7 @@ import {
   Film, ShoppingBag, HeartPulse, MoreHorizontal,
   Briefcase, TrendingUp, TrendingDown, Wallet
 } from 'lucide-react';
+import useFinanceStore from '../store/useFinanceStore';
 
 const CATEGORY_CHOICES = [
   { value: 'housing', label: 'Housing', icon: Home, color: '#3b82f6' },
@@ -28,8 +29,7 @@ const INCOME_SOURCES = [
 
 const History = () => {
   const { formatCurrency } = useSettings();
-  const [transactions, setTransactions] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { incomes, incomesLoaded, fetchIncomes, expenses, expensesLoaded, fetchExpenses } = useFinanceStore();
   
   // Filters
   const [searchTerm, setSearchTerm] = useState('');
@@ -37,39 +37,30 @@ const History = () => {
   const [filterCategory, setFilterCategory] = useState('all');
 
   useEffect(() => {
-    fetchTransactions();
-  }, []);
+    fetchIncomes();
+    fetchExpenses();
+  }, [fetchIncomes, fetchExpenses]);
 
-  const fetchTransactions = async () => {
-    setLoading(true);
-    try {
-      const [incRes, expRes] = await Promise.all([
-        api.get('/incomes/'),
-        api.get('/expenses/')
-      ]);
-      
-      const incomes = incRes.data.map(i => ({ ...i, type: 'income', displayTitle: i.source, categoryKey: i.source.toLowerCase() }));
-      const expenses = expRes.data.map(e => ({ ...e, type: 'expense', displayTitle: e.description || e.category, categoryKey: e.category }));
-      
-      const combined = [...incomes, ...expenses].sort((a, b) => new Date(b.date) - new Date(a.date));
-      setTransactions(combined);
-    } catch (err) {
-      toast.error('Failed to load transaction history.');
-    } finally {
-      setLoading(false);
-    }
-  };
+  const transactions = React.useMemo(() => {
+    if (!incomesLoaded || !expensesLoaded) return [];
+    const mappedIncomes = incomes.map(i => ({ ...i, type: 'income', displayTitle: i.source, categoryKey: i.source.toLowerCase() }));
+    const mappedExpenses = expenses.map(e => ({ ...e, type: 'expense', displayTitle: e.description || e.category, categoryKey: e.category }));
+    return [...mappedIncomes, ...mappedExpenses].sort((a, b) => new Date(b.date) - new Date(a.date));
+  }, [incomes, expenses, incomesLoaded, expensesLoaded]);
+
+  const loading = !incomesLoaded || !expensesLoaded;
 
   const handleDelete = async (id, type) => {
     if (!window.confirm('Are you sure you want to delete this transaction?')) return;
     try {
       if (type === 'income') {
         await api.delete(`/incomes/${id}/`);
+        fetchIncomes(true);
       } else {
         await api.delete(`/expenses/${id}/`);
+        fetchExpenses(true);
       }
       toast.success('Transaction deleted');
-      setTransactions(transactions.filter(t => !(t.id === id && t.type === type)));
     } catch (err) {
       toast.error('Failed to delete transaction');
     }

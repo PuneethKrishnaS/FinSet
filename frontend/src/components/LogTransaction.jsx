@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useSettings } from '../context/SettingsContext';
+import useFinanceStore from '../store/useFinanceStore';
 
 const CATEGORY_CHOICES = [
   { value: 'housing', label: 'Housing', icon: Home, color: '#3b82f6' },
@@ -37,8 +38,8 @@ const LogTransaction = () => {
   const [isRecurring, setIsRecurring] = useState(false);
 
   const [submitting, setSubmitting] = useState(false);
-  const [recentTransactions, setRecentTransactions] = useState([]);
-  const [categories, setCategories] = useState([]);
+  const [submitting, setSubmitting] = useState(false);
+  const { categories, categoriesLoaded, fetchCategories, incomes, incomesLoaded, fetchIncomes, expenses, expensesLoaded, fetchExpenses } = useFinanceStore();
 
   const { currency, formatCurrency } = useSettings();
   const currencySymbol = new Intl.NumberFormat('en-US', { style: 'currency', currency: currency }).formatToParts(1).find(x => x.type === 'currency').value;
@@ -46,35 +47,22 @@ const LogTransaction = () => {
 
   useEffect(() => {
     fetchCategories();
-    fetchRecent();
-  }, []);
+    fetchIncomes();
+    fetchExpenses();
+  }, [fetchCategories, fetchIncomes, fetchExpenses]);
 
-  const fetchCategories = async () => {
-    try {
-      const res = await api.get('/categories/');
-      setCategories(res.data);
-      if (res.data.length > 0 && !res.data.find(c => c.name === category)) {
-        setCategory(res.data[0].name);
-      }
-    } catch (err) {
-      console.error(err);
+  useEffect(() => {
+    if (categoriesLoaded && categories.length > 0 && !category) {
+      setCategory(categories[0].name);
     }
-  };
+  }, [categories, categoriesLoaded, category]);
 
-  const fetchRecent = async () => {
-    try {
-      const [incRes, expRes] = await Promise.all([
-        api.get('/incomes/'),
-        api.get('/expenses/')
-      ]);
-      const incomes = incRes.data.map(i => ({ ...i, type: 'income', displayTitle: i.source }));
-      const expenses = expRes.data.map(e => ({ ...e, type: 'expense', displayTitle: e.description || e.category }));
-      const combined = [...incomes, ...expenses].sort((a, b) => new Date(b.created_at || b.date) - new Date(a.created_at || a.date)).slice(0, 5);
-      setRecentTransactions(combined);
-    } catch (err) {
-      console.error(err);
-    }
-  };
+  const recentTransactions = React.useMemo(() => {
+    if (!incomesLoaded || !expensesLoaded) return [];
+    const mappedIncomes = incomes.map(i => ({ ...i, type: 'income', displayTitle: i.source }));
+    const mappedExpenses = expenses.map(e => ({ ...e, type: 'expense', displayTitle: e.description || e.category }));
+    return [...mappedIncomes, ...mappedExpenses].sort((a, b) => new Date(b.created_at || b.date) - new Date(a.created_at || a.date)).slice(0, 5);
+  }, [incomes, expenses, incomesLoaded, expensesLoaded]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -102,7 +90,13 @@ const LogTransaction = () => {
 
       setAmount('');
       setDescription('');
-      fetchRecent(); // Refresh the list instantly
+      
+      // Force refresh data in store
+      if (type === 'income') {
+        fetchIncomes(true);
+      } else {
+        fetchExpenses(true);
+      }
     } catch (err) {
       toast.error('Failed to log transaction. Please try again.');
     } finally {

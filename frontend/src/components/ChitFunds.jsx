@@ -3,11 +3,11 @@ import api from '../services/api';
 import toast from 'react-hot-toast';
 import { useSettings } from '../context/SettingsContext';
 import { PieChart, Plus, Calendar, ChevronRight, Target, Info, Edit2 } from 'lucide-react';
+import useFinanceStore from '../store/useFinanceStore';
 
 const ChitFunds = () => {
   const { formatCurrency, currency } = useSettings();
-  const [chits, setChits] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { chitFunds: chits, chitFundsLoaded, fetchChitFunds } = useFinanceStore();
 
   // Form states for creating a new Chit
   const [showCreateForm, setShowCreateForm] = useState(false);
@@ -39,20 +39,8 @@ const ChitFunds = () => {
   const currencySymbol = new Intl.NumberFormat('en-US', { style: 'currency', currency: currency }).formatToParts(1).find(x => x.type === 'currency').value;
 
   useEffect(() => {
-    fetchChits();
-  }, []);
-
-  const fetchChits = async () => {
-    setLoading(true);
-    try {
-      const res = await api.get('/chit-funds/');
-      setChits(res.data);
-    } catch (err) {
-      toast.error('Failed to load Chit Funds.');
-    } finally {
-      setLoading(false);
-    }
-  };
+    fetchChitFunds();
+  }, [fetchChitFunds]);
 
   const handleCreateChit = async (e) => {
     e.preventDefault();
@@ -69,7 +57,7 @@ const ChitFunds = () => {
         duration_months: 20,
         target_amount: ''
       });
-      fetchChits();
+      fetchChitFunds(true);
     } catch (err) {
       toast.error('Failed to create Chit Fund.');
     }
@@ -91,7 +79,7 @@ const ChitFunds = () => {
         date: new Date().toISOString().slice(0, 10),
         month_number: 1
       });
-      fetchChits();
+      fetchChitFunds(true);
     } catch (err) {
       toast.error('Failed to log contribution.');
     }
@@ -107,7 +95,7 @@ const ChitFunds = () => {
       });
       toast.success('Contribution updated successfully!');
       setEditingContributionId(null);
-      fetchChits();
+      fetchChitFunds(true);
     } catch (err) {
       toast.error('Failed to update contribution.');
     }
@@ -164,7 +152,7 @@ const ChitFunds = () => {
 
       {/* Chit Funds List */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-        {loading ? (
+        {!chitFundsLoaded ? (
           <div style={{ textAlign: 'center', padding: '2rem', color: 'var(--text-muted)' }}>Loading...</div>
         ) : chits.length === 0 ? (
           <div className="card" style={{ padding: '3rem 2rem', textAlign: 'center', color: 'var(--text-muted)' }}>

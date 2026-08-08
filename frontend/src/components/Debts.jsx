@@ -3,11 +3,11 @@ import { useSettings } from '../context/SettingsContext';
 import api from '../services/api';
 import toast from 'react-hot-toast';
 import { Users, Plus, CheckCircle, Trash2, ArrowUpRight, ArrowDownRight, TrendingUp, ChevronDown, ChevronUp, History } from 'lucide-react';
+import useFinanceStore from '../store/useFinanceStore';
 
 const Debts = () => {
   const { formatCurrency, currency } = useSettings();
-  const [debts, setDebts] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { debts, debtsLoaded, fetchDebts } = useFinanceStore();
 
   // New debt form
   const [personName, setPersonName] = useState('');
@@ -28,19 +28,7 @@ const Debts = () => {
 
   useEffect(() => {
     fetchDebts();
-  }, []);
-
-  const fetchDebts = async () => {
-    setLoading(true);
-    try {
-      const res = await api.get('/debts/');
-      setDebts(res.data);
-    } catch (err) {
-      toast.error('Failed to load debts.');
-    } finally {
-      setLoading(false);
-    }
-  };
+  }, [fetchDebts]);
 
   const handleCreateDebt = async (e) => {
     e.preventDefault();
@@ -59,7 +47,7 @@ const Debts = () => {
       setAmount('');
       setInterestRate('');
       setInterestPeriod('monthly');
-      fetchDebts();
+      fetchDebts(true); // force refresh
     } catch (err) {
       toast.error('Failed to record debt.');
     }
@@ -69,7 +57,7 @@ const Debts = () => {
     try {
       await api.put(`/debts/${debt.id}/`, { ...debt, is_settled: true });
       toast.success(`${debt.person_name}'s debt settled!`);
-      fetchDebts();
+      fetchDebts(true);
     } catch (err) {
       toast.error('Failed to settle debt.');
     }
@@ -80,7 +68,7 @@ const Debts = () => {
     try {
       await api.delete(`/debts/${id}/`);
       toast.success('Record deleted');
-      fetchDebts();
+      fetchDebts(true);
     } catch (err) {
       toast.error('Failed to delete record');
     }
@@ -99,7 +87,7 @@ const Debts = () => {
       toast.success('Payment logged successfully!');
       setPaymentAmount('');
       setPaymentNote('');
-      fetchDebts();
+      fetchDebts(true);
     } catch (err) {
       toast.error('Failed to log payment.');
     } finally {
@@ -112,7 +100,7 @@ const Debts = () => {
     try {
       await api.delete(`/debt-payments/${paymentId}/`);
       toast.success('Payment deleted');
-      fetchDebts();
+      fetchDebts(true);
     } catch (err) {
       toast.error('Failed to delete payment');
     }
@@ -299,7 +287,7 @@ const Debts = () => {
             <Users size={18} className="text-primary" /> Active Records
           </h3>
           
-          {loading ? (
+          {!debtsLoaded ? (
             <div className="card" style={{ padding: '2rem', textAlign: 'center' }}>Loading...</div>
           ) : debts.length === 0 ? (
             <div className="card" style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-muted)' }}>No records found.</div>

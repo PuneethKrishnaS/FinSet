@@ -3,6 +3,7 @@ import { useSettings } from '../context/SettingsContext';
 import api from '../services/api';
 import toast from 'react-hot-toast';
 import { Target, Plus, Save, Trash2, Calendar, AlertCircle, Home, Utensils, Car, Zap, Tv, ShoppingBag, Heart, MoreHorizontal } from 'lucide-react';
+import useFinanceStore from '../store/useFinanceStore';
 
 const CATEGORY_ICONS = {
   housing: <Home size={18} />,
@@ -66,10 +67,11 @@ const CircularProgress = ({ percentage, isOver, isWarning, size = 60, strokeWidt
 
 const Budget = () => {
   const { formatCurrency, currency } = useSettings();
-  const [budgets, setBudgets] = useState([]);
-  const [expenses, setExpenses] = useState({});
-  const [loading, setLoading] = useState(true);
-  const [categories, setCategories] = useState([]);
+  const { 
+    budgets, budgetsLoaded, fetchBudgets, 
+    expenses: storeExpenses, expensesLoaded, fetchExpenses, 
+    categories, categoriesLoaded, fetchCategories 
+  } = useFinanceStore();
 
   const [category, setCategory] = useState('');
   const [amount, setAmount] = useState('');
@@ -77,37 +79,30 @@ const Budget = () => {
   const currencySymbol = new Intl.NumberFormat('en-US', { style: 'currency', currency: currency }).formatToParts(1).find(x => x.type === 'currency').value;
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    fetchBudgets();
+    fetchExpenses();
+    fetchCategories();
+  }, [fetchBudgets, fetchExpenses, fetchCategories]);
 
-  const fetchData = async () => {
-    setLoading(true);
-    try {
-      const [budgetRes, expDataRes, catRes] = await Promise.all([
-        api.get('/budgets/'),
-        api.get('/expenses/'),
-        api.get('/categories/')
-      ]);
-      setBudgets(budgetRes.data);
-      setCategories(catRes.data);
-      if (catRes.data.length > 0 && !catRes.data.find(c => c.name === category)) {
-        setCategory(catRes.data[0].name);
-      }
-      
-      const currentMonthStr = new Date().toISOString().slice(0, 7);
-      const currentMonthExpenses = expDataRes.data.filter(e => e.date.startsWith(currentMonthStr));
-      
-      const sums = {};
-      currentMonthExpenses.forEach(e => {
-        sums[e.category] = (sums[e.category] || 0) + parseFloat(e.amount);
-      });
-      setExpenses(sums);
-    } catch (err) {
-      toast.error('Failed to load budgets.');
-    } finally {
-      setLoading(false);
+  useEffect(() => {
+    if (categoriesLoaded && categories.length > 0 && !category) {
+      setCategory(categories[0].name);
     }
-  };
+  }, [categories, categoriesLoaded, category]);
+
+  const loading = !budgetsLoaded || !expensesLoaded || !categoriesLoaded;
+
+  const expensesSums = React.useMemo(() => {
+    if (loading) return {};
+    const currentMonthStr = new Date().toISOString().slice(0, 7);
+    const currentMonthExpenses = storeExpenses.filter(e => e.date.startsWith(currentMonthStr));
+    
+    const sums = {};
+    currentMonthExpenses.forEach(e => {
+      sums[e.category] = (sums[e.category] || 0) + parseFloat(e.amount);
+    });
+    return sums;
+  }, [loading, storeExpenses]);
 
   const handleCreateBudget = async (e) => {
     e.preventDefault();
@@ -116,7 +111,7 @@ const Budget = () => {
       await api.post('/budgets/', { category, amount: parseFloat(amount), month: firstDay });
       toast.success('Budget created!');
       setAmount('');
-      fetchData();
+      fetchBudgets(true);
     } catch (err) {
       toast.error('Failed to create budget.');
     }
@@ -127,14 +122,14 @@ const Budget = () => {
     try {
       await api.delete(`/budgets/${id}/`);
       toast.success('Budget removed.');
-      fetchData();
+      fetchBudgets(true);
     } catch (err) {
       toast.error('Failed to delete.');
     }
   };
 
   const totalBudgeted = budgets.reduce((acc, b) => acc + parseFloat(b.amount), 0);
-  const totalSpentInBudgets = budgets.reduce((acc, b) => acc + (expenses[b.category] || 0), 0);
+  const totalSpentInBudgets = budgets.reduce((acc, b) => acc + (expensesSums[b.category] || 0), 0);
   const totalRemaining = totalBudgeted - totalSpentInBudgets;
 
   const today = new Date();
@@ -166,7 +161,7 @@ const Budget = () => {
           ) : (
             budgets.map(b => {
               const limit = parseFloat(b.amount);
-              const spent = expenses[b.category] || 0;
+              const spent = expensesSums[b.category] || 0;
               const percentage = limit > 0 ? (spent / limit) * 100 : 0;
               const isOver = spent > limit;
               const isWarning = percentage >= 80 && !isOver;
