@@ -164,6 +164,13 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchAllData = async () => {
       try {
+        // Process recurring transactions before fetching data
+        try {
+          await api.post('/process-recurring/');
+        } catch (e) {
+          console.error("Failed to process recurring transactions", e);
+        }
+
         const [dashRes, incRes, expRes, budRes] = await Promise.all([
           api.get('/dashboard/'),
           api.get('/incomes/'),

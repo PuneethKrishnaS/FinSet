@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useSettings } from '../context/SettingsContext';
-import { Moon, Sun, Globe, Save } from 'lucide-react';
+import { Moon, Sun, Globe, Save, Plus, Trash2 } from 'lucide-react';
 import toast from 'react-hot-toast';
+import api from '../services/api';
 
 const CURRENCIES = [
   { code: 'USD', label: 'US Dollar ($)' },
@@ -17,6 +18,43 @@ const Settings = () => {
   const { currency, updateCurrency, theme, toggleTheme } = useSettings();
   const [selectedCurrency, setSelectedCurrency] = useState(currency);
   const [saving, setSaving] = useState(false);
+  const [categories, setCategories] = useState([]);
+  const [newCategoryName, setNewCategoryName] = useState('');
+
+  React.useEffect(() => {
+    fetchCategories();
+  }, []);
+
+  const fetchCategories = async () => {
+    try {
+      const res = await api.get('/categories/');
+      setCategories(res.data);
+    } catch (err) {
+      console.error('Failed to fetch categories', err);
+    }
+  };
+
+  const handleAddCategory = async () => {
+    if (!newCategoryName.trim()) return;
+    try {
+      const res = await api.post('/categories/', { name: newCategoryName.trim(), type: 'expense' });
+      setCategories([...categories, res.data]);
+      setNewCategoryName('');
+      toast.success('Category added');
+    } catch (err) {
+      toast.error('Failed to add category');
+    }
+  };
+
+  const handleDeleteCategory = async (id) => {
+    try {
+      await api.delete(`/categories/${id}/`);
+      setCategories(categories.filter(c => c.id !== id));
+      toast.success('Category deleted');
+    } catch (err) {
+      toast.error('Failed to delete category');
+    }
+  };
 
   const handleSave = async () => {
     setSaving(true);
@@ -91,6 +129,45 @@ const Settings = () => {
                 <option key={c.code} value={c.code}>{c.label}</option>
               ))}
             </select>
+          </div>
+        </div>
+
+        {/* Categories Management */}
+        <div>
+          <h3 style={{ fontSize: '1.1rem', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <Plus size={20} className="text-primary" />
+            Custom Categories
+          </h3>
+          <div style={{ padding: '1rem', background: 'var(--bg-main)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)' }}>
+            <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem' }}>
+              <input 
+                type="text" 
+                value={newCategoryName}
+                onChange={e => setNewCategoryName(e.target.value)}
+                placeholder="New Category Name"
+                className="input-field"
+                style={{ marginBottom: 0 }}
+              />
+              <button 
+                onClick={handleAddCategory}
+                style={{
+                  background: 'var(--primary-color)', color: 'white', border: 'none', padding: '0 1rem',
+                  borderRadius: 'var(--radius-md)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.2rem'
+                }}
+              >
+                <Plus size={16} /> Add
+              </button>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+              {categories.map(cat => (
+                <div key={cat.id} style={{ display: 'flex', justifyContent: 'space-between', padding: '0.5rem', background: 'var(--bg-panel)', borderRadius: 'var(--radius-sm)' }}>
+                  <span>{cat.name}</span>
+                  <button onClick={() => handleDeleteCategory(cat.id)} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer' }}>
+                    <Trash2 size={16} />
+                  </button>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 

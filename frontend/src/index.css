@@ -54,18 +54,17 @@ body {
 .app-layout {
   display: flex;
   height: 100vh;
-  padding: 1rem;
-  background-color: #111827;
-  /* Dark border to mimic the screen bezel in the image */
+  padding: 0;
+  background-color: var(--bg-main);
 }
 
 .app-container {
   display: flex;
   flex: 1;
   background-color: var(--bg-main);
-  border-radius: var(--radius-lg);
+  border-radius: 0;
   overflow: hidden;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  box-shadow: none;
 }
 
 /* Sidebar Styles */
@@ -86,6 +85,20 @@ body {
   font-weight: 800;
   font-size: 1.5rem;
   color: var(--text-main);
+}
+
+.mobile-menu-btn {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--text-main);
+  cursor: pointer;
+}
+
+.sidebar-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 }
 
 .logo-icon {
@@ -184,13 +197,13 @@ body {
 }
 
 .btn-secondary {
-  background: white;
+  background: var(--bg-panel);
   color: var(--text-main);
   border: 1px solid var(--border-color);
 }
 
 .btn-secondary:hover {
-  background: #f9fafb;
+  background: var(--bg-main);
 }
 
 .icon-btn {
@@ -198,7 +211,7 @@ body {
   height: 40px;
   border-radius: 50%;
   border: 1px solid var(--border-color);
-  background: white;
+  background: var(--bg-panel);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -213,6 +226,8 @@ body {
   border-radius: var(--radius-lg);
   padding: 1.5rem;
   box-shadow: var(--shadow-sm);
+  min-width: 0;
+  width: 100%;
 }
 
 .card-header {
@@ -299,7 +314,7 @@ body {
 .input-field {
   width: 100%;
   padding: 0.8rem 1rem;
-  background: white;
+  background: var(--bg-panel);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
   color: var(--text-main);
@@ -328,7 +343,7 @@ body {
   display: flex;
   width: 100%;
   max-width: 1000px;
-  background: white;
+  background: var(--bg-panel);
   border-radius: 24px;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
   overflow: hidden;
@@ -499,7 +514,7 @@ body {
 .auth-input:focus {
   outline: none;
   border-color: var(--primary-color);
-  background: white;
+  background: var(--bg-panel);
   box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.1);
 }
 
@@ -677,42 +692,70 @@ body {
   }
 
   .sidebar {
+    position: relative;
     width: 100%;
     height: auto;
     padding: 1rem;
     border-right: none;
     border-bottom: 1px solid var(--border-color);
-    flex-direction: row;
-    align-items: center;
-    overflow-x: auto;
+    flex-direction: column;
+    align-items: stretch;
     z-index: 50;
+  }
+
+  .sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
   }
 
   .logo-area {
     margin-bottom: 0;
-    margin-right: 2rem;
+    margin-right: 0;
+  }
+
+  .mobile-menu-btn {
+    display: block;
+  }
+
+  .sidebar-content {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--bg-main);
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+  }
+
+  .sidebar-content.open {
+    display: flex;
   }
 
   .nav-menu {
-    flex-direction: row;
+    flex-direction: column;
     gap: 0.5rem;
   }
 
   .bottom-nav {
-    margin-top: 0;
-    margin-left: auto;
-    flex-direction: row;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+    flex-direction: column;
   }
 
   .nav-item {
-    padding: 0.5rem;
-    font-size: 0.8rem;
-    white-space: nowrap;
+    padding: 0.8rem 1rem;
+    font-size: 0.95rem;
+    white-space: normal;
   }
 
   .nav-item svg {
-    width: 16px;
-    height: 16px;
+    width: 18px;
+    height: 18px;
   }
 
   .main-content {

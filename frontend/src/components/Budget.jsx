@@ -69,8 +69,9 @@ const Budget = () => {
   const [budgets, setBudgets] = useState([]);
   const [expenses, setExpenses] = useState({});
   const [loading, setLoading] = useState(true);
+  const [categories, setCategories] = useState([]);
 
-  const [category, setCategory] = useState('food');
+  const [category, setCategory] = useState('');
   const [amount, setAmount] = useState('');
 
   const currencySymbol = new Intl.NumberFormat('en-US', { style: 'currency', currency: currency }).formatToParts(1).find(x => x.type === 'currency').value;
@@ -82,11 +83,16 @@ const Budget = () => {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const [budgetRes, expDataRes] = await Promise.all([
+      const [budgetRes, expDataRes, catRes] = await Promise.all([
         api.get('/budgets/'),
-        api.get('/expenses/')
+        api.get('/expenses/'),
+        api.get('/categories/')
       ]);
       setBudgets(budgetRes.data);
+      setCategories(catRes.data);
+      if (catRes.data.length > 0 && !catRes.data.find(c => c.name === category)) {
+        setCategory(catRes.data[0].name);
+      }
       
       const currentMonthStr = new Date().toISOString().slice(0, 7);
       const currentMonthExpenses = expDataRes.data.filter(e => e.date.startsWith(currentMonthStr));
@@ -161,11 +167,12 @@ const Budget = () => {
             budgets.map(b => {
               const limit = parseFloat(b.amount);
               const spent = expenses[b.category] || 0;
-              const percentage = (spent / limit) * 100;
+              const percentage = limit > 0 ? (spent / limit) * 100 : 0;
               const isOver = spent > limit;
               const isWarning = percentage >= 80 && !isOver;
-              const catLabel = CATEGORY_CHOICES.find(c => c.value === b.category)?.label || b.category;
-              const icon = CATEGORY_ICONS[b.category] || <Target size={18} />;
+              const fallback = CATEGORY_CHOICES.find(c => c.value.toLowerCase() === b.category.toLowerCase());
+              const catLabel = b.category;
+              const icon = fallback && CATEGORY_ICONS[fallback.value] ? CATEGORY_ICONS[fallback.value] : <Target size={18} />;
 
               return (
                 <div key={b.id} className="card interactive-table" style={{ padding: '1.25rem', display: 'flex', alignItems: 'center', gap: '1.5rem', transition: 'transform 0.2s, box-shadow 0.2s' }}>
@@ -250,8 +257,8 @@ const Budget = () => {
                   className="input-field" 
                   style={{ marginBottom: 0, padding: '0.6rem' }}
                 >
-                  {CATEGORY_CHOICES.map(c => (
-                    <option key={c.value} value={c.value}>{c.label}</option>
+                  {categories.map(c => (
+                    <option key={c.id} value={c.name}>{c.name}</option>
                   ))}
                 </select>
               </div>

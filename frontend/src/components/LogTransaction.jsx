@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
 import {
-  Save, AlertCircle,
+  Save,
   Home, Coffee, Car, Zap,
   Film, ShoppingBag, HeartPulse, MoreHorizontal,
   Briefcase, TrendingUp, History, ArrowRight
@@ -38,14 +38,28 @@ const LogTransaction = () => {
 
   const [submitting, setSubmitting] = useState(false);
   const [recentTransactions, setRecentTransactions] = useState([]);
+  const [categories, setCategories] = useState([]);
 
   const { currency, formatCurrency } = useSettings();
   const currencySymbol = new Intl.NumberFormat('en-US', { style: 'currency', currency: currency }).formatToParts(1).find(x => x.type === 'currency').value;
   const navigate = useNavigate();
 
   useEffect(() => {
+    fetchCategories();
     fetchRecent();
   }, []);
+
+  const fetchCategories = async () => {
+    try {
+      const res = await api.get('/categories/');
+      setCategories(res.data);
+      if (res.data.length > 0 && !res.data.find(c => c.name === category)) {
+        setCategory(res.data[0].name);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   const fetchRecent = async () => {
     try {
@@ -78,7 +92,7 @@ const LogTransaction = () => {
       } else {
         await api.post('/expenses/', {
           category: category,
-          description: description || CATEGORY_CHOICES.find(c => c.value === category).label,
+          description: description || category,
           amount: parseFloat(amount),
           date: date,
           is_recurring: isRecurring
@@ -204,33 +218,35 @@ const LogTransaction = () => {
 
               {type === 'expense' ? (
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '0.5rem' }}>
-                  {CATEGORY_CHOICES.map((c) => {
-                    const Icon = c.icon;
-                    const isSelected = category === c.value;
+                  {categories.map((c) => {
+                    const fallback = CATEGORY_CHOICES.find(ch => ch.value.toLowerCase() === c.name.toLowerCase());
+                    const Icon = fallback ? fallback.icon : MoreHorizontal;
+                    const color = fallback ? fallback.color : '#64748b';
+                    const isSelected = category === c.name;
                     return (
                       <div
-                        key={c.value}
-                        onClick={() => setCategory(c.value)}
+                        key={c.id}
+                        onClick={() => setCategory(c.name)}
                         style={{
                           display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.25rem',
                           padding: '0.75rem 0.25rem', borderRadius: 'var(--radius-md)', cursor: 'pointer',
-                          background: isSelected ? `${c.color}15` : 'var(--bg-main)',
-                          border: `2px solid ${isSelected ? c.color : 'transparent'}`,
+                          background: isSelected ? `${color}15` : 'var(--bg-main)',
+                          border: `2px solid ${isSelected ? color : 'transparent'}`,
                           transition: 'all 0.2s',
                           boxShadow: isSelected ? 'none' : 'inset 0 0 0 1px var(--border-color)'
                         }}
                       >
                         <div style={{
                           width: '32px', height: '32px', borderRadius: '50%',
-                          background: isSelected ? c.color : '#fff',
-                          color: isSelected ? '#fff' : c.color,
+                          background: isSelected ? color : '#fff',
+                          color: isSelected ? '#fff' : color,
                           display: 'flex', alignItems: 'center', justifyContent: 'center',
-                          boxShadow: isSelected ? `0 2px 8px ${c.color}40` : 'var(--shadow-sm)'
+                          boxShadow: isSelected ? `0 2px 8px ${color}40` : 'var(--shadow-sm)'
                         }}>
                           <Icon size={16} />
                         </div>
-                        <span style={{ fontSize: '0.7rem', fontWeight: isSelected ? '700' : '500', color: isSelected ? 'var(--text-main)' : 'var(--text-muted)' }}>
-                          {c.label}
+                        <span style={{ fontSize: '0.7rem', fontWeight: isSelected ? '700' : '500', color: isSelected ? 'var(--text-main)' : 'var(--text-muted)', textAlign: 'center', overflow: 'hidden', textOverflow: 'ellipsis', width: '100%' }}>
+                          {c.name}
                         </span>
                       </div>
                     );
@@ -336,7 +352,7 @@ const LogTransaction = () => {
                     const sourceObj = INCOME_SOURCES.find(s => s.value === t.source.toLowerCase()) || INCOME_SOURCES.find(s => s.label.toLowerCase() === t.source.toLowerCase());
                     if (sourceObj) { iconElement = <sourceObj.icon size={16} />; bgColor = sourceObj.color; }
                   } else {
-                    const catObj = CATEGORY_CHOICES.find(c => c.value === t.category);
+                    const catObj = CATEGORY_CHOICES.find(c => c.value.toLowerCase() === t.category.toLowerCase());
                     if (catObj) { iconElement = <catObj.icon size={16} />; bgColor = catObj.color; }
                   }
 

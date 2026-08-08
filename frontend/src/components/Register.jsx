@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import api from '../services/api';
-import { UserPlus, User, Lock, Mail, ArrowRight, Wallet } from 'lucide-react';
+import { UserPlus, User, Lock, Mail, ArrowRight, Wallet, Sun, Moon } from 'lucide-react';
+import { useSettings } from '../context/SettingsContext';
 
 const Register = () => {
   const [firstName, setFirstName] = useState('');
@@ -11,6 +12,7 @@ const Register = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { theme, toggleTheme } = useSettings();
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -62,7 +64,16 @@ const Register = () => {
       </div>
 
       {/* Right Form Panel */}
-      <div className="auth-right">
+      <div className="auth-right" style={{ position: 'relative' }}>
+        <button 
+          type="button"
+          onClick={toggleTheme} 
+          style={{ position: 'absolute', top: '2rem', right: '2rem', background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', padding: '0.5rem' }}
+          title="Toggle Theme"
+        >
+          {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
+        </button>
+
         <div className="auth-header">
           <h2 className="auth-title">Create Account</h2>
           <p className="auth-subtitle">Join us and start managing your finances effectively.</p>

@@ -4,6 +4,7 @@ import { Toaster } from 'react-hot-toast';
 import { SettingsProvider } from './context/SettingsContext';
 import Login from './components/Login';
 import Register from './components/Register';
+import LandingPage from './components/LandingPage';
 import Dashboard from './components/Dashboard';
 import LogTransaction from './components/LogTransaction';
 import History from './components/History';
@@ -12,11 +13,17 @@ import Debts from './components/Debts';
 import Sidebar from './components/Sidebar';
 import Settings from './components/Settings';
 import Profile from './components/Profile';
+import ChitFunds from './components/ChitFunds';
 
 const AppLayout = ({ children }) => {
   const location = useLocation();
   const isAuthPage = location.pathname === '/login' || location.pathname === '/register';
+  const isLandingPage = location.pathname === '/';
   
+  if (isLandingPage) {
+    return children;
+  }
+
   if (isAuthPage) {
     return <div className="auth-layout">{children}</div>;
   }
@@ -47,7 +54,7 @@ function App() {
       <Router>
         <AppLayout>
           <Routes>
-            <Route path="/" element={<Navigate to="/dashboard" replace />} />
+            <Route path="/" element={<LandingPage />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/dashboard" element={<Dashboard />} />
@@ -55,6 +62,7 @@ function App() {
             <Route path="/history" element={<History />} />
             <Route path="/budgets" element={<Budget />} />
             <Route path="/debts" element={<Debts />} />
+            <Route path="/chits" element={<ChitFunds />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/settings" element={<Settings />} />
           </Routes>

@@ -32,8 +32,15 @@ export const SettingsProvider = ({ children }) => {
         const token = localStorage.getItem('access_token');
         if (token) {
           const res = await api.get('/auth/profile/');
-          if (res.data.profile && res.data.profile.preferred_currency) {
-            setCurrency(res.data.profile.preferred_currency);
+          if (res.data.profile) {
+            if (res.data.profile.preferred_currency) {
+              setCurrency(res.data.profile.preferred_currency);
+            }
+            if (res.data.profile.theme) {
+              setTheme(res.data.profile.theme);
+              localStorage.setItem('theme', res.data.profile.theme);
+              document.documentElement.setAttribute('data-theme', res.data.profile.theme);
+            }
           }
         }
       } catch (err) {
@@ -46,11 +53,20 @@ export const SettingsProvider = ({ children }) => {
     fetchProfile();
   }, []);
 
-  const toggleTheme = () => {
+  const toggleTheme = async () => {
     const newTheme = theme === 'light' ? 'dark' : 'light';
     setTheme(newTheme);
     localStorage.setItem('theme', newTheme);
     document.documentElement.setAttribute('data-theme', newTheme);
+
+    try {
+      const token = localStorage.getItem('access_token');
+      if (token) {
+        await api.put('/auth/profile/', { theme: newTheme });
+      }
+    } catch (err) {
+      console.error('Failed to sync theme to DB', err);
+    }
   };
 
   const updateCurrency = async (newCurrency) => {
