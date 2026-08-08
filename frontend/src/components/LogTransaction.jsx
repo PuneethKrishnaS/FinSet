@@ -38,7 +38,6 @@ const LogTransaction = () => {
   const [isRecurring, setIsRecurring] = useState(false);
 
   const [submitting, setSubmitting] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
   const { categories, categoriesLoaded, fetchCategories, incomes, incomesLoaded, fetchIncomes, expenses, expensesLoaded, fetchExpenses } = useFinanceStore();
 
   const { currency, formatCurrency } = useSettings();
