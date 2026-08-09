@@ -54,8 +54,11 @@ class PasswordResetRequestView(APIView):
             token = token_generator.make_token(user)
             uidb64 = urlsafe_base64_encode(force_bytes(user.pk))
             
-            # The URL will point to the React frontend
-            frontend_url = os.environ.get('FRONTEND_URL', 'http://localhost:5173')
+            # Dynamically get the frontend URL from the request Origin header, fallback to env variable
+            frontend_url = request.headers.get('Origin') or os.environ.get('FRONTEND_URL', 'http://localhost:5173')
+            # Strip trailing slash if any
+            frontend_url = frontend_url.rstrip('/')
+            
             reset_url = f"{frontend_url}/reset-password/{uidb64}/{token}"
             
             html_content = f"""
