@@ -137,11 +137,11 @@ const Budget = () => {
   const daysLeft = lastDay.getDate() - today.getDate();
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', fontSize: '0.85rem', width: '100%' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100%', fontSize: '0.85rem', width: '100%' }}>
       <header className="responsive-header" style={{ marginBottom: '1.5rem' }}>
         <div>
-          <h1 className="header-title" style={{ fontSize: '1.5rem' }}>Budgets</h1>
-          <p className="header-subtitle" style={{ fontSize: '0.85rem' }}>Track your spending against goals</p>
+          <h1 className="header-title">Budgets</h1>
+          <p className="header-subtitle">Track your spending against goals</p>
         </div>
       </header>
 

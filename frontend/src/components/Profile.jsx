@@ -143,8 +143,10 @@ const Profile = () => {
   return (
     <div className="page-container" style={{ paddingBottom: '3rem' }}>
       <div className="page-header" style={{ marginBottom: '2rem' }}>
-        <h1 className="page-title">My Profile</h1>
-        <p className="page-subtitle">Manage your personal information and security</p>
+        <div>
+          <h1 className="page-title">My Profile</h1>
+          <p className="page-subtitle">Manage your personal information and security</p>
+        </div>
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', maxWidth: '800px', margin: '0 auto' }}>

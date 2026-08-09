@@ -102,11 +102,11 @@ const ChitFunds = () => {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', fontSize: '0.85rem', width: '100%' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100%', fontSize: '0.85rem', width: '100%' }}>
       <header className="responsive-header" style={{ marginBottom: '1.5rem' }}>
         <div>
-          <h1 className="header-title" style={{ fontSize: '1.5rem' }}>Chit Funds (Cheeti)</h1>
-          <p className="header-subtitle" style={{ fontSize: '0.85rem' }}>Track your community savings & contributions</p>
+          <h1 className="header-title">Chit Funds (Cheeti)</h1>
+          <p className="header-subtitle">Track your community savings & contributions</p>
         </div>
         <button 
           onClick={() => setShowCreateForm(!showCreateForm)}

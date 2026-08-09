@@ -104,11 +104,11 @@ const LogTransaction = () => {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', fontSize: '0.85rem', width: '100%', margin: '0 auto' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100%', fontSize: '0.85rem', width: '100%', margin: '0 auto' }}>
       <header className="responsive-header" style={{ marginBottom: '2rem' }}>
         <div>
-          <h1 className="header-title" style={{ fontSize: '1.5rem' }}>Transactions</h1>
-          <p className="header-subtitle" style={{ fontSize: '0.85rem' }}>Record a new expense or income</p>
+          <h1 className="header-title">Transactions</h1>
+          <p className="header-subtitle">Record a new expense or income</p>
         </div>
       </header>
 

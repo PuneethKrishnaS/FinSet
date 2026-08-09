@@ -142,11 +142,11 @@ const Debts = () => {
   const totalBorrowed = debts.filter(d => d.type === 'borrowed' && !d.is_settled).reduce((acc, d) => acc + calculateDebtTotals(d).remaining, 0);
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', fontSize: '0.9rem', width: '100%' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100%', fontSize: '0.9rem', width: '100%' }}>
       <header className="header" style={{ marginBottom: '1.5rem' }}>
         <div>
-          <h1 className="header-title" style={{ fontSize: '1.5rem' }}>Lending & Borrowing</h1>
-          <p className="header-subtitle" style={{ fontSize: '0.85rem' }}>Track money you owe and money owed to you</p>
+          <h1 className="header-title">Lending & Borrowing</h1>
+          <p className="header-subtitle">Track money you owe and money owed to you</p>
         </div>
       </header>
 

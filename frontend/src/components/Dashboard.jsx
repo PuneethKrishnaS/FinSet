@@ -212,7 +212,7 @@ const Dashboard = () => {
   if (loading || !processedData) return <div style={{ textAlign: 'center', marginTop: '4rem', color: 'var(--text-muted)' }}>Loading Analytics...</div>;
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', height: '100%', fontSize: '0.85rem', width: '100%' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', minHeight: '100%', fontSize: '0.85rem', width: '100%' }}>
       
       <CalendarOverlay 
         isOpen={isCalendarOpen} 
@@ -223,8 +223,8 @@ const Dashboard = () => {
 
       <header className="responsive-header">
         <div>
-          <h1 className="header-title" style={{ fontSize: '1.5rem' }}>Financial Overview</h1>
-          <p className="header-subtitle" style={{ fontSize: '0.85rem' }}>Your complete money analysis</p>
+          <h1 className="header-title">Financial Overview</h1>
+          <p className="header-subtitle">Your complete money analysis</p>
         </div>
         <button onClick={() => setIsCalendarOpen(true)} className="btn btn-secondary" style={{ padding: '0.5rem 1rem', fontSize: '0.85rem', display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
           <CalendarIcon size={16} /> View Calendar

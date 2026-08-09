@@ -113,13 +113,13 @@ const Notifications = () => {
 
   return (
     <div className="page-container">
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-        <h1 className="page-title" style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-          <Bell size={28} style={{ color: 'var(--primary-color)' }} />
-          Notifications
-        </h1>
+      <div className="page-header" style={{ marginBottom: '2rem' }}>
+        <div>
+          <h1 className="page-title">Notifications</h1>
+          <p className="page-subtitle">Stay updated with your financial alerts</p>
+        </div>
         
-        <div style={{ display: 'flex', gap: '1rem' }}>
+        <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
           <button onClick={subscribeToPush} className="btn-outline" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', borderColor: 'var(--primary-color)', color: 'var(--primary-color)' }}>
             <Smartphone size={18} /> Enable OS Push
           </button>

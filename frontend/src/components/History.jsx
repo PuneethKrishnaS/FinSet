@@ -100,12 +100,12 @@ const History = () => {
   const filteredNet = filteredIncome - filteredExpense;
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', fontSize: '0.85rem', width: '100%' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100%', fontSize: '0.85rem', width: '100%' }}>
       
       <header className="responsive-header" style={{ marginBottom: '1.5rem' }}>
         <div>
-          <h1 className="header-title" style={{ fontSize: '1.5rem' }}>History</h1>
-          <p className="header-subtitle" style={{ fontSize: '0.85rem' }}>View, search, and export your past transactions</p>
+          <h1 className="header-title">History</h1>
+          <p className="header-subtitle">View, search, and export your past transactions</p>
         </div>
         <button onClick={handleExportCSV} className="btn btn-secondary" style={{ padding: '0.5rem 1rem', fontSize: '0.85rem' }}>
           <Download size={16} /> Export CSV

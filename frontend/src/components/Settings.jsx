@@ -114,8 +114,10 @@ const Settings = () => {
   return (
     <div className="page-container" style={{ paddingBottom: '3rem' }}>
       <div className="page-header" style={{ marginBottom: '2rem' }}>
-        <h1 className="page-title">Application Settings</h1>
-        <p className="page-subtitle">Customize your FinSet experience</p>
+        <div>
+          <h1 className="page-title">Application Settings</h1>
+          <p className="page-subtitle">Customize your FinSet experience</p>
+        </div>
       </div>
 
       <div style={{ maxWidth: '800px', margin: '0 auto' }}>

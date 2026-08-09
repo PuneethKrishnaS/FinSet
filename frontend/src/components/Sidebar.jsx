@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
   LayoutDashboard,
@@ -19,6 +19,18 @@ const Sidebar = () => {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
+  const dropdownRef = useRef(null);
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   // Note: For a real app, you might use context or a store for this,
   // but we can fetch it periodically or on load here
@@ -58,7 +70,7 @@ const Sidebar = () => {
             <span style={{ fontSize: '1.4rem', fontWeight: '800' }}>FinSet</span>
           </div>
           
-          <div style={{ position: 'relative' }}>
+          <div style={{ position: 'relative' }} ref={dropdownRef}>
             <button className="mobile-menu-btn" onClick={() => setIsOpen(!isOpen)}>
               <MoreVertical size={24} />
               {unreadCount > 0 && !isOpen && (
