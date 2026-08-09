@@ -11,8 +11,7 @@ import {
   User,
   PieChart,
   Bell,
-  Menu,
-  X
+  MoreVertical,
 } from 'lucide-react';
 
 const Sidebar = () => {
@@ -50,18 +49,57 @@ const Sidebar = () => {
   const closeMenu = () => setIsOpen(false);
 
   return (
-    <aside className="sidebar">
-      <div className="sidebar-header" style={{ display: 'flex', alignItems: 'center' }}>
-        <div className="logo-area" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          <img src="/FinSet_Logo.svg" alt="FinSet" style={{ height: '32px' }} />
+    <>
+      {/* Sidebar acts as header on mobile, actual sidebar on desktop */}
+      <aside className="sidebar">
+        <div className="sidebar-header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div className="logo-area" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: 0 }}>
+            <img src="/FinSet_Logo.svg" alt="FinSet" style={{ height: '32px' }} />
+            <span style={{ fontSize: '1.4rem', fontWeight: '800' }}>FinSet</span>
+          </div>
+          
+          <div style={{ position: 'relative' }}>
+            <button className="mobile-menu-btn" onClick={() => setIsOpen(!isOpen)}>
+              <MoreVertical size={24} />
+              {unreadCount > 0 && !isOpen && (
+                <span style={{ 
+                  position: 'absolute', top: '-2px', right: '-2px', width: '10px', height: '10px', 
+                  background: 'var(--danger)', borderRadius: '50%', border: '2px solid var(--bg-main)' 
+                }} />
+              )}
+            </button>
+            
+            {/* 3-Dot Mobile Dropdown Menu */}
+            {isOpen && (
+              <div className="mobile-dropdown-menu">
+                <Link to="/profile" onClick={closeMenu} className="dropdown-item">
+                  <User size={18} /> Profile
+                </Link>
+                <Link to="/notifications" onClick={closeMenu} className="dropdown-item" style={{ position: 'relative' }}>
+                  <Bell size={18} /> Notifications
+                  {unreadCount > 0 && (
+                    <span style={{ 
+                      background: 'var(--primary-color)', color: 'white', fontSize: '0.7rem', 
+                      padding: '0.1rem 0.4rem', borderRadius: '10px', fontWeight: 'bold', marginLeft: 'auto'
+                    }}>
+                      {unreadCount}
+                    </span>
+                  )}
+                </Link>
+                <Link to="/settings" onClick={closeMenu} className="dropdown-item">
+                  <SettingsIcon size={18} /> Settings
+                </Link>
+                <div style={{ height: '1px', background: 'var(--border-color)', margin: '0.5rem 0' }} />
+                <button onClick={handleLogout} className="dropdown-item" style={{ color: 'var(--danger)' }}>
+                  <LogOut size={18} /> Log out
+                </button>
+              </div>
+            )}
+          </div>
         </div>
-        <button className="mobile-menu-btn" onClick={() => setIsOpen(!isOpen)}>
-          {isOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
-      </div>
 
-      <div className={`sidebar-content ${isOpen ? 'open' : ''}`}>
-        <nav className="nav-menu">
+        <div className="sidebar-content">
+          <nav className="nav-menu">
           <Link to="/dashboard" onClick={closeMenu} className={`nav-item ${location.pathname === '/dashboard' ? 'active' : ''}`}>
             <LayoutDashboard size={18} />
             Dashboard
@@ -89,11 +127,11 @@ const Sidebar = () => {
         </nav>
 
         <div className="bottom-nav">
-          <Link to="/profile" onClick={closeMenu} className={`nav-item ${location.pathname === '/profile' ? 'active' : ''}`}>
+          <Link to="/profile" className={`nav-item ${location.pathname === '/profile' ? 'active' : ''}`}>
             <User size={18} />
             Profile
           </Link>
-          <Link to="/notifications" onClick={closeMenu} className={`nav-item ${location.pathname === '/notifications' ? 'active' : ''}`} style={{ position: 'relative' }}>
+          <Link to="/notifications" className={`nav-item ${location.pathname === '/notifications' ? 'active' : ''}`} style={{ position: 'relative' }}>
             <Bell size={18} />
             Notifications
             {unreadCount > 0 && (
@@ -106,7 +144,7 @@ const Sidebar = () => {
               </span>
             )}
           </Link>
-          <Link to="/settings" onClick={closeMenu} className={`nav-item ${location.pathname === '/settings' ? 'active' : ''}`}>
+          <Link to="/settings" className={`nav-item ${location.pathname === '/settings' ? 'active' : ''}`}>
             <SettingsIcon size={18} />
             Settings
           </Link>
@@ -117,6 +155,35 @@ const Sidebar = () => {
         </div>
       </div>
     </aside>
+
+    {/* Mobile Bottom Navigation Bar */}
+    <div className="mobile-bottom-navbar">
+      <Link to="/dashboard" className={`mobile-nav-item ${location.pathname === '/dashboard' ? 'active' : ''}`}>
+        <LayoutDashboard size={22} />
+        <span>Home</span>
+      </Link>
+      <Link to="/log-transaction" className={`mobile-nav-item ${location.pathname === '/log-transaction' ? 'active' : ''}`}>
+        <ArrowRightLeft size={22} />
+        <span>Log</span>
+      </Link>
+      <Link to="/history" className={`mobile-nav-item ${location.pathname === '/history' ? 'active' : ''}`}>
+        <HistoryIcon size={22} />
+        <span>History</span>
+      </Link>
+      <Link to="/budgets" className={`mobile-nav-item ${location.pathname === '/budgets' ? 'active' : ''}`}>
+        <Target size={22} />
+        <span>Budgets</span>
+      </Link>
+      <Link to="/debts" className={`mobile-nav-item ${location.pathname === '/debts' ? 'active' : ''}`}>
+        <Users size={22} />
+        <span>Debts</span>
+      </Link>
+      <Link to="/chits" className={`mobile-nav-item ${location.pathname === '/chits' ? 'active' : ''}`}>
+        <PieChart size={22} />
+        <span>Chits</span>
+      </Link>
+    </div>
+    </>
   );
 };
 

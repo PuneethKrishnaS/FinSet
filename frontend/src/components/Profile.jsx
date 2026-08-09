@@ -151,8 +151,8 @@ const Profile = () => {
         
         {/* Personal Details Card */}
         <div className="card" style={{ padding: '2rem' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', flexWrap: 'wrap' }}>
               <div style={{ 
                 width: '80px', height: '80px', borderRadius: '50%', 
                 background: 'linear-gradient(135deg, #6366f1, #a855f7)', 
