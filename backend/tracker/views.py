@@ -49,7 +49,6 @@ class PasswordResetRequestView(APIView):
         email = request.data.get('email')
         user = User.objects.filter(email=email).first()
         if user:
-            print("DEBUG: Found user in DB:", user.email)
             token_generator = PasswordResetTokenGenerator()
             token = token_generator.make_token(user)
             uidb64 = urlsafe_base64_encode(force_bytes(user.pk))

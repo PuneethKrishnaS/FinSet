@@ -131,6 +131,9 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# Set password reset token validity to 5 minutes (300 seconds)
+PASSWORD_RESET_TIMEOUT = 300
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/6.0/topics/i18n/
