@@ -84,6 +84,11 @@ const Notifications = () => {
       const vapidRes = await api.get('/notifications/vapid-public-key/');
       const vapidPublicKey = vapidRes.data.public_key;
       
+      if (!vapidPublicKey) {
+        toast.error('Push notifications are not configured on the server yet.');
+        return false;
+      }
+      
       const convertedVapidKey = urlBase64ToUint8Array(vapidPublicKey);
       
       const subscription = await registration.pushManager.subscribe({
@@ -98,7 +103,7 @@ const Notifications = () => {
       toast.success('Successfully enabled mobile push notifications!');
     } catch (error) {
       console.error('Failed to subscribe', error);
-      toast.error('Failed to enable push notifications.');
+      toast.error('Failed to enable: ' + (error.message || 'Unknown error'));
     }
   };
 
@@ -119,14 +124,14 @@ const Notifications = () => {
           <p className="page-subtitle">Stay updated with your financial alerts</p>
         </div>
         
-        <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
-          <button onClick={subscribeToPush} className="btn-outline" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', borderColor: 'var(--primary-color)', color: 'var(--primary-color)' }}>
+        <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+          <button onClick={subscribeToPush} className="btn" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
             <Smartphone size={18} /> Enable OS Push
           </button>
           <button onClick={markAllAsRead} className="btn-outline" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
             <Check size={18} /> Mark all read
           </button>
-          <button onClick={clearAll} className="btn-outline" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', borderColor: 'var(--danger)', color: 'var(--danger)' }}>
+          <button onClick={clearAll} className="btn" style={{ background: 'var(--danger)', display: 'flex', alignItems: 'center', gap: '0.5rem', boxShadow: '0 4px 14px 0 rgba(239, 68, 68, 0.39)' }}>
             <Trash2 size={18} /> Clear all
           </button>
         </div>
