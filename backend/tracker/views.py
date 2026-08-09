@@ -54,8 +54,17 @@ class PasswordResetRequestView(APIView):
             token = token_generator.make_token(user)
             uidb64 = urlsafe_base64_encode(force_bytes(user.pk))
             
-            # Dynamically get the frontend URL from the request Origin header, fallback to env variable
-            frontend_url = request.headers.get('Origin') or os.environ.get('FRONTEND_URL', 'http://localhost:5173')
+            # Securely get frontend URL from CORS allowed origins
+            origin = request.headers.get('Origin')
+            allowed_origins = getattr(settings, 'CORS_ALLOWED_ORIGINS', [])
+            
+            if origin in allowed_origins:
+                frontend_url = origin
+            elif allowed_origins:
+                frontend_url = allowed_origins[0]
+            else:
+                frontend_url = os.environ.get('FRONTEND_URL', 'http://localhost:5173')
+                
             # Strip trailing slash if any
             frontend_url = frontend_url.rstrip('/')
             
