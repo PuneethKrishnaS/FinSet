@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import api from '../services/api';
-import { LogIn, User, Lock, ArrowRight, Wallet, Sun, Moon } from 'lucide-react';
+import { User, Lock, ArrowRight, Sun, Moon } from 'lucide-react';
 import { useSettings } from '../context/SettingsContext';
 
 const Login = () => {
@@ -37,11 +37,8 @@ const Login = () => {
       <div className="auth-left">
         <img src="/auth-bg.png" alt="Abstract Wealth" className="auth-bg-img" />
         <div className="auth-left-content">
-          <div className="auth-logo">
-            <div className="auth-logo-icon">
-              <Wallet size={20} />
-            </div>
-            ExpenseTracker
+          <div className="auth-logo" style={{ display: 'flex', alignItems: 'center' }}>
+            <img src="/FinSet_Logo.svg" alt="FinSet" style={{ height: '32px' }} />
           </div>
           
           <div className="auth-quote-container">
@@ -93,7 +90,10 @@ const Login = () => {
           </div>
 
           <div className="auth-form-group">
-            <label className="auth-label">Password</label>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+              <label className="auth-label" style={{ marginBottom: 0 }}>Password</label>
+              <Link to="/forgot-password" style={{ fontSize: '0.8rem', color: 'var(--primary-color)', textDecoration: 'none', fontWeight: 600 }}>Forgot Password?</Link>
+            </div>
             <div className="auth-input-wrapper">
               <Lock size={18} className="auth-input-icon" />
               <input 

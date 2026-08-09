@@ -30,9 +30,8 @@ const Sidebar = () => {
   return (
     <aside className="sidebar">
       <div className="sidebar-header" style={{ display: 'flex', alignItems: 'center' }}>
-        <div className="logo-area">
-          <div className="logo-icon">F</div>
-          FinSet
+        <div className="logo-area" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <img src="/FinSet_Logo.svg" alt="FinSet" style={{ height: '32px' }} />
         </div>
         <button className="mobile-menu-btn" onClick={() => setIsOpen(!isOpen)}>
           {isOpen ? <X size={24} /> : <Menu size={24} />}

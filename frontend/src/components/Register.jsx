@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import api from '../services/api';
-import { UserPlus, User, Lock, Mail, ArrowRight, Wallet, Sun, Moon } from 'lucide-react';
+import { UserPlus, User, Lock, Mail, Sun, Moon } from 'lucide-react';
 import { useSettings } from '../context/SettingsContext';
 
 const Register = () => {
@@ -46,11 +46,8 @@ const Register = () => {
       <div className="auth-left">
         <img src="/auth-bg.png" alt="Abstract Wealth" className="auth-bg-img" />
         <div className="auth-left-content">
-          <div className="auth-logo">
-            <div className="auth-logo-icon">
-              <Wallet size={20} />
-            </div>
-            ExpenseTracker
+          <div className="auth-logo" style={{ display: 'flex', alignItems: 'center' }}>
+            <img src="/FinSet_Logo.svg" alt="FinSet" style={{ height: '32px' }} />
           </div>
           
           <div className="auth-quote-container">

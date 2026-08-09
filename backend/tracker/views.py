@@ -8,6 +8,12 @@ from .models import Income, Expense, UserProfile, Budget, Debt, DebtPayment, Cat
 from .serializers import UserSerializer, IncomeSerializer, ExpenseSerializer, UserProfileSerializer, BudgetSerializer, DebtSerializer, DebtPaymentSerializer, CategorySerializer, ChitFundSerializer, ChitContributionSerializer
 from datetime import date
 import calendar
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
+from django.utils.encoding import force_bytes, force_str
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.core.mail import send_mail
+from django.conf import settings
+import os
 
 def add_months(sourcedate, months):
     month = sourcedate.month - 1 + months
@@ -35,6 +41,148 @@ class UserProfileView(APIView):
             serializer.save()
             return Response(UserSerializer(request.user).data)
         return Response(serializer.errors, status=400)
+
+class PasswordResetRequestView(APIView):
+    permission_classes = (permissions.AllowAny,)
+
+    def post(self, request):
+        email = request.data.get('email')
+        user = User.objects.filter(email=email).first()
+        if user:
+            print("DEBUG: Found user in DB:", user.email)
+            token_generator = PasswordResetTokenGenerator()
+            token = token_generator.make_token(user)
+            uidb64 = urlsafe_base64_encode(force_bytes(user.pk))
+            
+            # The URL will point to the React frontend
+            frontend_url = os.environ.get('FRONTEND_URL', 'http://localhost:5173')
+            reset_url = f"{frontend_url}/reset-password/{uidb64}/{token}"
+            
+            html_content = f"""
+            <!DOCTYPE html>
+            <html>
+            <head>
+            <meta name="color-scheme" content="light dark">
+            <meta name="supported-color-schemes" content="light dark">
+            <style>
+                body {{
+                    font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                    background-color: #ffffff;
+                    color: #1e293b;
+                    margin: 0;
+                    padding: 40px 20px;
+                }}
+                .container {{
+                    max-width: 600px;
+                    margin: 0 auto;
+                }}
+                .logo-container {{
+                    margin-bottom: 30px;
+                }}
+                .logo {{
+                    height: 40px;
+                }}
+                h2 {{
+                    font-size: 24px;
+                    margin-top: 0;
+                }}
+                p {{
+                    font-size: 16px;
+                    line-height: 1.6;
+                    color: #475569;
+                }}
+                .btn {{
+                    background: #ec4899;
+                    color: #ffffff !important;
+                    text-decoration: none;
+                    padding: 14px 32px;
+                    border-radius: 30px;
+                    font-weight: bold;
+                    display: inline-block;
+                    font-size: 16px;
+                    margin: 35px 0;
+                }}
+                .footer {{
+                    margin-top: 40px;
+                    color: #94a3b8;
+                    font-size: 12px;
+                }}
+                @media (prefers-color-scheme: dark) {{
+                    body {{
+                        background-color: #0f172a;
+                        color: #f8fafc;
+                    }}
+                    p {{
+                        color: #cbd5e1;
+                    }}
+                }}
+            </style>
+            </head>
+            <body>
+                <div class="container">
+                    <div class="logo-container">
+                        <img src="{frontend_url}/FinSet_Logo.png" alt="FinSet" class="logo" />
+                    </div>
+                    <h2>Password Reset Request</h2>
+                    <p>
+                        Hello,<br><br>
+                        We received a request to reset your password for your FinSet account. Click the button below to securely choose a new password.
+                    </p>
+                    <div>
+                        <a href="{reset_url}" class="btn">Reset Password</a>
+                    </div>
+                    <p style="font-size: 14px; color: #94a3b8;">
+                        If you did not request a password reset, you can safely ignore this email. Your password will remain unchanged.
+                    </p>
+                    <div class="footer">
+                        &copy; 2026 FinSet Platform. All rights reserved.
+                    </div>
+                </div>
+            </body>
+            </html>
+            """
+            
+            try:
+                send_mail(
+                    subject='FinSet - Password Reset Request',
+                    message=f'Click the link below to reset your password:\n\n{reset_url}',
+                    html_message=html_content,
+                    from_email=getattr(settings, 'DEFAULT_FROM_EMAIL', 'noreply@finset.com'),
+                    recipient_list=[user.email],
+                    fail_silently=False,
+                )
+                print("DEBUG: Email successfully handed off to Gmail SMTP!")
+            except Exception as e:
+                print("DEBUG: Failed to send email via SMTP:", str(e))
+        else:
+            print("DEBUG: User not found for email:", email)
+        
+        # We always return success to prevent email enumeration attacks
+        return Response({'message': 'If an account with that email exists, we have sent a password reset link.'})
+
+class PasswordResetConfirmView(APIView):
+    permission_classes = (permissions.AllowAny,)
+
+    def post(self, request, uidb64, token):
+        new_password = request.data.get('new_password')
+        if not new_password:
+            return Response({'error': 'New password is required.'}, status=400)
+
+        try:
+            uid = force_str(urlsafe_base64_decode(uidb64))
+            user = User.objects.get(pk=uid)
+        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+            user = None
+
+        if user is not None:
+            token_generator = PasswordResetTokenGenerator()
+            if token_generator.check_token(user, token):
+                user.set_password(new_password)
+                user.save()
+                return Response({'message': 'Password has been reset successfully.'})
+            else:
+                return Response({'error': 'The reset link is invalid or has expired.'}, status=400)
+        return Response({'error': 'The reset link is invalid.'}, status=400)
 
 class BudgetViewSet(viewsets.ModelViewSet):
     serializer_class = BudgetSerializer

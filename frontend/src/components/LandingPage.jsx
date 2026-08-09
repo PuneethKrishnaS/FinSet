@@ -51,9 +51,8 @@ const LandingPage = () => {
       
       {/* Top Nav (Absolute) */}
       <nav style={{ position: 'absolute', top: 0, left: 0, right: 0, padding: '2rem 5%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', zIndex: 100 }}>
-        <div style={{ fontWeight: 800, fontSize: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-          <div style={{ width: '36px', height: '36px', background: 'linear-gradient(135deg, #7c3aed 0%, #ec4899 100%)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 15px rgba(124, 58, 237, 0.4)' }}>F</div>
-          FinSet
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <img src="/FinSet_Logo.svg" alt="FinSet" style={{ height: '36px' }} />
         </div>
         <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
           <Link to="/login" style={{ color: '#cbd5e1', textDecoration: 'none', fontWeight: 600, padding: '0.5rem 1rem', transition: 'color 0.2s' }}>Log In</Link>
@@ -215,9 +214,8 @@ const LandingPage = () => {
 
       {/* Footer */}
       <footer style={{ padding: '4rem 5%', display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid #1e293b' }}>
-        <div style={{ fontWeight: 800, fontSize: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-          <div style={{ width: '32px', height: '32px', background: 'linear-gradient(135deg, #7c3aed 0%, #ec4899 100%)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>F</div>
-          FinSet
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <img src="/FinSet_Logo.svg" alt="FinSet" style={{ height: '32px' }} />
         </div>
         <p style={{ color: '#64748b', fontWeight: 500 }}>© 2026 FinSet Platform. All rights reserved.</p>
       </footer>
