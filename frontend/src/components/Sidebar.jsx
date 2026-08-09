@@ -10,6 +10,7 @@ import {
   LogOut,
   User,
   PieChart,
+  Bell,
   Menu,
   X
 } from 'lucide-react';
@@ -18,6 +19,27 @@ const Sidebar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
+
+  // Note: For a real app, you might use context or a store for this,
+  // but we can fetch it periodically or on load here
+  React.useEffect(() => {
+    const fetchUnread = async () => {
+      try {
+        const res = await fetch('http://localhost:8001/api/notifications/', {
+          headers: { 'Authorization': `Bearer ${localStorage.getItem('access_token')}` }
+        });
+        const data = await res.json();
+        const unread = data.filter(n => !n.is_read).length;
+        setUnreadCount(unread);
+      } catch (err) { }
+    };
+    fetchUnread();
+    
+    // Refresh unread count every 30 seconds
+    const interval = setInterval(fetchUnread, 30000);
+    return () => clearInterval(interval);
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem('access_token');
@@ -70,6 +92,19 @@ const Sidebar = () => {
           <Link to="/profile" onClick={closeMenu} className={`nav-item ${location.pathname === '/profile' ? 'active' : ''}`}>
             <User size={18} />
             Profile
+          </Link>
+          <Link to="/notifications" onClick={closeMenu} className={`nav-item ${location.pathname === '/notifications' ? 'active' : ''}`} style={{ position: 'relative' }}>
+            <Bell size={18} />
+            Notifications
+            {unreadCount > 0 && (
+              <span style={{ 
+                position: 'absolute', right: '1rem', background: 'var(--primary-color)', 
+                color: 'white', fontSize: '0.75rem', padding: '0.1rem 0.4rem', 
+                borderRadius: '10px', fontWeight: 'bold' 
+              }}>
+                {unreadCount}
+              </span>
+            )}
           </Link>
           <Link to="/settings" onClick={closeMenu} className={`nav-item ${location.pathname === '/settings' ? 'active' : ''}`}>
             <SettingsIcon size={18} />

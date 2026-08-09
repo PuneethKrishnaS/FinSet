@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from django.contrib.auth.models import User
 from django.db.models import Sum
 from django.db.models.functions import TruncMonth, TruncDay
-from .models import Income, Expense, UserProfile, Budget, Debt, DebtPayment, Category, ChitFund, ChitContribution, PushSubscription
+from .models import Income, Expense, UserProfile, Budget, Debt, DebtPayment, Category, ChitFund, ChitContribution, Notification
 from .serializers import UserSerializer, IncomeSerializer, ExpenseSerializer, UserProfileSerializer, BudgetSerializer, DebtSerializer, DebtPaymentSerializer, CategorySerializer, ChitFundSerializer, ChitContributionSerializer
 from datetime import date
 import calendar
@@ -79,34 +79,37 @@ class ChangePasswordView(APIView):
         request.user.save()
         return Response({'message': 'Password updated successfully.'})
 
-class SubscribeToPushView(APIView):
+class NotificationListView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
-    def post(self, request):
-        subscription = request.data.get('subscription')
-        if not subscription:
-            return Response({'error': 'Subscription data is required.'}, status=400)
-            
-        endpoint = subscription.get('endpoint')
-        keys = subscription.get('keys', {})
-        p256dh = keys.get('p256dh')
-        auth = keys.get('auth')
-        
-        if not endpoint or not p256dh or not auth:
-            return Response({'error': 'Invalid subscription format.'}, status=400)
-            
-        PushSubscription.objects.update_or_create(
-            user=request.user,
-            endpoint=endpoint,
-            defaults={'p256dh': p256dh, 'auth': auth}
-        )
-        return Response({'message': 'Subscribed successfully.'})
-
-class VapidPublicKeyView(APIView):
-    permission_classes = (permissions.AllowAny,)
-
     def get(self, request):
-        return Response({'public_key': getattr(settings, 'VAPID_PUBLIC_KEY', '')})
+        notifications = Notification.objects.filter(user=request.user)
+        # We need a serializer here, let's use the one we just created
+        from .serializers import NotificationSerializer
+        serializer = NotificationSerializer(notifications, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        action = request.data.get('action')
+        if action == 'mark_read':
+            Notification.objects.filter(user=request.user, is_read=False).update(is_read=True)
+            return Response({'message': 'Notifications marked as read'})
+        elif action == 'clear_all':
+            Notification.objects.filter(user=request.user).delete()
+            return Response({'message': 'Notifications cleared'})
+        
+        # Mark specific notification read
+        notification_id = request.data.get('id')
+        if notification_id:
+            try:
+                notif = Notification.objects.get(id=notification_id, user=request.user)
+                notif.is_read = True
+                notif.save()
+                return Response({'message': 'Marked read'})
+            except Notification.DoesNotExist:
+                return Response({'error': 'Not found'}, status=404)
+                
+        return Response({'error': 'Invalid action'}, status=400)
 
 class ExportDataView(APIView):
     permission_classes = [permissions.IsAuthenticated]
@@ -340,8 +343,8 @@ class ExpenseViewSet(viewsets.ModelViewSet):
             threshold = float(budget.amount) * 0.8
             if total_spent >= threshold and (total_spent - float(expense.amount)) < threshold:
                 # Crossed the 80% threshold just now
-                from .utils import send_web_push
-                send_web_push(
+                from .utils import create_notification
+                create_notification(
                     self.request.user,
                     "Budget Alert! ⚠️",
                     f"You have used over 80% of your {expense.category.name} budget for this month."

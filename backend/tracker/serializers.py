@@ -1,7 +1,7 @@
 # pyrefly: ignore [missing-import]
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import Income, Expense, UserProfile, Budget, Debt, DebtPayment, Category, ChitFund, ChitContribution
+from .models import Income, Expense, UserProfile, Budget, Debt, DebtPayment, Category, ChitFund, ChitContribution, Notification
 
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
@@ -72,3 +72,8 @@ class ChitFundSerializer(serializers.ModelSerializer):
         model = ChitFund
         fields = ('id', 'user', 'name', 'start_date', 'duration_months', 'target_amount', 'contributions')
         read_only_fields = ('user',)
+class NotificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Notification
+        fields = "__all__"
+        read_only_fields = ("user", "created_at")

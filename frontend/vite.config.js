@@ -7,9 +7,6 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
-      strategies: 'injectManifest',
-      srcDir: 'src',
-      filename: 'sw.js',
       registerType: 'autoUpdate',
       includeAssets: ['FinSet_Logo.svg', 'FinSet_Logo.png', 'auth-bg.png', 'hero_bg.png', 'feature_1.png'],
       manifest: {

@@ -16,6 +16,7 @@ import Sidebar from './components/Sidebar';
 import Settings from './components/Settings';
 import Profile from './components/Profile';
 import ChitFunds from './components/ChitFunds';
+import Notifications from './components/Notifications';
 
 const ProtectedRoute = ({ children }) => {
   const token = localStorage.getItem('access_token');
@@ -37,7 +38,7 @@ const AppLayout = ({ children }) => {
   const location = useLocation();
   const isAuthPage = location.pathname === '/login' || location.pathname === '/register' || location.pathname === '/forgot-password' || location.pathname.startsWith('/reset-password');
   const isLandingPage = location.pathname === '/';
-  
+
   if (isLandingPage) {
     return children;
   }
@@ -77,7 +78,7 @@ function App() {
             <Route path="/register" element={<AuthRoute><Register /></AuthRoute>} />
             <Route path="/forgot-password" element={<AuthRoute><ForgotPassword /></AuthRoute>} />
             <Route path="/reset-password/:uid/:token" element={<AuthRoute><ResetPassword /></AuthRoute>} />
-            
+
             <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
             <Route path="/log-transaction" element={<ProtectedRoute><LogTransaction /></ProtectedRoute>} />
             <Route path="/history" element={<ProtectedRoute><History /></ProtectedRoute>} />
@@ -86,6 +87,7 @@ function App() {
             <Route path="/chits" element={<ProtectedRoute><ChitFunds /></ProtectedRoute>} />
             <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
             <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+            <Route path="/notifications" element={<ProtectedRoute><Notifications /></ProtectedRoute>} />
           </Routes>
         </AppLayout>
       </Router>

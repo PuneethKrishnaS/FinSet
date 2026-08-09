@@ -83,72 +83,6 @@ const Settings = () => {
     }
   };
 
-  const urlBase64ToUint8Array = (base64String) => {
-    const padding = '='.repeat((4 - base64String.length % 4) % 4);
-    const base64 = (base64String + padding)
-      .replace(/\-/g, '+')
-      .replace(/_/g, '/');
-
-    const rawData = window.atob(base64);
-    const outputArray = new Uint8Array(rawData.length);
-
-    for (let i = 0; i < rawData.length; ++i) {
-      outputArray[i] = rawData.charCodeAt(i);
-    }
-    return outputArray;
-  };
-
-  const subscribeToPush = async () => {
-    if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
-      toast.error('Push notifications are not supported in this browser.');
-      return false;
-    }
-    
-    try {
-      const permission = await Notification.requestPermission();
-      if (permission !== 'granted') {
-        toast.error('Permission denied for notifications.');
-        return false;
-      }
-      
-      const registration = await navigator.serviceWorker.ready;
-      
-      // Get VAPID public key from backend
-      const vapidRes = await api.get('/notifications/vapid-public-key/');
-      const vapidPublicKey = vapidRes.data.public_key;
-      
-      const convertedVapidKey = urlBase64ToUint8Array(vapidPublicKey);
-      
-      const subscription = await registration.pushManager.subscribe({
-        userVisibleOnly: true,
-        applicationServerKey: convertedVapidKey
-      });
-      
-      await api.post('/notifications/subscribe/', {
-        subscription: subscription.toJSON()
-      });
-      
-      toast.success('Successfully subscribed to push notifications!');
-      return true;
-    } catch (error) {
-      console.error('Failed to subscribe', error);
-      toast.error('Failed to enable push notifications.');
-      return false;
-    }
-  };
-
-  const toggleNotification = async (key) => {
-    const newValue = !notifications[key];
-    
-    // If turning on Budget Alerts, try to subscribe
-    if (newValue && key === 'budgetAlerts') {
-      const success = await subscribeToPush();
-      if (!success) return; // Revert toggle if subscription failed
-    }
-    
-    setNotifications(prev => ({ ...prev, [key]: newValue }));
-  };
-
   // Styles
   const tabBtnStyle = (isActive) => ({
     padding: '0.75rem 1.5rem',
@@ -198,9 +132,6 @@ const Settings = () => {
           </button>
           <button style={tabBtnStyle(activeTab === 'categories')} onClick={() => setActiveTab('categories')}>
             <Layout size={18} /> Categories
-          </button>
-          <button style={tabBtnStyle(activeTab === 'notifications')} onClick={() => setActiveTab('notifications')}>
-            <Bell size={18} /> Notifications
           </button>
         </div>
 
@@ -321,46 +252,6 @@ const Settings = () => {
               )}
             </div>
           </div>
-        )}
-
-        {/* Notifications Tab */}
-        {activeTab === 'notifications' && (
-          <div className="card" style={{ padding: '2rem' }}>
-            <h3 style={{ fontSize: '1.25rem', marginBottom: '1.5rem', color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-              <div style={{ padding: '0.5rem', background: 'var(--primary-light)', color: 'var(--primary-color)', borderRadius: '10px' }}><Bell size={20} /></div>
-              Email & Push Alerts
-            </h3>
-            
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-              
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1.5rem', background: 'var(--bg-main)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)' }}>
-                <div>
-                  <p style={{ fontWeight: '600', color: 'var(--text-main)', margin: '0 0 0.25rem 0', fontSize: '1.05rem' }}>Budget Alerts</p>
-                  <p style={{ color: 'var(--text-muted)', margin: 0, fontSize: '0.9rem' }}>Get notified when you exceed 80% of any budget.</p>
-                </div>
-                <ToggleSwitch checked={notifications.budgetAlerts} onChange={() => toggleNotification('budgetAlerts')} />
-              </div>
-              
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1.5rem', background: 'var(--bg-main)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)' }}>
-                <div>
-                  <p style={{ fontWeight: '600', color: 'var(--text-main)', margin: '0 0 0.25rem 0', fontSize: '1.05rem' }}>Weekly Financial Summary</p>
-                  <p style={{ color: 'var(--text-muted)', margin: 0, fontSize: '0.9rem' }}>Receive a weekly digest of your spending habits.</p>
-                </div>
-                <ToggleSwitch checked={notifications.weeklySummary} onChange={() => toggleNotification('weeklySummary')} />
-              </div>
-              
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1.5rem', background: 'var(--bg-main)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)' }}>
-                <div>
-                  <p style={{ fontWeight: '600', color: 'var(--text-main)', margin: '0 0 0.25rem 0', fontSize: '1.05rem' }}>Chit Fund Reminders</p>
-                  <p style={{ color: 'var(--text-muted)', margin: 0, fontSize: '0.9rem' }}>Get reminded 3 days before a chit fund payment is due.</p>
-                </div>
-                <ToggleSwitch checked={notifications.chitFundReminders} onChange={() => toggleNotification('chitFundReminders')} />
-              </div>
-
-            </div>
-          </div>
-        )}
-
       </div>
     </div>
   );
