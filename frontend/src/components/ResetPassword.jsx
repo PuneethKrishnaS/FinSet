@@ -77,7 +77,7 @@ const ResetPassword = () => {
 
         {success ? (
           <div style={{ textAlign: 'center', padding: '2rem 1rem' }}>
-            <CheckCircle2 size={48} className="text-success" style={{ margin: '0 auto 1rem auto' }} />
+            <CheckCircle2 size={48} style={{ color: 'var(--success)', margin: '0 auto 1rem auto' }} />
             <h3 style={{ fontSize: '1.25rem', marginBottom: '0.5rem', color: 'var(--text-main)' }}>Password Reset Successful</h3>
             <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginBottom: '2rem' }}>
               Your password has been changed successfully. You can now log in with your new credentials.
