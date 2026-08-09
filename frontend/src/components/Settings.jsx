@@ -83,8 +83,70 @@ const Settings = () => {
     }
   };
 
-  const toggleNotification = (key) => {
-    setNotifications(prev => ({ ...prev, [key]: !prev[key] }));
+  const urlBase64ToUint8Array = (base64String) => {
+    const padding = '='.repeat((4 - base64String.length % 4) % 4);
+    const base64 = (base64String + padding)
+      .replace(/\-/g, '+')
+      .replace(/_/g, '/');
+
+    const rawData = window.atob(base64);
+    const outputArray = new Uint8Array(rawData.length);
+
+    for (let i = 0; i < rawData.length; ++i) {
+      outputArray[i] = rawData.charCodeAt(i);
+    }
+    return outputArray;
+  };
+
+  const subscribeToPush = async () => {
+    if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
+      toast.error('Push notifications are not supported in this browser.');
+      return false;
+    }
+    
+    try {
+      const permission = await Notification.requestPermission();
+      if (permission !== 'granted') {
+        toast.error('Permission denied for notifications.');
+        return false;
+      }
+      
+      const registration = await navigator.serviceWorker.ready;
+      
+      // Get VAPID public key from backend
+      const vapidRes = await api.get('/notifications/vapid-public-key/');
+      const vapidPublicKey = vapidRes.data.public_key;
+      
+      const convertedVapidKey = urlBase64ToUint8Array(vapidPublicKey);
+      
+      const subscription = await registration.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: convertedVapidKey
+      });
+      
+      await api.post('/notifications/subscribe/', {
+        subscription: subscription.toJSON()
+      });
+      
+      toast.success('Successfully subscribed to push notifications!');
+      return true;
+    } catch (error) {
+      console.error('Failed to subscribe', error);
+      toast.error('Failed to enable push notifications.');
+      return false;
+    }
+  };
+
+  const toggleNotification = async (key) => {
+    const newValue = !notifications[key];
+    
+    // If turning on Budget Alerts, try to subscribe
+    if (newValue && key === 'budgetAlerts') {
+      const success = await subscribeToPush();
+      if (!success) return; // Revert toggle if subscription failed
+    }
+    
+    setNotifications(prev => ({ ...prev, [key]: newValue }));
   };
 
   // Styles

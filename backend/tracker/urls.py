@@ -1,7 +1,7 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-from .views import RegisterView, IncomeViewSet, ExpenseViewSet, DashboardDataView, UserProfileView, BudgetViewSet, DebtViewSet, DebtPaymentViewSet, CategoryViewSet, ProcessRecurringView, ChitFundViewSet, ChitContributionViewSet, PasswordResetRequestView, PasswordResetConfirmView, ChangePasswordView, ExportDataView
+from .views import RegisterView, IncomeViewSet, ExpenseViewSet, DashboardDataView, UserProfileView, BudgetViewSet, DebtViewSet, DebtPaymentViewSet, CategoryViewSet, ProcessRecurringView, ChitFundViewSet, ChitContributionViewSet, PasswordResetRequestView, PasswordResetConfirmView, ChangePasswordView, ExportDataView, SubscribeToPushView, VapidPublicKeyView
 
 router = DefaultRouter()
 router.register(r'incomes', IncomeViewSet, basename='income')
@@ -21,6 +21,8 @@ urlpatterns = [
     path('auth/change-password/', ChangePasswordView.as_view(), name='change_password'),
     path('auth/password-reset/', PasswordResetRequestView.as_view(), name='password_reset'),
     path('auth/password-reset-confirm/<uidb64>/<token>/', PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
+    path('notifications/vapid-public-key/', VapidPublicKeyView.as_view(), name='vapid_public_key'),
+    path('notifications/subscribe/', SubscribeToPushView.as_view(), name='subscribe_to_push'),
     path('dashboard/', DashboardDataView.as_view(), name='dashboard_data'),
     path('export-data/', ExportDataView.as_view(), name='export_data'),
     path('process-recurring/', ProcessRecurringView.as_view(), name='process_recurring'),

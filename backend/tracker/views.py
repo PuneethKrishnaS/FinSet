@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from django.contrib.auth.models import User
 from django.db.models import Sum
 from django.db.models.functions import TruncMonth, TruncDay
-from .models import Income, Expense, UserProfile, Budget, Debt, DebtPayment, Category, ChitFund, ChitContribution
+from .models import Income, Expense, UserProfile, Budget, Debt, DebtPayment, Category, ChitFund, ChitContribution, PushSubscription
 from .serializers import UserSerializer, IncomeSerializer, ExpenseSerializer, UserProfileSerializer, BudgetSerializer, DebtSerializer, DebtPaymentSerializer, CategorySerializer, ChitFundSerializer, ChitContributionSerializer
 from datetime import date
 import calendar
@@ -78,6 +78,35 @@ class ChangePasswordView(APIView):
         request.user.set_password(new_password)
         request.user.save()
         return Response({'message': 'Password updated successfully.'})
+
+class SubscribeToPushView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        subscription = request.data.get('subscription')
+        if not subscription:
+            return Response({'error': 'Subscription data is required.'}, status=400)
+            
+        endpoint = subscription.get('endpoint')
+        keys = subscription.get('keys', {})
+        p256dh = keys.get('p256dh')
+        auth = keys.get('auth')
+        
+        if not endpoint or not p256dh or not auth:
+            return Response({'error': 'Invalid subscription format.'}, status=400)
+            
+        PushSubscription.objects.update_or_create(
+            user=request.user,
+            endpoint=endpoint,
+            defaults={'p256dh': p256dh, 'auth': auth}
+        )
+        return Response({'message': 'Subscribed successfully.'})
+
+class VapidPublicKeyView(APIView):
+    permission_classes = (permissions.AllowAny,)
+
+    def get(self, request):
+        return Response({'public_key': getattr(settings, 'VAPID_PUBLIC_KEY', '')})
 
 class ExportDataView(APIView):
     permission_classes = [permissions.IsAuthenticated]
@@ -294,7 +323,29 @@ class ExpenseViewSet(viewsets.ModelViewSet):
         return Expense.objects.filter(user=self.request.user).order_by('-date')
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        expense = serializer.save(user=self.request.user)
+        
+        # Check budget alerts (80%)
+        month = expense.date.replace(day=1)
+        budget = Budget.objects.filter(user=self.request.user, category=expense.category, month=month).first()
+        
+        if budget:
+            total_spent = Expense.objects.filter(
+                user=self.request.user,
+                category=expense.category,
+                date__year=expense.date.year,
+                date__month=expense.date.month
+            ).aggregate(Sum('amount'))['amount__sum'] or 0
+            
+            threshold = float(budget.amount) * 0.8
+            if total_spent >= threshold and (total_spent - float(expense.amount)) < threshold:
+                # Crossed the 80% threshold just now
+                from .utils import send_web_push
+                send_web_push(
+                    self.request.user,
+                    "Budget Alert! ⚠️",
+                    f"You have used over 80% of your {expense.category.name} budget for this month."
+                )
 
 class DebtViewSet(viewsets.ModelViewSet):
     serializer_class = DebtSerializer
