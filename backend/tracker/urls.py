@@ -1,7 +1,7 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-from .views import RegisterView, IncomeViewSet, ExpenseViewSet, DashboardDataView, UserProfileView, BudgetViewSet, DebtViewSet, DebtPaymentViewSet, CategoryViewSet, ProcessRecurringView, ChitFundViewSet, ChitContributionViewSet, PasswordResetRequestView, PasswordResetConfirmView
+from .views import RegisterView, IncomeViewSet, ExpenseViewSet, DashboardDataView, UserProfileView, BudgetViewSet, DebtViewSet, DebtPaymentViewSet, CategoryViewSet, ProcessRecurringView, ChitFundViewSet, ChitContributionViewSet, PasswordResetRequestView, PasswordResetConfirmView, ChangePasswordView, ExportDataView
 
 router = DefaultRouter()
 router.register(r'incomes', IncomeViewSet, basename='income')
@@ -18,9 +18,11 @@ urlpatterns = [
     path('auth/login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('auth/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('auth/profile/', UserProfileView.as_view(), name='user_profile'),
+    path('auth/change-password/', ChangePasswordView.as_view(), name='change_password'),
     path('auth/password-reset/', PasswordResetRequestView.as_view(), name='password_reset'),
     path('auth/password-reset-confirm/<uidb64>/<token>/', PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
     path('dashboard/', DashboardDataView.as_view(), name='dashboard_data'),
+    path('export-data/', ExportDataView.as_view(), name='export_data'),
     path('process-recurring/', ProcessRecurringView.as_view(), name='process_recurring'),
     path('', include(router.urls)),
 ]

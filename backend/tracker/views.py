@@ -35,12 +35,70 @@ class UserProfileView(APIView):
         return Response(serializer.data)
 
     def put(self, request):
+        user = request.user
+        
+        # Update User fields if provided
+        user_updated = False
+        if 'first_name' in request.data:
+            user.first_name = request.data['first_name']
+            user_updated = True
+        if 'last_name' in request.data:
+            user.last_name = request.data['last_name']
+            user_updated = True
+            
+        if user_updated:
+            user.save()
+
+        # Update UserProfile fields
         profile = request.user.profile
         serializer = UserProfileSerializer(profile, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(UserSerializer(request.user).data)
         return Response(serializer.errors, status=400)
+
+    def delete(self, request):
+        user = request.user
+        user.delete()
+        return Response({'message': 'User deleted successfully.'})
+
+class ChangePasswordView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        old_password = request.data.get('old_password')
+        new_password = request.data.get('new_password')
+        
+        if not old_password or not new_password:
+            return Response({'error': 'Both old and new passwords are required.'}, status=400)
+            
+        if not request.user.check_password(old_password):
+            return Response({'error': 'Incorrect old password.'}, status=400)
+            
+        request.user.set_password(new_password)
+        request.user.save()
+        return Response({'message': 'Password updated successfully.'})
+
+class ExportDataView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        incomes = IncomeSerializer(Income.objects.filter(user=request.user), many=True).data
+        expenses = ExpenseSerializer(Expense.objects.filter(user=request.user), many=True).data
+        budgets = BudgetSerializer(Budget.objects.filter(user=request.user), many=True).data
+        debts = DebtSerializer(Debt.objects.filter(user=request.user), many=True).data
+        categories = CategorySerializer(Category.objects.filter(user=request.user), many=True).data
+        chit_funds = ChitFundSerializer(ChitFund.objects.filter(user=request.user), many=True).data
+        
+        data = {
+            'incomes': incomes,
+            'expenses': expenses,
+            'budgets': budgets,
+            'debts': debts,
+            'categories': categories,
+            'chit_funds': chit_funds,
+        }
+        return Response(data)
 
 class PasswordResetRequestView(APIView):
     permission_classes = (permissions.AllowAny,)
