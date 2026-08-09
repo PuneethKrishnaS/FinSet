@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Bell, Check, Trash2 } from 'lucide-react';
+import { Bell, Check, Trash2, Smartphone } from 'lucide-react';
 import api from '../services/api';
+import toast from 'react-hot-toast';
 
 const Notifications = () => {
   const [notifications, setNotifications] = useState([]);
@@ -50,6 +51,57 @@ const Notifications = () => {
     }
   };
 
+  const urlBase64ToUint8Array = (base64String) => {
+    const padding = '='.repeat((4 - base64String.length % 4) % 4);
+    const base64 = (base64String + padding)
+      .replace(/\-/g, '+')
+      .replace(/_/g, '/');
+
+    const rawData = window.atob(base64);
+    const outputArray = new Uint8Array(rawData.length);
+
+    for (let i = 0; i < rawData.length; ++i) {
+      outputArray[i] = rawData.charCodeAt(i);
+    }
+    return outputArray;
+  };
+
+  const subscribeToPush = async () => {
+    if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
+      toast.error('Push notifications are not supported in this browser.');
+      return false;
+    }
+    
+    try {
+      const permission = await Notification.requestPermission();
+      if (permission !== 'granted') {
+        toast.error('Permission denied for notifications.');
+        return false;
+      }
+      
+      const registration = await navigator.serviceWorker.ready;
+      
+      const vapidRes = await api.get('/notifications/vapid-public-key/');
+      const vapidPublicKey = vapidRes.data.public_key;
+      
+      const convertedVapidKey = urlBase64ToUint8Array(vapidPublicKey);
+      
+      const subscription = await registration.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: convertedVapidKey
+      });
+      
+      await api.post('/notifications/subscribe/', {
+        subscription: subscription.toJSON()
+      });
+      
+      toast.success('Successfully enabled mobile push notifications!');
+    } catch (error) {
+      console.error('Failed to subscribe', error);
+      toast.error('Failed to enable push notifications.');
+    }
+  };
+
   if (loading) {
     return (
       <div className="page-container">
@@ -68,6 +120,9 @@ const Notifications = () => {
         </h1>
         
         <div style={{ display: 'flex', gap: '1rem' }}>
+          <button onClick={subscribeToPush} className="btn-outline" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', borderColor: 'var(--primary-color)', color: 'var(--primary-color)' }}>
+            <Smartphone size={18} /> Enable OS Push
+          </button>
           <button onClick={markAllAsRead} className="btn-outline" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
             <Check size={18} /> Mark all read
           </button>

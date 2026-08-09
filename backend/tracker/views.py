@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from django.contrib.auth.models import User
 from django.db.models import Sum
 from django.db.models.functions import TruncMonth, TruncDay
-from .models import Income, Expense, UserProfile, Budget, Debt, DebtPayment, Category, ChitFund, ChitContribution, Notification
+from .models import Income, Expense, UserProfile, Budget, Debt, DebtPayment, Category, ChitFund, ChitContribution, Notification, PushSubscription
 from .serializers import UserSerializer, IncomeSerializer, ExpenseSerializer, UserProfileSerializer, BudgetSerializer, DebtSerializer, DebtPaymentSerializer, CategorySerializer, ChitFundSerializer, ChitContributionSerializer
 from datetime import date
 import calendar
@@ -78,6 +78,36 @@ class ChangePasswordView(APIView):
         request.user.set_password(new_password)
         request.user.save()
         return Response({'message': 'Password updated successfully.'})
+
+class SubscribeToPushView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        subscription = request.data.get('subscription')
+        if not subscription:
+            return Response({'error': 'Subscription data is required.'}, status=400)
+            
+        endpoint = subscription.get('endpoint')
+        keys = subscription.get('keys', {})
+        p256dh = keys.get('p256dh')
+        auth = keys.get('auth')
+        
+        if not endpoint or not p256dh or not auth:
+            return Response({'error': 'Invalid subscription format.'}, status=400)
+            
+        PushSubscription.objects.update_or_create(
+            user=request.user,
+            endpoint=endpoint,
+            defaults={'p256dh': p256dh, 'auth': auth}
+        )
+        return Response({'message': 'Subscribed successfully.'})
+
+class VapidPublicKeyView(APIView):
+    permission_classes = (permissions.AllowAny,)
+
+    def get(self, request):
+        from django.conf import settings
+        return Response({'public_key': getattr(settings, 'VAPID_PUBLIC_KEY', '')})
 
 class NotificationListView(APIView):
     permission_classes = [permissions.IsAuthenticated]

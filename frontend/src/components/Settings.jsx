@@ -20,16 +20,11 @@ const Settings = () => {
   const [saving, setSaving] = useState(false);
   const [categories, setCategories] = useState([]);
   const [newCategoryName, setNewCategoryName] = useState('');
-  
+
   // UI State
   const [activeTab, setActiveTab] = useState('general');
-  
-  // Mock local preferences for UI richness
-  const [notifications, setNotifications] = useState({
-    budgetAlerts: true,
-    weeklySummary: false,
-    chitFundReminders: true
-  });
+
+
 
   React.useEffect(() => {
     setSelectedCurrency(currency);
@@ -100,7 +95,7 @@ const Settings = () => {
   });
 
   const ToggleSwitch = ({ checked, onChange }) => (
-    <div 
+    <div
       onClick={onChange}
       style={{
         width: '44px', height: '24px', borderRadius: '12px',
@@ -124,7 +119,7 @@ const Settings = () => {
       </div>
 
       <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-        
+
         {/* Tabs */}
         <div style={{ display: 'flex', gap: '1rem', borderBottom: '1px solid var(--border-color)', marginBottom: '2rem' }}>
           <button style={tabBtnStyle(activeTab === 'general')} onClick={() => setActiveTab('general')}>
@@ -138,13 +133,13 @@ const Settings = () => {
         {/* General Tab */}
         {activeTab === 'general' && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-            
+
             <div className="card" style={{ padding: '2rem' }}>
               <h3 style={{ fontSize: '1.25rem', marginBottom: '1.5rem', color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                 <div style={{ padding: '0.5rem', background: 'var(--primary-light)', color: 'var(--primary-color)', borderRadius: '10px' }}><Sun size={20} /></div>
                 Appearance
               </h3>
-              
+
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1.5rem', background: 'var(--bg-main)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)' }}>
                 <div>
                   <p style={{ fontWeight: '600', color: 'var(--text-main)', margin: '0 0 0.25rem 0', fontSize: '1.05rem' }}>Theme Mode</p>
@@ -162,13 +157,13 @@ const Settings = () => {
                 <div style={{ padding: '0.5rem', background: 'var(--primary-light)', color: 'var(--primary-color)', borderRadius: '10px' }}><Globe size={20} /></div>
                 Regional Preferences
               </h3>
-              
+
               <div style={{ padding: '1.5rem', background: 'var(--bg-main)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)' }}>
                 <label style={{ display: 'block', fontWeight: '600', color: 'var(--text-main)', marginBottom: '0.5rem' }}>Base Currency</label>
                 <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)', marginBottom: '1.5rem' }}>This currency is used globally across your dashboard and transaction history.</p>
-                
-                <select 
-                  value={selectedCurrency} 
+
+                <select
+                  value={selectedCurrency}
                   onChange={(e) => setSelectedCurrency(e.target.value)}
                   className="input-field"
                   style={{ marginBottom: '0', maxWidth: '300px' }}
@@ -181,9 +176,9 @@ const Settings = () => {
             </div>
 
             <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '1rem' }}>
-              <button 
-                className="btn" 
-                onClick={handleSave} 
+              <button
+                className="btn"
+                onClick={handleSave}
                 disabled={saving || selectedCurrency === currency}
                 style={{ padding: '0.75rem 2rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}
               >
@@ -207,15 +202,15 @@ const Settings = () => {
             </div>
 
             <form onSubmit={handleAddCategory} style={{ display: 'flex', gap: '1rem', marginBottom: '2rem' }}>
-              <input 
-                type="text" 
+              <input
+                type="text"
                 value={newCategoryName}
                 onChange={e => setNewCategoryName(e.target.value)}
                 placeholder="Enter new category name..."
                 className="input-field"
                 style={{ marginBottom: 0, flex: 1 }}
               />
-              <button 
+              <button
                 type="submit"
                 className="btn"
                 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', whiteSpace: 'nowrap' }}
@@ -226,17 +221,17 @@ const Settings = () => {
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '1rem' }}>
               {categories.map(cat => (
-                <div key={cat.id} style={{ 
-                  display: 'flex', justifyContent: 'space-between', alignItems: 'center', 
-                  padding: '1rem 1.25rem', background: 'var(--bg-main)', borderRadius: 'var(--radius-md)', 
-                  border: '1px solid var(--border-color)' 
+                <div key={cat.id} style={{
+                  display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                  padding: '1rem 1.25rem', background: 'var(--bg-main)', borderRadius: 'var(--radius-md)',
+                  border: '1px solid var(--border-color)'
                 }}>
                   <span style={{ fontWeight: '600', color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                     <DollarSign size={16} style={{ color: 'var(--primary-color)' }} />
                     {cat.name}
                   </span>
-                  <button 
-                    onClick={() => handleDeleteCategory(cat.id)} 
+                  <button
+                    onClick={() => handleDeleteCategory(cat.id)}
                     style={{ background: 'none', border: 'none', color: 'var(--danger)', cursor: 'pointer', opacity: 0.7, padding: '0.25rem' }}
                     onMouseOver={(e) => e.currentTarget.style.opacity = 1}
                     onMouseOut={(e) => e.currentTarget.style.opacity = 0.7}
@@ -252,6 +247,8 @@ const Settings = () => {
               )}
             </div>
           </div>
+        )}
+
       </div>
     </div>
   );
