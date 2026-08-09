@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
-import { User, Mail, Lock, Download, Trash2, CheckCircle2, AlertTriangle, X } from 'lucide-react';
+import { User, Mail, Lock, Download, Trash2, CheckCircle2, AlertTriangle, X, Edit2 } from 'lucide-react';
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -118,180 +118,215 @@ const Profile = () => {
   if (loading) return <div className="loading-state">Loading profile...</div>;
   if (!profileData) return <div className="loading-state">Error loading profile.</div>;
 
+  const btnOutlineStyle = {
+    background: 'transparent',
+    border: '1px solid var(--border-color)',
+    color: 'var(--text-main)',
+    padding: '0.6rem 1.2rem',
+    borderRadius: 'var(--radius-md)',
+    cursor: 'pointer',
+    fontWeight: '600',
+    display: 'inline-flex',
+    alignItems: 'center',
+    gap: '0.5rem',
+    transition: 'all 0.2s',
+  };
+
+  const labelStyle = {
+    display: 'block',
+    fontWeight: '600',
+    color: 'var(--text-main)',
+    marginBottom: '0.5rem',
+    fontSize: '0.9rem'
+  };
+
   return (
     <div className="page-container" style={{ paddingBottom: '3rem' }}>
-      <div className="page-header">
+      <div className="page-header" style={{ marginBottom: '2rem' }}>
         <h1 className="page-title">My Profile</h1>
         <p className="page-subtitle">Manage your personal information and security</p>
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', maxWidth: '800px', margin: '0 auto' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', maxWidth: '800px', margin: '0 auto' }}>
         
         {/* Personal Details Card */}
         <div className="card" style={{ padding: '2rem' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '2rem' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
-              <div style={{ width: '80px', height: '80px', borderRadius: '50%', backgroundColor: 'var(--primary)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2rem', fontWeight: 'bold' }}>
-                {profileData.first_name ? profileData.first_name[0].toUpperCase() : <User size={40} />}
+              <div style={{ 
+                width: '80px', height: '80px', borderRadius: '50%', 
+                background: 'linear-gradient(135deg, #6366f1, #a855f7)', 
+                color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', 
+                fontSize: '2rem', fontWeight: 'bold', boxShadow: '0 10px 25px -5px rgba(168, 85, 247, 0.4)' 
+              }}>
+                {profileData.first_name ? profileData.first_name[0].toUpperCase() : <User size={36} />}
               </div>
               <div>
-                <h2 style={{ fontSize: '1.5rem', fontWeight: '600', color: 'var(--text-main)', marginBottom: '0.25rem' }}>
-                  {profileData.first_name} {profileData.last_name}
+                <h2 style={{ fontSize: '1.75rem', fontWeight: '700', color: 'var(--text-main)', marginBottom: '0.25rem' }}>
+                  {(profileData.first_name || profileData.last_name) ? `${profileData.first_name} ${profileData.last_name}` : 'FinSet User'}
                 </h2>
-                <p style={{ color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  <Mail size={14} /> {profileData.email}
+                <p style={{ color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.95rem' }}>
+                  <Mail size={16} /> {profileData.email}
                 </p>
               </div>
             </div>
-            <button 
-              className="btn-outline" 
-              onClick={() => setIsEditing(!isEditing)}
-              style={{ fontSize: '0.9rem', padding: '0.5rem 1rem' }}
-            >
-              {isEditing ? 'Cancel' : 'Edit Profile'}
-            </button>
+            {!isEditing && (
+              <button 
+                onClick={() => setIsEditing(true)}
+                style={btnOutlineStyle}
+                onMouseOver={(e) => e.currentTarget.style.background = 'var(--bg-main)'}
+                onMouseOut={(e) => e.currentTarget.style.background = 'transparent'}
+              >
+                <Edit2 size={16} /> Edit Profile
+              </button>
+            )}
           </div>
 
-          {isEditing ? (
-            <form onSubmit={handleEditSubmit} style={{ marginTop: '1.5rem', borderTop: '1px solid var(--border-color)', paddingTop: '1.5rem' }}>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
-                <div className="form-group">
-                  <label className="form-label">First Name</label>
+          {isEditing && (
+            <form onSubmit={handleEditSubmit} style={{ marginTop: '2.5rem', background: 'var(--bg-main)', padding: '1.5rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)' }}>
+              <h3 style={{ fontSize: '1.1rem', marginBottom: '1.5rem', color: 'var(--text-main)' }}>Update Information</h3>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '1.5rem' }}>
+                <div>
+                  <label style={labelStyle}>First Name</label>
                   <input 
                     type="text" 
-                    className="form-control" 
+                    className="input-field" 
+                    style={{ marginBottom: 0 }}
                     value={editForm.first_name}
                     onChange={(e) => setEditForm({...editForm, first_name: e.target.value})}
                   />
                 </div>
-                <div className="form-group">
-                  <label className="form-label">Last Name</label>
+                <div>
+                  <label style={labelStyle}>Last Name</label>
                   <input 
                     type="text" 
-                    className="form-control" 
+                    className="input-field" 
+                    style={{ marginBottom: 0 }}
                     value={editForm.last_name}
                     onChange={(e) => setEditForm({...editForm, last_name: e.target.value})}
                   />
                 </div>
               </div>
-              <button type="submit" className="btn" disabled={editLoading}>
-                {editLoading ? 'Saving...' : 'Save Changes'}
-              </button>
-            </form>
-          ) : (
-            <div className="settings-section" style={{ marginTop: '1.5rem', borderTop: '1px solid var(--border-color)', paddingTop: '1.5rem' }}>
-              <h3 className="settings-section-title">Account Information</h3>
-              <div className="settings-item" style={{ borderBottom: '1px solid var(--border-color)', paddingBottom: '1rem', marginBottom: '1rem', display: 'flex', alignItems: 'center' }}>
-                <div className="settings-item-info" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                  <User size={18} className="settings-icon" style={{ color: 'var(--text-muted)' }} />
-                  <div>
-                    <p style={{ fontWeight: '500', color: 'var(--text-main)', margin: 0 }}>Full Name</p>
-                    <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', margin: 0 }}>
-                      {(profileData.first_name || profileData.last_name) ? `${profileData.first_name} ${profileData.last_name}` : 'Not provided'}
-                    </p>
-                  </div>
-                </div>
+              <div style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-end' }}>
+                <button type="button" onClick={() => setIsEditing(false)} style={btnOutlineStyle}>
+                  Cancel
+                </button>
+                <button type="submit" className="btn" disabled={editLoading}>
+                  {editLoading ? 'Saving...' : 'Save Changes'}
+                </button>
               </div>
-            </div>
+            </form>
           )}
         </div>
 
         {/* Security & Password Card */}
         <div className="card" style={{ padding: '2rem' }}>
-          <h3 className="settings-section-title" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <Lock size={18} /> Security & Password
-          </h3>
+          <div style={{ marginBottom: '2rem' }}>
+            <h3 style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', fontSize: '1.25rem', color: 'var(--text-main)', marginBottom: '0.5rem' }}>
+              <div style={{ padding: '0.5rem', background: 'var(--primary-light)', color: 'var(--primary-color)', borderRadius: '10px' }}><Lock size={20} /></div>
+              Security & Password
+            </h3>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem' }}>Keep your account secure by updating your password regularly.</p>
+          </div>
           
           {passwordMessage.text && (
             <div style={{ 
-              padding: '0.8rem 1rem', 
+              padding: '1rem 1.25rem', 
               borderRadius: 'var(--radius-md)', 
-              marginBottom: '1rem',
-              display: 'flex', alignItems: 'center', gap: '0.5rem',
+              marginBottom: '1.5rem',
+              display: 'flex', alignItems: 'center', gap: '0.75rem', fontWeight: '500',
               background: passwordMessage.type === 'success' ? 'var(--success-light)' : 'var(--danger-light)',
               color: passwordMessage.type === 'success' ? 'var(--success)' : 'var(--danger)',
               border: `1px solid ${passwordMessage.type === 'success' ? '#bbf7d0' : '#fecaca'}`
             }}>
-              {passwordMessage.type === 'success' ? <CheckCircle2 size={18} /> : <AlertTriangle size={18} />}
+              {passwordMessage.type === 'success' ? <CheckCircle2 size={20} /> : <AlertTriangle size={20} />}
               {passwordMessage.text}
             </div>
           )}
 
-          <form onSubmit={handlePasswordSubmit}>
-            <div className="form-group">
-              <label className="form-label">Current Password</label>
+          <form onSubmit={handlePasswordSubmit} style={{ maxWidth: '100%' }}>
+            <div style={{ marginBottom: '1.5rem', maxWidth: '50%' }}>
+              <label style={labelStyle}>Current Password</label>
               <input 
                 type="password" 
-                className="form-control" 
+                className="input-field" 
+                style={{ marginBottom: 0 }}
+                placeholder="••••••••"
                 required
                 value={passwordForm.old_password}
                 onChange={(e) => setPasswordForm({...passwordForm, old_password: e.target.value})}
               />
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
-              <div className="form-group">
-                <label className="form-label">New Password</label>
+            
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '2rem' }}>
+              <div>
+                <label style={labelStyle}>New Password</label>
                 <input 
                   type="password" 
-                  className="form-control" 
+                  className="input-field" 
+                  style={{ marginBottom: 0 }}
+                  placeholder="••••••••"
                   required
                   value={passwordForm.new_password}
                   onChange={(e) => setPasswordForm({...passwordForm, new_password: e.target.value})}
                 />
               </div>
-              <div className="form-group">
-                <label className="form-label">Confirm New Password</label>
+              <div>
+                <label style={labelStyle}>Confirm New Password</label>
                 <input 
                   type="password" 
-                  className="form-control" 
+                  className="input-field" 
+                  style={{ marginBottom: 0 }}
+                  placeholder="••••••••"
                   required
                   value={passwordForm.confirm_password}
                   onChange={(e) => setPasswordForm({...passwordForm, confirm_password: e.target.value})}
                 />
               </div>
             </div>
+            
             <button type="submit" className="btn" disabled={passwordLoading}>
-              {passwordLoading ? 'Updating...' : 'Update Password'}
+              {passwordLoading ? 'Updating Password...' : 'Update Password'}
             </button>
           </form>
         </div>
 
         {/* Data & Privacy Card */}
         <div className="card" style={{ padding: '2rem' }}>
-          <h3 className="settings-section-title" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-main)' }}>
+          <h3 style={{ fontSize: '1.25rem', color: 'var(--text-main)', marginBottom: '2rem' }}>
             Data & Privacy
           </h3>
           
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--border-color)', paddingBottom: '1.5rem', marginBottom: '1.5rem' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'var(--bg-main)', padding: '1.5rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)', marginBottom: '1.5rem' }}>
             <div>
-              <p style={{ fontWeight: '500', color: 'var(--text-main)', margin: 0 }}>Export Financial Data</p>
-              <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', margin: 0, marginTop: '0.25rem' }}>
-                Download all your incomes, expenses, budgets, and chit fund data in JSON format.
+              <p style={{ fontWeight: '600', color: 'var(--text-main)', fontSize: '1.05rem', margin: '0 0 0.5rem 0' }}>Export Financial Data</p>
+              <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', margin: 0, lineHeight: '1.5' }}>
+                Download all your incomes, expenses, budgets, and chit fund data in a clean JSON format for your own records.
               </p>
             </div>
             <button 
-              className="btn-outline" 
+              className="btn" 
               onClick={handleExportData}
               disabled={exportLoading}
-              style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}
+              style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', whiteSpace: 'nowrap', marginLeft: '1rem' }}
             >
-              <Download size={16} /> {exportLoading ? 'Exporting...' : 'Export Data'}
+              <Download size={18} /> {exportLoading ? 'Exporting...' : 'Export Data'}
             </button>
           </div>
 
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'var(--danger-light)', padding: '1.5rem', borderRadius: 'var(--radius-md)', border: '1px solid #fecaca' }}>
             <div>
-              <p style={{ fontWeight: '600', color: 'var(--danger)', margin: 0 }}>Delete Account</p>
-              <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', margin: 0, marginTop: '0.25rem' }}>
-                Permanently delete your account and all associated data. This action cannot be undone.
+              <p style={{ fontWeight: '600', color: 'var(--danger)', fontSize: '1.05rem', margin: '0 0 0.5rem 0' }}>Delete Account</p>
+              <p style={{ color: 'var(--danger)', opacity: 0.8, fontSize: '0.9rem', margin: 0, lineHeight: '1.5' }}>
+                Permanently delete your account and all associated financial data. This action is irreversible.
               </p>
             </div>
             <button 
               className="btn" 
               onClick={() => setShowDeleteConfirm(true)}
-              style={{ background: 'var(--danger)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}
+              style={{ background: 'var(--danger)', display: 'flex', alignItems: 'center', gap: '0.5rem', whiteSpace: 'nowrap', marginLeft: '1rem', boxShadow: '0 4px 14px 0 rgba(239, 68, 68, 0.39)' }}
             >
-              <Trash2 size={16} /> Delete Account
+              <Trash2 size={18} /> Delete Account
             </button>
           </div>
         </div>
@@ -300,37 +335,40 @@ const Profile = () => {
 
       {/* Delete Confirmation Modal */}
       {showDeleteConfirm && (
-        <div className="modal-overlay">
-          <div className="modal" style={{ maxWidth: '400px' }}>
-            <div className="modal-header">
-              <h2 className="modal-title" style={{ color: 'var(--danger)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <AlertTriangle size={20} /> Confirm Deletion
-              </h2>
-              <button className="modal-close" onClick={() => setShowDeleteConfirm(false)}>
-                <X size={20} />
+        <div className="modal-overlay" style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
+          <div className="modal" style={{ background: 'var(--bg-panel)', padding: '2.5rem', borderRadius: '24px', maxWidth: '450px', width: '90%', boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.5rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'var(--danger-light)', color: 'var(--danger)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <AlertTriangle size={24} />
+                </div>
+                <h2 style={{ fontSize: '1.25rem', fontWeight: '700', color: 'var(--text-main)', margin: 0 }}>Delete Account?</h2>
+              </div>
+              <button onClick={() => setShowDeleteConfirm(false)} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer' }}>
+                <X size={24} />
               </button>
             </div>
-            <div className="modal-content">
-              <p style={{ marginBottom: '1.5rem' }}>
-                Are you absolutely sure you want to delete your account? All your transactions, budgets, and settings will be permanently destroyed. <strong>This cannot be reversed.</strong>
-              </p>
-              <div className="modal-actions" style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-end' }}>
-                <button 
-                  className="btn-outline" 
-                  onClick={() => setShowDeleteConfirm(false)}
-                  disabled={deleteLoading}
-                >
-                  Cancel
-                </button>
-                <button 
-                  className="btn" 
-                  style={{ background: 'var(--danger)' }}
-                  onClick={handleDeleteAccount}
-                  disabled={deleteLoading}
-                >
-                  {deleteLoading ? 'Deleting...' : 'Yes, Delete My Account'}
-                </button>
-              </div>
+            
+            <p style={{ color: 'var(--text-muted)', lineHeight: '1.6', marginBottom: '2rem' }}>
+              Are you absolutely sure you want to delete your account? All your transactions, budgets, and settings will be permanently destroyed. <strong style={{ color: 'var(--danger)' }}>This cannot be reversed.</strong>
+            </p>
+            
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+              <button 
+                style={{ ...btnOutlineStyle, justifyContent: 'center', width: '100%' }}
+                onClick={() => setShowDeleteConfirm(false)}
+                disabled={deleteLoading}
+              >
+                Cancel
+              </button>
+              <button 
+                className="btn" 
+                style={{ background: 'var(--danger)', width: '100%', justifyContent: 'center' }}
+                onClick={handleDeleteAccount}
+                disabled={deleteLoading}
+              >
+                {deleteLoading ? 'Deleting...' : 'Yes, Delete'}
+              </button>
             </div>
           </div>
         </div>
