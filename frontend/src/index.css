@@ -858,6 +858,7 @@ body {
 
   .main-content {
     padding: 1rem;
+    padding-bottom: 100px;
   }
 
   .responsive-grid-3 {

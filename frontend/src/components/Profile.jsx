@@ -299,7 +299,7 @@ const Profile = () => {
             Data & Privacy
           </h3>
           
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'var(--bg-main)', padding: '1.5rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)', marginBottom: '1.5rem' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'var(--bg-main)', padding: '1.5rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1.25rem' }}>
             <div>
               <p style={{ fontWeight: '600', color: 'var(--text-main)', fontSize: '1.05rem', margin: '0 0 0.5rem 0' }}>Export Financial Data</p>
               <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', margin: 0, lineHeight: '1.5' }}>
@@ -310,13 +310,13 @@ const Profile = () => {
               className="btn" 
               onClick={handleExportData}
               disabled={exportLoading}
-              style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', whiteSpace: 'nowrap', marginLeft: '1rem' }}
+              style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', whiteSpace: 'nowrap' }}
             >
               <Download size={18} /> {exportLoading ? 'Exporting...' : 'Export Data'}
             </button>
           </div>
 
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'var(--danger-light)', padding: '1.5rem', borderRadius: 'var(--radius-md)', border: '1px solid #fecaca' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'var(--danger-light)', padding: '1.5rem', borderRadius: 'var(--radius-md)', border: '1px solid #fecaca', flexWrap: 'wrap', gap: '1.25rem' }}>
             <div>
               <p style={{ fontWeight: '600', color: 'var(--danger)', fontSize: '1.05rem', margin: '0 0 0.5rem 0' }}>Delete Account</p>
               <p style={{ color: 'var(--danger)', opacity: 0.8, fontSize: '0.9rem', margin: 0, lineHeight: '1.5' }}>
@@ -326,7 +326,7 @@ const Profile = () => {
             <button 
               className="btn" 
               onClick={() => setShowDeleteConfirm(true)}
-              style={{ background: 'var(--danger)', display: 'flex', alignItems: 'center', gap: '0.5rem', whiteSpace: 'nowrap', marginLeft: '1rem', boxShadow: '0 4px 14px 0 rgba(239, 68, 68, 0.39)' }}
+              style={{ background: 'var(--danger)', display: 'flex', alignItems: 'center', gap: '0.5rem', whiteSpace: 'nowrap', boxShadow: '0 4px 14px 0 rgba(239, 68, 68, 0.39)' }}
             >
               <Trash2 size={18} /> Delete Account
             </button>
