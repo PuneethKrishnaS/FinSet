@@ -6,7 +6,7 @@ const SettingsContext = createContext();
 export const useSettings = () => useContext(SettingsContext);
 
 export const SettingsProvider = ({ children }) => {
-  const [currency, setCurrency] = useState('USD');
+  const [currency, setCurrency] = useState('INR');
   const [theme, setTheme] = useState('light');
   const [loading, setLoading] = useState(true);
 

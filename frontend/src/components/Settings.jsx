@@ -22,6 +22,10 @@ const Settings = () => {
   const [newCategoryName, setNewCategoryName] = useState('');
 
   React.useEffect(() => {
+    setSelectedCurrency(currency);
+  }, [currency]);
+
+  React.useEffect(() => {
     fetchCategories();
   }, []);
 

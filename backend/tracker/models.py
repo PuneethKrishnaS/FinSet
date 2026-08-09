@@ -5,7 +5,7 @@ from django.dispatch import receiver
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
-    preferred_currency = models.CharField(max_length=10, default='USD')
+    preferred_currency = models.CharField(max_length=10, default='INR')
     theme = models.CharField(max_length=10, default='light')
     
     def __str__(self):
