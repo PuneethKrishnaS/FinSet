@@ -1,3 +1,8 @@
+import { precacheAndRoute } from 'workbox-precaching';
+
+// Use with workbox-precaching to inject manifest
+precacheAndRoute(self.__WB_MANIFEST || []);
+
 self.addEventListener('push', function(event) {
   if (event.data) {
     const data = event.data.json();
