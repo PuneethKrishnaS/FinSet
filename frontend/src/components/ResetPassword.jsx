@@ -11,7 +11,23 @@ const ResetPassword = () => {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
+  const [isChecking, setIsChecking] = useState(true);
+  const [isInvalidLink, setIsInvalidLink] = useState(false);
   const { theme, toggleTheme } = useSettings();
+
+  React.useEffect(() => {
+    const checkToken = async () => {
+      try {
+        await api.get(`/auth/password-reset-confirm/${uid}/${token}/`);
+        setIsChecking(false);
+      } catch (err) {
+        setError('The reset link is invalid or has expired. You may have already used it.');
+        setIsInvalidLink(true);
+        setIsChecking(false);
+      }
+    };
+    checkToken();
+  }, [uid, token]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -77,13 +93,27 @@ const ResetPassword = () => {
 
         {success ? (
           <div style={{ textAlign: 'center', padding: '2rem 1rem' }}>
-            <CheckCircle2 size={48} style={{ color: 'var(--success)', margin: '0 auto 1rem auto' }} />
+            <CheckCircle2 size={48} className="text-success" style={{ margin: '0 auto 1rem auto' }} />
             <h3 style={{ fontSize: '1.25rem', marginBottom: '0.5rem', color: 'var(--text-main)' }}>Password Reset Successful</h3>
             <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginBottom: '2rem' }}>
               Your password has been changed successfully. You can now log in with your new credentials.
             </p>
             <Link to="/login" className="btn" style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
               <ArrowLeft size={16} /> Back to Login
+            </Link>
+          </div>
+        ) : isChecking ? (
+          <div style={{ textAlign: 'center', padding: '2rem' }}>
+            <div className="spinner" style={{ margin: '0 auto' }}></div>
+            <p style={{ marginTop: '1rem', color: 'var(--text-muted)' }}>Validating link...</p>
+          </div>
+        ) : isInvalidLink ? (
+          <div style={{ textAlign: 'center', padding: '1rem' }}>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', marginBottom: '1.5rem' }}>
+              Please request a new password reset link if you still need to change your password.
+            </p>
+            <Link to="/forgot-password" className="btn" style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
+              Request New Link
             </Link>
           </div>
         ) : (

@@ -174,6 +174,19 @@ class PasswordResetRequestView(APIView):
 class PasswordResetConfirmView(APIView):
     permission_classes = (permissions.AllowAny,)
 
+    def get(self, request, uidb64, token):
+        try:
+            uid = force_str(urlsafe_base64_decode(uidb64))
+            user = User.objects.get(pk=uid)
+        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+            user = None
+
+        if user is not None:
+            token_generator = PasswordResetTokenGenerator()
+            if token_generator.check_token(user, token):
+                return Response({'valid': True})
+        return Response({'valid': False, 'error': 'The reset link is invalid or has expired.'}, status=400)
+
     def post(self, request, uidb64, token):
         new_password = request.data.get('new_password')
         if not new_password:
