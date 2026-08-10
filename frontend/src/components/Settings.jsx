@@ -3,6 +3,7 @@ import { useSettings } from '../context/SettingsContext';
 import { Moon, Sun, Globe, Save, Plus, Trash2, Bell, Settings as SettingsIcon, Layout, DollarSign } from 'lucide-react';
 import toast from 'react-hot-toast';
 import api from '../services/api';
+import { ICON_MAP, PREDEFINED_CATEGORIES, getCategoryIcon } from '../utils/CategoryIcons';
 
 const CURRENCIES = [
   { code: 'USD', label: 'US Dollar ($)' },
@@ -20,6 +21,8 @@ const Settings = () => {
   const [saving, setSaving] = useState(false);
   const [categories, setCategories] = useState([]);
   const [newCategoryName, setNewCategoryName] = useState('');
+  const [newCategoryIcon, setNewCategoryIcon] = useState('DollarSign');
+  const [showIconPicker, setShowIconPicker] = useState(false);
 
   // UI State
   const [activeTab, setActiveTab] = useState('general');
@@ -47,12 +50,28 @@ const Settings = () => {
     e.preventDefault();
     if (!newCategoryName.trim()) return;
     try {
-      const res = await api.post('/categories/', { name: newCategoryName.trim(), type: 'expense' });
+      const res = await api.post('/categories/', { name: newCategoryName.trim(), type: 'expense', icon: newCategoryIcon });
       setCategories([...categories, res.data]);
       setNewCategoryName('');
+      setNewCategoryIcon('DollarSign');
+      setShowIconPicker(false);
       toast.success('Category added');
     } catch (err) {
       toast.error('Failed to add category');
+    }
+  };
+
+  const handleAddPredefined = async (predef) => {
+    if (categories.some(c => c.name.toLowerCase() === predef.name.toLowerCase())) {
+      toast.error(`${predef.name} already exists`);
+      return;
+    }
+    try {
+      const res = await api.post('/categories/', { name: predef.name, type: 'expense', icon: predef.icon });
+      setCategories([...categories, res.data]);
+      toast.success(`${predef.name} added`);
+    } catch (err) {
+      toast.error(`Failed to add ${predef.name}`);
     }
   };
 
@@ -203,24 +222,93 @@ const Settings = () => {
               </div>
             </div>
 
-            <form onSubmit={handleAddCategory} style={{ display: 'flex', gap: '1rem', marginBottom: '2rem' }}>
-              <input
-                type="text"
-                value={newCategoryName}
-                onChange={e => setNewCategoryName(e.target.value)}
-                placeholder="Enter new category name..."
-                className="input-field"
-                style={{ marginBottom: 0, flex: 1 }}
-              />
-              <button
-                type="submit"
-                className="btn"
-                style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', whiteSpace: 'nowrap' }}
-              >
-                <Plus size={18} /> Add Category
-              </button>
+            {/* Predefined Categories Grid */}
+            <div style={{ marginBottom: '2rem' }}>
+              <h4 style={{ fontSize: '0.95rem', color: 'var(--text-muted)', marginBottom: '1rem' }}>Quick Add Predefined Categories</h4>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem' }}>
+                {PREDEFINED_CATEGORIES.map(predef => {
+                  const alreadyAdded = categories.some(c => c.name.toLowerCase() === predef.name.toLowerCase());
+                  return (
+                    <button
+                      key={predef.name}
+                      onClick={() => handleAddPredefined(predef)}
+                      disabled={alreadyAdded}
+                      style={{
+                        display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem 1rem',
+                        background: alreadyAdded ? 'var(--bg-main)' : 'var(--primary-light)',
+                        border: '1px solid', borderColor: alreadyAdded ? 'var(--border-color)' : 'var(--primary-color)',
+                        borderRadius: 'var(--radius-md)', cursor: alreadyAdded ? 'not-allowed' : 'pointer',
+                        color: alreadyAdded ? 'var(--text-muted)' : 'var(--primary-color)',
+                        opacity: alreadyAdded ? 0.6 : 1, fontSize: '0.9rem', fontWeight: 600, transition: 'all 0.2s'
+                      }}
+                    >
+                      {getCategoryIcon(predef.icon, 16, 'currentColor')}
+                      {predef.name}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            <hr style={{ border: 'none', borderTop: '1px solid var(--border-color)', margin: '2rem 0' }} />
+
+            <h4 style={{ fontSize: '0.95rem', color: 'var(--text-muted)', marginBottom: '1rem' }}>Add Custom Category</h4>
+            <form onSubmit={handleAddCategory} style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '2rem', background: 'var(--bg-main)', padding: '1.5rem', borderRadius: 'var(--radius-md)', border: '1px dashed var(--border-color)' }}>
+              
+              <div style={{ display: 'flex', gap: '1rem' }}>
+                <button
+                  type="button"
+                  onClick={() => setShowIconPicker(!showIconPicker)}
+                  style={{
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', width: '45px', height: '45px',
+                    background: 'var(--bg-panel)', border: '1px solid var(--border-color)', borderRadius: 'var(--radius-md)',
+                    cursor: 'pointer', color: 'var(--primary-color)'
+                  }}
+                  title="Choose Icon"
+                >
+                  {getCategoryIcon(newCategoryIcon, 20)}
+                </button>
+                <input
+                  type="text"
+                  value={newCategoryName}
+                  onChange={e => setNewCategoryName(e.target.value)}
+                  placeholder="Enter custom category name..."
+                  className="input-field"
+                  style={{ marginBottom: 0, flex: 1 }}
+                  required
+                />
+                <button
+                  type="submit"
+                  className="btn"
+                  style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', whiteSpace: 'nowrap' }}
+                >
+                  <Plus size={18} /> Add
+                </button>
+              </div>
+
+              {showIconPicker && (
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', padding: '1rem', background: 'var(--bg-panel)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)' }}>
+                  {Object.keys(ICON_MAP).map(iconName => (
+                    <button
+                      key={iconName}
+                      type="button"
+                      onClick={() => { setNewCategoryIcon(iconName); setShowIconPicker(false); }}
+                      style={{
+                        padding: '0.5rem', borderRadius: 'var(--radius-sm)', border: '1px solid',
+                        borderColor: newCategoryIcon === iconName ? 'var(--primary-color)' : 'transparent',
+                        background: newCategoryIcon === iconName ? 'var(--primary-light)' : 'transparent',
+                        cursor: 'pointer', color: newCategoryIcon === iconName ? 'var(--primary-color)' : 'var(--text-muted)',
+                        transition: 'all 0.2s'
+                      }}
+                    >
+                      {getCategoryIcon(iconName, 20)}
+                    </button>
+                  ))}
+                </div>
+              )}
             </form>
 
+            <h4 style={{ fontSize: '0.95rem', color: 'var(--text-main)', marginBottom: '1rem' }}>Your Categories</h4>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '1rem' }}>
               {categories.map(cat => (
                 <div key={cat.id} style={{
@@ -228,8 +316,10 @@ const Settings = () => {
                   padding: '1rem 1.25rem', background: 'var(--bg-main)', borderRadius: 'var(--radius-md)',
                   border: '1px solid var(--border-color)'
                 }}>
-                  <span style={{ fontWeight: '600', color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                    <DollarSign size={16} style={{ color: 'var(--primary-color)' }} />
+                  <span style={{ fontWeight: '600', color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '32px', height: '32px', background: 'var(--primary-light)', color: 'var(--primary-color)', borderRadius: '8px' }}>
+                      {getCategoryIcon(cat.icon, 16)}
+                    </div>
                     {cat.name}
                   </span>
                   <button
@@ -244,7 +334,7 @@ const Settings = () => {
               ))}
               {categories.length === 0 && (
                 <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '3rem', color: 'var(--text-muted)', background: 'var(--bg-main)', borderRadius: 'var(--radius-md)' }}>
-                  No custom categories yet. Add one above!
+                  No categories yet. Add one above!
                 </div>
               )}
             </div>

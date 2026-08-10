@@ -2,25 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
 import {
-  Save,
-  Home, Coffee, Car, Zap,
-  Film, ShoppingBag, HeartPulse, MoreHorizontal,
-  Briefcase, TrendingUp, History, ArrowRight
+  Save, Briefcase, TrendingUp, History, ArrowRight, MoreHorizontal
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useSettings } from '../context/SettingsContext';
 import useFinanceStore from '../store/useFinanceStore';
-
-const CATEGORY_CHOICES = [
-  { value: 'housing', label: 'Housing', icon: Home, color: '#3b82f6' },
-  { value: 'food', label: 'Food', icon: Coffee, color: '#ef4444' },
-  { value: 'transport', label: 'Transport', icon: Car, color: '#f59e0b' },
-  { value: 'utilities', label: 'Utilities', icon: Zap, color: '#10b981' },
-  { value: 'entertainment', label: 'Fun', icon: Film, color: '#8b5cf6' },
-  { value: 'shopping', label: 'Shopping', icon: ShoppingBag, color: '#ec4899' },
-  { value: 'health', label: 'Health', icon: HeartPulse, color: '#14b8a6' },
-  { value: 'other', label: 'Other', icon: MoreHorizontal, color: '#64748b' },
-];
+import { getCategoryIcon } from '../utils/CategoryIcons';
 
 const INCOME_SOURCES = [
   { value: 'salary', label: 'Salary', icon: Briefcase, color: '#10b981' },
@@ -212,9 +199,7 @@ const LogTransaction = () => {
               {type === 'expense' ? (
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '0.5rem' }}>
                   {categories.map((c) => {
-                    const fallback = CATEGORY_CHOICES.find(ch => ch.value.toLowerCase() === c.name.toLowerCase());
-                    const Icon = fallback ? fallback.icon : MoreHorizontal;
-                    const color = fallback ? fallback.color : '#64748b';
+                    const color = 'var(--primary-color)';
                     const isSelected = category === c.name;
                     return (
                       <div
@@ -223,7 +208,7 @@ const LogTransaction = () => {
                         style={{
                           display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.25rem',
                           padding: '0.75rem 0.25rem', borderRadius: 'var(--radius-md)', cursor: 'pointer',
-                          background: isSelected ? `${color}15` : 'var(--bg-main)',
+                          background: isSelected ? 'var(--primary-light)' : 'var(--bg-main)',
                           border: `2px solid ${isSelected ? color : 'transparent'}`,
                           transition: 'all 0.2s',
                           boxShadow: isSelected ? 'none' : 'inset 0 0 0 1px var(--border-color)'
@@ -234,9 +219,9 @@ const LogTransaction = () => {
                           background: isSelected ? color : '#fff',
                           color: isSelected ? '#fff' : color,
                           display: 'flex', alignItems: 'center', justifyContent: 'center',
-                          boxShadow: isSelected ? `0 2px 8px ${color}40` : 'var(--shadow-sm)'
+                          boxShadow: isSelected ? `0 2px 8px rgba(0,0,0,0.2)` : 'var(--shadow-sm)'
                         }}>
-                          <Icon size={16} />
+                          {getCategoryIcon(c.icon, 16)}
                         </div>
                         <span style={{ fontSize: '0.7rem', fontWeight: isSelected ? '700' : '500', color: isSelected ? 'var(--text-main)' : 'var(--text-muted)', textAlign: 'center', overflow: 'hidden', textOverflow: 'ellipsis', width: '100%' }}>
                           {c.name}
@@ -345,8 +330,8 @@ const LogTransaction = () => {
                     const sourceObj = INCOME_SOURCES.find(s => s.value === t.source.toLowerCase()) || INCOME_SOURCES.find(s => s.label.toLowerCase() === t.source.toLowerCase());
                     if (sourceObj) { iconElement = <sourceObj.icon size={16} />; bgColor = sourceObj.color; }
                   } else {
-                    const catObj = CATEGORY_CHOICES.find(c => c.value.toLowerCase() === t.category.toLowerCase());
-                    if (catObj) { iconElement = <catObj.icon size={16} />; bgColor = catObj.color; }
+                    const catObj = categories.find(c => c.name.toLowerCase() === t.category.toLowerCase());
+                    if (catObj) { iconElement = getCategoryIcon(catObj.icon, 16); bgColor = 'var(--primary-color)'; }
                   }
 
                   return (

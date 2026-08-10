@@ -9,17 +9,7 @@ import {
   Briefcase, TrendingUp, TrendingDown, Wallet
 } from 'lucide-react';
 import useFinanceStore from '../store/useFinanceStore';
-
-const CATEGORY_CHOICES = [
-  { value: 'housing', label: 'Housing', icon: Home, color: '#3b82f6' },
-  { value: 'food', label: 'Food', icon: Coffee, color: '#ef4444' },
-  { value: 'transport', label: 'Transport', icon: Car, color: '#f59e0b' },
-  { value: 'utilities', label: 'Utilities', icon: Zap, color: '#10b981' },
-  { value: 'entertainment', label: 'Fun', icon: Film, color: '#8b5cf6' },
-  { value: 'shopping', label: 'Shopping', icon: ShoppingBag, color: '#ec4899' },
-  { value: 'health', label: 'Health', icon: HeartPulse, color: '#14b8a6' },
-  { value: 'other', label: 'Other', icon: MoreHorizontal, color: '#64748b' },
-];
+import { getCategoryIcon } from '../utils/CategoryIcons';
 
 const INCOME_SOURCES = [
   { value: 'salary', label: 'Salary', icon: Briefcase, color: '#10b981' },
@@ -29,7 +19,7 @@ const INCOME_SOURCES = [
 
 const History = () => {
   const { formatCurrency } = useSettings();
-  const { incomes, incomesLoaded, fetchIncomes, expenses, expensesLoaded, fetchExpenses } = useFinanceStore();
+  const { incomes, incomesLoaded, fetchIncomes, expenses, expensesLoaded, fetchExpenses, categories, fetchCategories } = useFinanceStore();
   
   // Filters
   const [searchTerm, setSearchTerm] = useState('');
@@ -39,12 +29,13 @@ const History = () => {
   useEffect(() => {
     fetchIncomes();
     fetchExpenses();
-  }, [fetchIncomes, fetchExpenses]);
+    fetchCategories();
+  }, [fetchIncomes, fetchExpenses, fetchCategories]);
 
   const transactions = React.useMemo(() => {
     if (!incomesLoaded || !expensesLoaded) return [];
     const mappedIncomes = incomes.map(i => ({ ...i, type: 'income', displayTitle: i.source, categoryKey: i.source.toLowerCase() }));
-    const mappedExpenses = expenses.map(e => ({ ...e, type: 'expense', displayTitle: e.description || e.category, categoryKey: e.category }));
+    const mappedExpenses = expenses.map(e => ({ ...e, type: 'expense', displayTitle: e.description || e.category, categoryKey: e.category.toLowerCase() }));
     return [...mappedIncomes, ...mappedExpenses].sort((a, b) => new Date(b.date) - new Date(a.date));
   }, [incomes, expenses, incomesLoaded, expensesLoaded]);
 
@@ -187,16 +178,15 @@ const History = () => {
             >
               All Categories
             </button>
-            {CATEGORY_CHOICES.map(c => {
-              const Icon = c.icon;
-              const isSelected = filterCategory === c.value;
+            {categories.map(c => {
+              const isSelected = filterCategory === c.name.toLowerCase();
               return (
                 <button
-                  key={c.value}
-                  onClick={() => setFilterCategory(c.value)}
-                  style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', padding: '0.4rem 0.8rem', border: 'none', borderRadius: 'var(--radius-md)', cursor: 'pointer', whiteSpace: 'nowrap', fontWeight: 600, fontSize: '0.75rem', background: isSelected ? `${c.color}20` : 'var(--bg-main)', color: isSelected ? c.color : 'var(--text-muted)', transition: 'all 0.2s' }}
+                  key={c.id}
+                  onClick={() => setFilterCategory(c.name.toLowerCase())}
+                  style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', padding: '0.4rem 0.8rem', border: 'none', borderRadius: 'var(--radius-md)', cursor: 'pointer', whiteSpace: 'nowrap', fontWeight: 600, fontSize: '0.75rem', background: isSelected ? 'var(--primary-color)' : 'var(--bg-main)', color: isSelected ? '#fff' : 'var(--text-muted)', transition: 'all 0.2s' }}
                 >
-                  <Icon size={14} /> {c.label}
+                  {getCategoryIcon(c.icon, 14, isSelected ? '#fff' : 'currentColor')} {c.name}
                 </button>
               );
             })}
@@ -226,8 +216,10 @@ const History = () => {
                   if (sourceObj) { iconElement = <sourceObj.icon size={18} />; bgColor = sourceObj.color; typeLabel = sourceObj.label; }
                   else { typeLabel = t.displayTitle; }
                 } else {
-                  const catObj = CATEGORY_CHOICES.find(c => c.value === t.categoryKey);
-                  if (catObj) { iconElement = <catObj.icon size={18} />; bgColor = catObj.color; typeLabel = catObj.label; }
+                  const catObj = categories.find(c => c.name.toLowerCase() === t.categoryKey);
+                  typeLabel = catObj ? catObj.name : t.category;
+                  iconElement = catObj ? getCategoryIcon(catObj.icon, 18) : <MoreHorizontal size={18} />;
+                  bgColor = catObj ? (catObj.color || '#64748b') : '#64748b';
                 }
 
                 return (

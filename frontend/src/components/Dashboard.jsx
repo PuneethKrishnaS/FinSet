@@ -7,23 +7,13 @@ import {
 import api from '../services/api';
 import {
   ArrowUpRight, ArrowDownRight, TrendingDown, TrendingUp, Wallet, Target,
-  Home, Coffee, Car, Zap, Film, ShoppingBag, HeartPulse, MoreHorizontal, 
-  Briefcase, History, Calendar as CalendarIcon, X, ChevronLeft, ChevronRight
+  History, Calendar as CalendarIcon, X, ChevronLeft, ChevronRight, MoreHorizontal
 } from 'lucide-react';
 import { useSettings } from '../context/SettingsContext';
 import useFinanceStore from '../store/useFinanceStore';
+import { getCategoryIcon } from '../utils/CategoryIcons';
 
 const COLORS = ['#4f46e5', '#8b5cf6', '#ec4899', '#f59e0b', '#10b981', '#14b8a6', '#3b82f6', '#6366f1'];
-
-const CATEGORY_LABELS = {
-  housing: 'Housing', food: 'Food', transport: 'Transport', utilities: 'Utilities',
-  entertainment: 'Fun', shopping: 'Shopping', health: 'Health', other: 'Other'
-};
-
-const CATEGORY_ICONS = {
-  housing: <Home size={16} />, food: <Coffee size={16} />, transport: <Car size={16} />, utilities: <Zap size={16} />,
-  entertainment: <Film size={16} />, shopping: <ShoppingBag size={16} />, health: <HeartPulse size={16} />, other: <MoreHorizontal size={16} />
-};
 
 // --- Calendar Overlay Component ---
 const CalendarOverlay = ({ isOpen, onClose, transactions, formatCurrency }) => {
@@ -170,11 +160,15 @@ const Dashboard = () => {
   const processedData = React.useMemo(() => {
     if (loading) return null;
 
-    const formattedPieData = dashboardData.expenses_by_category.map(item => ({
-      name: CATEGORY_LABELS[item.category] || item.category,
-      value: parseFloat(item.amount),
-      originalCategory: item.category
-    }));
+    const formattedPieData = dashboardData.expenses_by_category.map(item => {
+      const catObj = categories.find(c => c.name.toLowerCase() === item.category.toLowerCase());
+      return {
+        name: catObj ? catObj.name : item.category,
+        value: parseFloat(item.amount),
+        originalCategory: item.category,
+        icon: catObj ? catObj.icon : null
+      };
+    });
 
     const mappedIncomes = incomes.map(i => ({ ...i, type: 'income', title: i.source, amount: parseFloat(i.amount) }));
     const mappedExpenses = expenses.map(e => ({ ...e, type: 'expense', title: e.description || e.category, amount: parseFloat(e.amount) }));
@@ -365,7 +359,7 @@ const Dashboard = () => {
             
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
               {processedData.pieData.slice(0, 5).map((cat, i) => {
-                const icon = CATEGORY_ICONS[cat.originalCategory] || <MoreHorizontal size={14} />;
+                const icon = cat.icon ? getCategoryIcon(cat.icon, 14) : <MoreHorizontal size={14} />;
                 const percentage = ((cat.value / dashboardData.total_expense) * 100).toFixed(0);
                 return (
                   <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '0.8rem' }}>
@@ -402,7 +396,7 @@ const Dashboard = () => {
                 const spent = processedData.budgetSpends[b.category] || 0;
                 const percentage = Math.min((spent / limit) * 100, 100);
                 const isOver = spent > limit;
-                const catLabel = CATEGORY_LABELS[b.category] || b.category;
+                const catLabel = b.category.charAt(0).toUpperCase() + b.category.slice(1);
                 
                 return (
                   <div key={b.id}>

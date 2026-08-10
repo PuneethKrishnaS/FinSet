@@ -2,30 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useSettings } from '../context/SettingsContext';
 import api from '../services/api';
 import toast from 'react-hot-toast';
-import { Target, Plus, Save, Trash2, Calendar, AlertCircle, Home, Utensils, Car, Zap, Tv, ShoppingBag, Heart, MoreHorizontal } from 'lucide-react';
+import { Target, Plus, Save, Trash2, Calendar, AlertCircle } from 'lucide-react';
 import useFinanceStore from '../store/useFinanceStore';
-
-const CATEGORY_ICONS = {
-  housing: <Home size={18} />,
-  food: <Utensils size={18} />,
-  transport: <Car size={18} />,
-  utilities: <Zap size={18} />,
-  entertainment: <Tv size={18} />,
-  shopping: <ShoppingBag size={18} />,
-  health: <Heart size={18} />,
-  other: <MoreHorizontal size={18} />,
-};
-
-const CATEGORY_CHOICES = [
-  { value: 'housing', label: 'Housing' },
-  { value: 'food', label: 'Food' },
-  { value: 'transport', label: 'Transport' },
-  { value: 'utilities', label: 'Utilities' },
-  { value: 'entertainment', label: 'Fun' },
-  { value: 'shopping', label: 'Shopping' },
-  { value: 'health', label: 'Health' },
-  { value: 'other', label: 'Other' },
-];
+import { getCategoryIcon } from '../utils/CategoryIcons';
 
 // Circular Progress Component
 const CircularProgress = ({ percentage, isOver, isWarning, size = 60, strokeWidth = 6 }) => {
@@ -165,9 +144,9 @@ const Budget = () => {
               const percentage = limit > 0 ? (spent / limit) * 100 : 0;
               const isOver = spent > limit;
               const isWarning = percentage >= 80 && !isOver;
-              const fallback = CATEGORY_CHOICES.find(c => c.value.toLowerCase() === b.category.toLowerCase());
-              const catLabel = b.category;
-              const icon = fallback && CATEGORY_ICONS[fallback.value] ? CATEGORY_ICONS[fallback.value] : <Target size={18} />;
+              const catObj = categories.find(c => c.name.toLowerCase() === b.category.toLowerCase());
+              const catLabel = catObj ? catObj.name : b.category;
+              const icon = catObj ? getCategoryIcon(catObj.icon, 18) : <Target size={18} />;
 
               return (
                 <div key={b.id} className="card interactive-table" style={{ padding: '1.25rem', display: 'flex', alignItems: 'center', gap: '1.5rem', transition: 'transform 0.2s, box-shadow 0.2s' }}>

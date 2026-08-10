@@ -41,9 +41,18 @@ class PushSubscription(models.Model):
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
         UserProfile.objects.create(user=instance)
-        default_categories = ['housing', 'food', 'transport', 'utilities', 'entertainment', 'shopping', 'health', 'other']
-        for cat_name in default_categories:
-            Category.objects.create(user=instance, name=cat_name, type='expense')
+        default_categories = [
+            {'name': 'Housing', 'icon': 'Home'},
+            {'name': 'Food & Dining', 'icon': 'Coffee'},
+            {'name': 'Transportation', 'icon': 'Car'},
+            {'name': 'Utilities', 'icon': 'Zap'},
+            {'name': 'Entertainment', 'icon': 'Film'},
+            {'name': 'Shopping', 'icon': 'ShoppingBag'},
+            {'name': 'Health & Fitness', 'icon': 'HeartPulse'},
+            {'name': 'Other', 'icon': 'MoreHorizontal'}
+        ]
+        for cat in default_categories:
+            Category.objects.create(user=instance, name=cat['name'], type='expense', icon=cat['icon'])
 
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
