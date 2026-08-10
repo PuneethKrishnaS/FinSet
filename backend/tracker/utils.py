@@ -45,3 +45,5 @@ def send_web_push(user, title, message):
             print("Web push failed:", repr(ex))
             if ex.response and ex.response.status_code in [404, 410]:
                 sub.delete()
+        except Exception as ex:
+            print("Failed to send web push due to unexpected error:", repr(ex))

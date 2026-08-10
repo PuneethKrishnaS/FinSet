@@ -370,9 +370,17 @@ class ExpenseViewSet(viewsets.ModelViewSet):
                 date__month=expense.date.month
             ).aggregate(Sum('amount'))['amount__sum'] or 0
             
-            threshold = float(budget.amount) * 0.8
-            if total_spent >= threshold and (total_spent - float(expense.amount)) < threshold:
-                # Crossed the 80% threshold just now
+            threshold_80 = float(budget.amount) * 0.8
+            threshold_100 = float(budget.amount)
+            
+            if total_spent >= threshold_100 and (total_spent - float(expense.amount)) < threshold_100:
+                from .utils import create_notification
+                create_notification(
+                    self.request.user,
+                    "Budget Exceeded! 🚨",
+                    f"You have exceeded your {expense.category} budget for this month."
+                )
+            elif total_spent >= threshold_80 and (total_spent - float(expense.amount)) < threshold_80:
                 from .utils import create_notification
                 create_notification(
                     self.request.user,
