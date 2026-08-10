@@ -194,8 +194,9 @@ const LogTransaction = () => {
 
               {type === 'expense' ? (
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '0.5rem' }}>
-                  {categories.map((c) => {
-                    const color = 'var(--primary-color)';
+                  {categories.map((c, index) => {
+                    const COLORS = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8C8', '#F7DC6F', '#BB8FCE', '#F1948A', '#A9DFBF', '#F5B041'];
+                    const color = COLORS[index % COLORS.length];
                     const isSelected = category === c.name;
                     return (
                       <div
@@ -204,7 +205,7 @@ const LogTransaction = () => {
                         style={{
                           display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.25rem',
                           padding: '0.75rem 0.25rem', borderRadius: 'var(--radius-md)', cursor: 'pointer',
-                          background: isSelected ? 'var(--primary-light)' : 'var(--bg-main)',
+                          background: isSelected ? `${color}1A` : 'var(--bg-main)',
                           border: `2px solid ${isSelected ? color : 'transparent'}`,
                           transition: 'all 0.2s',
                           boxShadow: isSelected ? 'none' : 'inset 0 0 0 1px var(--border-color)'
