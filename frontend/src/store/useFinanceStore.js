@@ -15,15 +15,25 @@ const useFinanceStore = create((set, get) => ({
     if (store.expensesLoaded) store.fetchExpenses(true);
   },
 
-  fetchAll: () => {
+  fetchAll: async () => {
     const store = get();
-    store.fetchDashboard();
-    store.fetchDebts();
-    store.fetchBudgets();
-    store.fetchChitFunds();
-    store.fetchIncomes();
-    store.fetchExpenses();
-    store.fetchCategories();
+    // Process recurring ONLY ONCE on app load, sequentially before other fetches
+    try {
+      await api.post('/process-recurring/');
+    } catch (e) {
+      console.error('Failed to process recurring:', e);
+    }
+    
+    // Now fetch all data
+    await Promise.allSettled([
+      store.fetchDashboard(),
+      store.fetchDebts(),
+      store.fetchBudgets(),
+      store.fetchChitFunds(),
+      store.fetchIncomes(),
+      store.fetchExpenses(),
+      store.fetchCategories()
+    ]);
   },
 
   dashboardData: null,
@@ -31,12 +41,6 @@ const useFinanceStore = create((set, get) => ({
   fetchDashboard: async (force = false) => {
     if (get().dashboardLoaded && !force) return;
     try {
-      // Process recurring before dashboard fetch
-      try {
-        await api.post('/process-recurring/');
-      } catch (e) {
-        console.error('Failed to process recurring:', e);
-      }
       const res = await api.get('/dashboard/');
       set({ dashboardData: res.data, dashboardLoaded: true });
     } catch (e) {
