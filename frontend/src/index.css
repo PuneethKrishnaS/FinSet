@@ -176,6 +176,10 @@ body {
   height: 105px;
   border-bottom: 1px solid var(--border-color);
   box-sizing: border-box;
+  position: sticky;
+  top: -2rem;
+  z-index: 50;
+  background-color: var(--bg-main);
 }
 
 .page-container {
@@ -831,6 +835,7 @@ body {
     height: auto;
     margin: -1rem -1rem 1.5rem -1rem !important;
     padding: 1.5rem 1rem 1rem 1rem;
+    top: -1rem;
   }
 
   .nav-menu {
