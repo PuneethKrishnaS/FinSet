@@ -377,7 +377,7 @@ class ExpenseViewSet(viewsets.ModelViewSet):
                 create_notification(
                     self.request.user,
                     "Budget Alert! ⚠️",
-                    f"You have used over 80% of your {expense.category.name} budget for this month."
+                    f"You have used over 80% of your {expense.category} budget for this month."
                 )
 
 class DebtViewSet(viewsets.ModelViewSet):

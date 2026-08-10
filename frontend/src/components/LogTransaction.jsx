@@ -193,7 +193,7 @@ const LogTransaction = () => {
               </label>
 
               {type === 'expense' ? (
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '0.5rem' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.5rem' }}>
                   {categories.map((c, index) => {
                     const COLORS = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8C8', '#F7DC6F', '#BB8FCE', '#F1948A', '#A9DFBF', '#F5B041'];
                     const color = COLORS[index % COLORS.length];
