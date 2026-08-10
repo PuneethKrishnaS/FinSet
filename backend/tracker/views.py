@@ -358,35 +358,40 @@ class ExpenseViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         expense = serializer.save(user=self.request.user)
         
-        # Check budget alerts (80%)
-        month = expense.date.replace(day=1)
-        budget = Budget.objects.filter(user=self.request.user, category=expense.category, month=month).first()
-        
-        if budget:
-            total_spent = Expense.objects.filter(
-                user=self.request.user,
-                category=expense.category,
-                date__year=expense.date.year,
-                date__month=expense.date.month
-            ).aggregate(Sum('amount'))['amount__sum'] or 0
+        # Check budget alerts (80% and 100%)
+        try:
+            month = expense.date.replace(day=1)
+            budget = Budget.objects.filter(user=self.request.user, category=expense.category, month=month).first()
             
-            threshold_80 = float(budget.amount) * 0.8
-            threshold_100 = float(budget.amount)
-            
-            if total_spent >= threshold_100 and (total_spent - float(expense.amount)) < threshold_100:
-                from .utils import create_notification
-                create_notification(
-                    self.request.user,
-                    "Budget Exceeded! 🚨",
-                    f"You have exceeded your {expense.category} budget for this month."
-                )
-            elif total_spent >= threshold_80 and (total_spent - float(expense.amount)) < threshold_80:
-                from .utils import create_notification
-                create_notification(
-                    self.request.user,
-                    "Budget Alert! ⚠️",
-                    f"You have used over 80% of your {expense.category} budget for this month."
-                )
+            if budget:
+                total_spent = Expense.objects.filter(
+                    user=self.request.user,
+                    category=expense.category,
+                    date__year=expense.date.year,
+                    date__month=expense.date.month
+                ).aggregate(Sum('amount'))['amount__sum'] or 0
+                
+                total_spent = float(total_spent)
+                
+                threshold_80 = float(budget.amount) * 0.8
+                threshold_100 = float(budget.amount)
+                
+                if total_spent >= threshold_100 and (total_spent - float(expense.amount)) < threshold_100:
+                    from .utils import create_notification
+                    create_notification(
+                        self.request.user,
+                        "Budget Exceeded! 🚨",
+                        f"You have exceeded your {expense.category} budget for this month."
+                    )
+                elif total_spent >= threshold_80 and (total_spent - float(expense.amount)) < threshold_80:
+                    from .utils import create_notification
+                    create_notification(
+                        self.request.user,
+                        "Budget Alert! ⚠️",
+                        f"You have used over 80% of your {expense.category} budget for this month."
+                    )
+        except Exception as e:
+            print(f"Error checking budget alerts: {e}")
 
 class DebtViewSet(viewsets.ModelViewSet):
     serializer_class = DebtSerializer
