@@ -729,7 +729,7 @@ body {
     border-bottom: none;
     flex-direction: column;
     align-items: stretch;
-    z-index: 50;
+    z-index: 1000;
   }
 
   .sidebar-header {
