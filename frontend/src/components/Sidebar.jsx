@@ -13,6 +13,7 @@ import {
   Bell,
   MoreVertical,
 } from 'lucide-react';
+import api from '../services/api';
 
 const Sidebar = () => {
   const location = useLocation();
@@ -37,11 +38,8 @@ const Sidebar = () => {
   React.useEffect(() => {
     const fetchUnread = async () => {
       try {
-        const res = await fetch('http://localhost:8001/api/notifications/', {
-          headers: { 'Authorization': `Bearer ${localStorage.getItem('access_token')}` }
-        });
-        const data = await res.json();
-        const unread = data.filter(n => !n.is_read).length;
+        const res = await api.get('/notifications/');
+        const unread = res.data.filter(n => !n.is_read).length;
         setUnreadCount(unread);
       } catch (err) { }
     };
