@@ -873,3 +873,28 @@ body {
 .stat-pulse {
   animation: softPulse 2s infinite;
 }
+
+.profile-action-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--bg-main);
+  padding: 1.5rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+}
+
+.profile-action-card.danger {
+  background: var(--danger-light);
+  border-color: #fecaca;
+}
+
+@media (max-width: 768px) {
+  .profile-action-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

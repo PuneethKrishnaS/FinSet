@@ -136,11 +136,11 @@ const Settings = () => {
   );
 
   return (
-    <div className="page-container" style={{ paddingBottom: '3rem' }}>
+    <div className="page-container">
       <div className="page-header" style={{ marginBottom: '2rem' }}>
         <div>
-          <h1 className="page-title">Application Settings</h1>
-          <p className="page-subtitle">Customize your FinSet experience</p>
+          <h1 className="header-title">Application Settings</h1>
+          <p className="header-subtitle">Customize your FinSet experience</p>
         </div>
       </div>
 
@@ -259,7 +259,7 @@ const Settings = () => {
 
             <h4 style={{ fontSize: '0.95rem', color: 'var(--text-muted)', marginBottom: '1rem' }}>Add Custom Category</h4>
             <form onSubmit={handleAddCategory} style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '2rem', background: 'var(--bg-main)', padding: '1.5rem', borderRadius: 'var(--radius-md)', border: '1px dashed var(--border-color)' }}>
-              
+
               <div style={{ display: 'flex', gap: '1rem' }}>
                 <button
                   type="button"

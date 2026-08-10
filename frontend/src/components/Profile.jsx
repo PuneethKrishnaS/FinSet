@@ -141,11 +141,11 @@ const Profile = () => {
   };
 
   return (
-    <div className="page-container" style={{ paddingBottom: '3rem' }}>
+    <div className="page-container">
       <div className="page-header" style={{ marginBottom: '2rem' }}>
         <div>
-          <h1 className="page-title">My Profile</h1>
-          <p className="page-subtitle">Manage your personal information and security</p>
+          <h1 className="header-title">My Profile</h1>
+          <p className="header-subtitle">Manage your personal information and security</p>
         </div>
       </div>
 
@@ -299,7 +299,7 @@ const Profile = () => {
             Data & Privacy
           </h3>
           
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'var(--bg-main)', padding: '1.5rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1.25rem' }}>
+          <div className="profile-action-card">
             <div>
               <p style={{ fontWeight: '600', color: 'var(--text-main)', fontSize: '1.05rem', margin: '0 0 0.5rem 0' }}>Export Financial Data</p>
               <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', margin: 0, lineHeight: '1.5' }}>
@@ -316,7 +316,7 @@ const Profile = () => {
             </button>
           </div>
 
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'var(--danger-light)', padding: '1.5rem', borderRadius: 'var(--radius-md)', border: '1px solid #fecaca', flexWrap: 'wrap', gap: '1.25rem' }}>
+          <div className="profile-action-card danger">
             <div>
               <p style={{ fontWeight: '600', color: 'var(--danger)', fontSize: '1.05rem', margin: '0 0 0.5rem 0' }}>Delete Account</p>
               <p style={{ color: 'var(--danger)', opacity: 0.8, fontSize: '0.9rem', margin: 0, lineHeight: '1.5' }}>

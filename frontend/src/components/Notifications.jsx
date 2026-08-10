@@ -2,14 +2,36 @@ import React, { useState, useEffect } from 'react';
 import { Bell, Check, Trash2, Smartphone } from 'lucide-react';
 import api from '../services/api';
 import toast from 'react-hot-toast';
+import useFinanceStore from '../store/useFinanceStore';
 
 const Notifications = () => {
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isPushEnabled, setIsPushEnabled] = useState(true); // default true to avoid flicker
+  const { dataVersion, markDataDirty } = useFinanceStore();
 
   useEffect(() => {
     fetchNotifications();
-  }, []);
+    checkPushStatus();
+  }, [dataVersion]);
+
+  const checkPushStatus = async () => {
+    if ('serviceWorker' in navigator && 'PushManager' in window) {
+      try {
+        const registration = await navigator.serviceWorker.getRegistration();
+        if (registration) {
+          const subscription = await registration.pushManager.getSubscription();
+          setIsPushEnabled(!!subscription);
+        } else {
+          setIsPushEnabled(false);
+        }
+      } catch (e) {
+        setIsPushEnabled(false);
+      }
+    } else {
+      setIsPushEnabled(false);
+    }
+  };
 
   const fetchNotifications = async () => {
     try {
@@ -100,6 +122,7 @@ const Notifications = () => {
         subscription: subscription.toJSON()
       });
       
+      setIsPushEnabled(true);
       toast.success('Successfully enabled mobile push notifications!');
     } catch (error) {
       console.error('Failed to subscribe', error);
@@ -118,35 +141,37 @@ const Notifications = () => {
 
   return (
     <div className="page-container">
-      <div className="page-header" style={{ marginBottom: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem' }}>
+      <div className="page-header" style={{ marginBottom: '2rem' }}>
         <div>
-          <h1 className="page-title">Notifications</h1>
-          <p className="page-subtitle">Stay updated with your financial alerts</p>
+          <h1 className="header-title">Notifications</h1>
+          <p className="header-subtitle">Stay updated with your financial alerts</p>
         </div>
         
         {notifications.length > 0 && (
           <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-            <button onClick={markAllAsRead} style={{ background: 'transparent', border: 'none', color: 'var(--primary-color)', fontSize: '0.9rem', fontWeight: '500', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
+            <button onClick={markAllAsRead} className="btn" style={{ background: 'transparent', border: '1px solid var(--primary-color)', color: 'var(--primary-color)', fontSize: '0.85rem', padding: '0.4rem 0.8rem', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
               <Check size={16} /> Mark read
             </button>
-            <button onClick={clearAll} style={{ background: 'transparent', border: 'none', color: 'var(--danger)', fontSize: '0.9rem', fontWeight: '500', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
+            <button onClick={clearAll} className="btn" style={{ background: 'transparent', border: '1px solid var(--danger)', color: 'var(--danger)', fontSize: '0.85rem', padding: '0.4rem 0.8rem', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
               <Trash2 size={16} /> Clear all
             </button>
           </div>
         )}
       </div>
 
-      <div style={{ background: 'var(--bg-main)', border: '1px solid var(--border-color)', borderRadius: 'var(--radius-md)', padding: '1.25rem 1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
-        <div>
-          <h4 style={{ margin: '0 0 0.25rem 0', color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '1rem' }}>
-            <Smartphone size={18} color="var(--primary-color)"/> Enable Push Alerts
-          </h4>
-          <p style={{ margin: 0, fontSize: '0.85rem', color: 'var(--text-muted)' }}>Get instant alerts on this device when important updates happen.</p>
+      {!isPushEnabled && (
+        <div style={{ background: 'var(--bg-main)', border: '1px solid var(--border-color)', borderRadius: 'var(--radius-md)', padding: '1.25rem 1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
+          <div>
+            <h4 style={{ margin: '0 0 0.25rem 0', color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '1rem' }}>
+              <Smartphone size={18} color="var(--primary-color)"/> Enable Push Alerts
+            </h4>
+            <p style={{ margin: 0, fontSize: '0.85rem', color: 'var(--text-muted)' }}>Get instant alerts on this device when important updates happen.</p>
+          </div>
+          <button onClick={subscribeToPush} className="btn" style={{ padding: '0.5rem 1.25rem', fontSize: '0.9rem', whiteSpace: 'nowrap' }}>
+            Enable
+          </button>
         </div>
-        <button onClick={subscribeToPush} className="btn" style={{ padding: '0.5rem 1.25rem', fontSize: '0.9rem', whiteSpace: 'nowrap' }}>
-          Enable
-        </button>
-      </div>
+      )}
 
       <div className="card" style={{ padding: '1rem' }}>
         {notifications.length === 0 ? (
