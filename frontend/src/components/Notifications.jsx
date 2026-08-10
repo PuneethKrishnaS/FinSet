@@ -50,6 +50,7 @@ const Notifications = () => {
       setNotifications(prev => 
         prev.map(n => n.id === id ? { ...n, is_read: true } : n)
       );
+      markDataDirty();
     } catch (err) {
       console.error(err);
     }
@@ -59,6 +60,7 @@ const Notifications = () => {
     try {
       await api.post('/notifications/', { action: 'mark_read' });
       setNotifications(prev => prev.map(n => ({ ...n, is_read: true })));
+      markDataDirty();
     } catch (err) {
       console.error(err);
     }
@@ -68,6 +70,7 @@ const Notifications = () => {
     try {
       await api.post('/notifications/', { action: 'clear_all' });
       setNotifications([]);
+      markDataDirty();
     } catch (err) {
       console.error(err);
     }
@@ -173,9 +176,9 @@ const Notifications = () => {
         </div>
       )}
 
-      <div className="card" style={{ padding: '1rem' }}>
+      <div style={{ padding: '0' }}>
         {notifications.length === 0 ? (
-          <div style={{ padding: '3rem', textAlign: 'center', color: 'var(--text-muted)' }}>
+          <div className="card" style={{ padding: '3rem', textAlign: 'center', color: 'var(--text-muted)' }}>
             <Bell size={48} style={{ opacity: 0.2, marginBottom: '1rem' }} />
             <p>You have no notifications right now.</p>
           </div>
@@ -207,8 +210,15 @@ const Notifications = () => {
                 {!notif.is_read && (
                   <button 
                     onClick={() => markAsRead(notif.id)}
-                    className="btn"
-                    style={{ padding: '0.5rem 1rem', fontSize: '0.9rem' }}
+                    style={{ 
+                      padding: '0.4rem 0.6rem', 
+                      fontSize: '0.75rem',
+                      background: 'transparent',
+                      color: 'var(--primary-color)',
+                      border: 'none',
+                      cursor: 'pointer',
+                      fontWeight: '600'
+                    }}
                   >
                     Mark read
                   </button>

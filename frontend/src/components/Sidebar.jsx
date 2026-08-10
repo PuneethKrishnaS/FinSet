@@ -14,12 +14,14 @@ import {
   MoreVertical,
 } from 'lucide-react';
 import api from '../services/api';
+import useFinanceStore from '../store/useFinanceStore';
 
 const Sidebar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
+  const { dataVersion } = useFinanceStore();
   const dropdownRef = useRef(null);
 
   // Close dropdown on outside click
@@ -48,7 +50,7 @@ const Sidebar = () => {
     // Refresh unread count every 30 seconds
     const interval = setInterval(fetchUnread, 30000);
     return () => clearInterval(interval);
-  }, []);
+  }, [dataVersion]);
 
   const handleLogout = () => {
     localStorage.removeItem('access_token');
