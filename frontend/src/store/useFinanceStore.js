@@ -20,8 +20,12 @@ const useFinanceStore = create((set, get) => ({
   fetchDashboard: async (force = false) => {
     if (get().dashboardLoaded && !force) return;
     try {
-      // Process recurring before dashboard fetch (fire & forget is fine)
-      api.post('/process-recurring/').catch(() => {});
+      // Process recurring before dashboard fetch
+      try {
+        await api.post('/process-recurring/');
+      } catch (e) {
+        console.error('Failed to process recurring:', e);
+      }
       const res = await api.get('/dashboard/');
       set({ dashboardData: res.data, dashboardLoaded: true });
     } catch (e) {
