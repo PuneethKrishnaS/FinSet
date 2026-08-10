@@ -52,3 +52,9 @@ export const getCategoryIcon = (iconName, size = 16, color = 'currentColor') => 
   const IconComponent = ICON_MAP[iconName] || MoreHorizontal;
   return <IconComponent size={size} color={color} />;
 };
+
+export const getIconForCategory = (categoryObj, size = 16, color = 'currentColor') => {
+  if (!categoryObj) return getCategoryIcon(null, size, color);
+  const iconName = categoryObj.icon || PREDEFINED_CATEGORIES.find(pc => pc.name === categoryObj.name)?.icon;
+  return getCategoryIcon(iconName, size, color);
+};

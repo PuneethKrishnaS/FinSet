@@ -17,6 +17,7 @@ import Settings from './components/Settings';
 import Profile from './components/Profile';
 import ChitFunds from './components/ChitFunds';
 import Notifications from './components/Notifications';
+import useFinanceStore from './store/useFinanceStore';
 
 const ProtectedRoute = ({ children }) => {
   const token = localStorage.getItem('access_token');
@@ -36,8 +37,17 @@ const AuthRoute = ({ children }) => {
 
 const AppLayout = ({ children }) => {
   const location = useLocation();
+  const { fetchAll } = useFinanceStore();
+
   const isAuthPage = location.pathname === '/login' || location.pathname === '/register' || location.pathname === '/forgot-password' || location.pathname.startsWith('/reset-password');
   const isLandingPage = location.pathname === '/';
+
+  React.useEffect(() => {
+    const token = localStorage.getItem('access_token');
+    if (token && !isAuthPage && !isLandingPage) {
+      fetchAll();
+    }
+  }, [location.pathname, isAuthPage, isLandingPage, fetchAll]);
 
   if (isLandingPage) {
     return children;

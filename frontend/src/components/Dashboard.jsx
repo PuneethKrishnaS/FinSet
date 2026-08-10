@@ -11,7 +11,7 @@ import {
 } from 'lucide-react';
 import { useSettings } from '../context/SettingsContext';
 import useFinanceStore from '../store/useFinanceStore';
-import { getCategoryIcon } from '../utils/CategoryIcons';
+import { getCategoryIcon, getIconForCategory } from '../utils/CategoryIcons';
 
 const COLORS = ['#4f46e5', '#8b5cf6', '#ec4899', '#f59e0b', '#10b981', '#14b8a6', '#3b82f6', '#6366f1'];
 
@@ -360,7 +360,7 @@ const Dashboard = () => {
             
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
               {processedData.pieData.slice(0, 5).map((cat, i) => {
-                const icon = cat.icon ? getCategoryIcon(cat.icon, 14) : <MoreHorizontal size={14} />;
+                const icon = cat ? getIconForCategory(cat, 14) : <MoreHorizontal size={14} />;
                 const percentage = ((cat.value / dashboardData.total_expense) * 100).toFixed(0);
                 return (
                   <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '0.8rem' }}>

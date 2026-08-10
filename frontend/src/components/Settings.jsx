@@ -3,7 +3,7 @@ import { useSettings } from '../context/SettingsContext';
 import { Moon, Sun, Globe, Save, Plus, Trash2, Bell, Settings as SettingsIcon, Layout, DollarSign } from 'lucide-react';
 import toast from 'react-hot-toast';
 import api from '../services/api';
-import { ICON_MAP, PREDEFINED_CATEGORIES, getCategoryIcon } from '../utils/CategoryIcons';
+import { ICON_MAP, PREDEFINED_CATEGORIES, getCategoryIcon, getIconForCategory } from '../utils/CategoryIcons';
 import useFinanceStore from '../store/useFinanceStore';
 
 const CURRENCIES = [
@@ -323,7 +323,7 @@ const Settings = () => {
                 }}>
                   <span style={{ fontWeight: '600', color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '32px', height: '32px', background: 'var(--primary-light)', color: 'var(--primary-color)', borderRadius: '8px' }}>
-                      {getCategoryIcon(cat.icon, 16)}
+                      {getIconForCategory(cat, 16)}
                     </div>
                     {cat.name}
                   </span>

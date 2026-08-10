@@ -4,15 +4,26 @@ import api from '../services/api';
 const useFinanceStore = create((set, get) => ({
   dataVersion: 0,
   markDataDirty: () => {
-    set(state => ({
-      dataVersion: state.dataVersion + 1,
-      dashboardLoaded: false,
-      debtsLoaded: false,
-      budgetsLoaded: false,
-      chitFundsLoaded: false,
-      incomesLoaded: false,
-      expensesLoaded: false,
-    }));
+    set(state => ({ dataVersion: state.dataVersion + 1 }));
+    const store = get();
+    // Background silent refetch for already loaded data
+    if (store.dashboardLoaded) store.fetchDashboard(true);
+    if (store.debtsLoaded) store.fetchDebts(true);
+    if (store.budgetsLoaded) store.fetchBudgets(true);
+    if (store.chitFundsLoaded) store.fetchChitFunds(true);
+    if (store.incomesLoaded) store.fetchIncomes(true);
+    if (store.expensesLoaded) store.fetchExpenses(true);
+  },
+
+  fetchAll: () => {
+    const store = get();
+    store.fetchDashboard();
+    store.fetchDebts();
+    store.fetchBudgets();
+    store.fetchChitFunds();
+    store.fetchIncomes();
+    store.fetchExpenses();
+    store.fetchCategories();
   },
 
   dashboardData: null,

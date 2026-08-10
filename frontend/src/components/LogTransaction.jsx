@@ -7,7 +7,7 @@ import {
 import toast from 'react-hot-toast';
 import { useSettings } from '../context/SettingsContext';
 import useFinanceStore from '../store/useFinanceStore';
-import { getCategoryIcon } from '../utils/CategoryIcons';
+import { getCategoryIcon, getIconForCategory } from '../utils/CategoryIcons';
 
 const INCOME_SOURCES = [
   { value: 'salary', label: 'Salary', icon: Briefcase, color: '#10b981' },
@@ -218,7 +218,7 @@ const LogTransaction = () => {
                           display: 'flex', alignItems: 'center', justifyContent: 'center',
                           boxShadow: isSelected ? `0 2px 8px rgba(0,0,0,0.2)` : 'var(--shadow-sm)'
                         }}>
-                          {getCategoryIcon(c.icon, 16)}
+                          {getIconForCategory(c, 16)}
                         </div>
                         <span style={{ fontSize: '0.7rem', fontWeight: isSelected ? '700' : '500', color: isSelected ? 'var(--text-main)' : 'var(--text-muted)', textAlign: 'center', overflow: 'hidden', textOverflow: 'ellipsis', width: '100%' }}>
                           {c.name}
@@ -328,7 +328,7 @@ const LogTransaction = () => {
                     if (sourceObj) { iconElement = <sourceObj.icon size={16} />; bgColor = sourceObj.color; }
                   } else {
                     const catObj = categories.find(c => c.name.toLowerCase() === t.category.toLowerCase());
-                    if (catObj) { iconElement = getCategoryIcon(catObj.icon, 16); bgColor = 'var(--primary-color)'; }
+                    if (catObj) { iconElement = getIconForCategory(catObj, 16); bgColor = 'var(--primary-color)'; }
                   }
 
                   return (

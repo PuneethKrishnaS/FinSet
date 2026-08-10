@@ -9,7 +9,7 @@ import {
   Briefcase, TrendingUp, TrendingDown, Wallet
 } from 'lucide-react';
 import useFinanceStore from '../store/useFinanceStore';
-import { getCategoryIcon } from '../utils/CategoryIcons';
+import { getCategoryIcon, getIconForCategory } from '../utils/CategoryIcons';
 
 const INCOME_SOURCES = [
   { value: 'salary', label: 'Salary', icon: Briefcase, color: '#10b981' },
@@ -185,7 +185,7 @@ const History = () => {
                   onClick={() => setFilterCategory(c.name.toLowerCase())}
                   style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', padding: '0.4rem 0.8rem', border: 'none', borderRadius: 'var(--radius-md)', cursor: 'pointer', whiteSpace: 'nowrap', fontWeight: 600, fontSize: '0.75rem', background: isSelected ? 'var(--primary-color)' : 'var(--bg-main)', color: isSelected ? '#fff' : 'var(--text-muted)', transition: 'all 0.2s' }}
                 >
-                  {getCategoryIcon(c.icon, 14, isSelected ? '#fff' : 'currentColor')} {c.name}
+                  {getIconForCategory(c, 14, isSelected ? '#fff' : 'currentColor')} {c.name}
                 </button>
               );
             })}
@@ -217,7 +217,7 @@ const History = () => {
                 } else {
                   const catObj = categories.find(c => c.name.toLowerCase() === t.categoryKey);
                   typeLabel = catObj ? catObj.name : t.category;
-                  iconElement = catObj ? getCategoryIcon(catObj.icon, 18) : <MoreHorizontal size={18} />;
+                  iconElement = catObj ? getIconForCategory(catObj, 18) : <MoreHorizontal size={18} />;
                   bgColor = catObj ? (catObj.color || '#64748b') : '#64748b';
                 }
 

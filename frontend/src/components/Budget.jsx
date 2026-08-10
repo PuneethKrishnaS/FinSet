@@ -4,7 +4,7 @@ import api from '../services/api';
 import toast from 'react-hot-toast';
 import { Target, Plus, Save, Trash2, Calendar, AlertCircle } from 'lucide-react';
 import useFinanceStore from '../store/useFinanceStore';
-import { getCategoryIcon } from '../utils/CategoryIcons';
+import { getCategoryIcon, getIconForCategory } from '../utils/CategoryIcons';
 
 // Circular Progress Component
 const CircularProgress = ({ percentage, isOver, isWarning, size = 60, strokeWidth = 6 }) => {
@@ -147,7 +147,7 @@ const Budget = () => {
               const isWarning = percentage >= 80 && !isOver;
               const catObj = categories.find(c => c.name.toLowerCase() === b.category.toLowerCase());
               const catLabel = catObj ? catObj.name : b.category;
-              const icon = catObj ? getCategoryIcon(catObj.icon, 18) : <Target size={18} />;
+              const icon = catObj ? getIconForCategory(catObj, 18) : <Target size={18} />;
 
               return (
                 <div key={b.id} className="card interactive-table" style={{ padding: '1.25rem', display: 'flex', alignItems: 'center', gap: '1.5rem', transition: 'transform 0.2s, box-shadow 0.2s' }}>
