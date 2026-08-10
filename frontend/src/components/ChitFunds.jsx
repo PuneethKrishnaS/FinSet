@@ -7,7 +7,7 @@ import useFinanceStore from '../store/useFinanceStore';
 
 const ChitFunds = () => {
   const { formatCurrency, currency } = useSettings();
-  const { chitFunds: chits, chitFundsLoaded, fetchChitFunds } = useFinanceStore();
+  const { chitFunds: chits, chitFundsLoaded, fetchChitFunds, dataVersion, markDataDirty } = useFinanceStore();
 
   // Form states for creating a new Chit
   const [showCreateForm, setShowCreateForm] = useState(false);
@@ -40,7 +40,7 @@ const ChitFunds = () => {
 
   useEffect(() => {
     fetchChitFunds();
-  }, [fetchChitFunds]);
+  }, [fetchChitFunds, dataVersion]);
 
   const handleCreateChit = async (e) => {
     e.preventDefault();
@@ -57,7 +57,7 @@ const ChitFunds = () => {
         duration_months: 20,
         target_amount: ''
       });
-      fetchChitFunds(true);
+      markDataDirty();
     } catch (err) {
       toast.error('Failed to create Chit Fund.');
     }
@@ -79,7 +79,7 @@ const ChitFunds = () => {
         date: new Date().toISOString().slice(0, 10),
         month_number: 1
       });
-      fetchChitFunds(true);
+      markDataDirty();
     } catch (err) {
       toast.error('Failed to log contribution.');
     }
@@ -95,7 +95,7 @@ const ChitFunds = () => {
       });
       toast.success('Contribution updated successfully!');
       setEditingContributionId(null);
-      fetchChitFunds(true);
+      markDataDirty();
     } catch (err) {
       toast.error('Failed to update contribution.');
     }

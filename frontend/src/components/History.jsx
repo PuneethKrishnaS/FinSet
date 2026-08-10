@@ -19,7 +19,7 @@ const INCOME_SOURCES = [
 
 const History = () => {
   const { formatCurrency } = useSettings();
-  const { incomes, incomesLoaded, fetchIncomes, expenses, expensesLoaded, fetchExpenses, categories, fetchCategories } = useFinanceStore();
+  const { incomes, incomesLoaded, fetchIncomes, expenses, expensesLoaded, fetchExpenses, categories, fetchCategories, dataVersion, markDataDirty } = useFinanceStore();
   
   // Filters
   const [searchTerm, setSearchTerm] = useState('');
@@ -30,7 +30,7 @@ const History = () => {
     fetchIncomes();
     fetchExpenses();
     fetchCategories();
-  }, [fetchIncomes, fetchExpenses, fetchCategories]);
+  }, [fetchIncomes, fetchExpenses, fetchCategories, dataVersion]);
 
   const transactions = React.useMemo(() => {
     if (!incomesLoaded || !expensesLoaded) return [];
@@ -46,11 +46,10 @@ const History = () => {
     try {
       if (type === 'income') {
         await api.delete(`/incomes/${id}/`);
-        fetchIncomes(true);
       } else {
         await api.delete(`/expenses/${id}/`);
-        fetchExpenses(true);
       }
+      markDataDirty();
       toast.success('Transaction deleted');
     } catch (err) {
       toast.error('Failed to delete transaction');

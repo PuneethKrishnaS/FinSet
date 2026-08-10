@@ -2,6 +2,19 @@ import { create } from 'zustand';
 import api from '../services/api';
 
 const useFinanceStore = create((set, get) => ({
+  dataVersion: 0,
+  markDataDirty: () => {
+    set(state => ({
+      dataVersion: state.dataVersion + 1,
+      dashboardLoaded: false,
+      debtsLoaded: false,
+      budgetsLoaded: false,
+      chitFundsLoaded: false,
+      incomesLoaded: false,
+      expensesLoaded: false,
+    }));
+  },
+
   dashboardData: null,
   dashboardLoaded: false,
   fetchDashboard: async (force = false) => {

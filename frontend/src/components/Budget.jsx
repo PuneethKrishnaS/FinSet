@@ -49,7 +49,8 @@ const Budget = () => {
   const { 
     budgets, budgetsLoaded, fetchBudgets, 
     expenses: storeExpenses, expensesLoaded, fetchExpenses, 
-    categories, categoriesLoaded, fetchCategories 
+    categories, categoriesLoaded, fetchCategories,
+    dataVersion, markDataDirty
   } = useFinanceStore();
 
   const [category, setCategory] = useState('');
@@ -61,7 +62,7 @@ const Budget = () => {
     fetchBudgets();
     fetchExpenses();
     fetchCategories();
-  }, [fetchBudgets, fetchExpenses, fetchCategories]);
+  }, [fetchBudgets, fetchExpenses, fetchCategories, dataVersion]);
 
   useEffect(() => {
     if (categoriesLoaded && categories.length > 0 && !category) {
@@ -90,7 +91,7 @@ const Budget = () => {
       await api.post('/budgets/', { category, amount: parseFloat(amount), month: firstDay });
       toast.success('Budget created!');
       setAmount('');
-      fetchBudgets(true);
+      markDataDirty();
     } catch (err) {
       toast.error('Failed to create budget.');
     }
@@ -101,7 +102,7 @@ const Budget = () => {
     try {
       await api.delete(`/budgets/${id}/`);
       toast.success('Budget removed.');
-      fetchBudgets(true);
+      markDataDirty();
     } catch (err) {
       toast.error('Failed to delete.');
     }

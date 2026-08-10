@@ -141,7 +141,8 @@ const Dashboard = () => {
     dashboardData, dashboardLoaded, fetchDashboard, 
     incomes, incomesLoaded, fetchIncomes, 
     expenses, expensesLoaded, fetchExpenses, 
-    budgets, budgetsLoaded, fetchBudgets 
+    budgets, budgetsLoaded, fetchBudgets, categories,
+    dataVersion
   } = useFinanceStore();
 
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
@@ -153,7 +154,7 @@ const Dashboard = () => {
     fetchIncomes();
     fetchExpenses();
     fetchBudgets();
-  }, [fetchDashboard, fetchIncomes, fetchExpenses, fetchBudgets]);
+  }, [fetchDashboard, fetchIncomes, fetchExpenses, fetchBudgets, dataVersion]);
 
   const loading = !dashboardLoaded || !incomesLoaded || !expensesLoaded || !budgetsLoaded || !dashboardData;
 

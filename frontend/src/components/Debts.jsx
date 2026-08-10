@@ -6,8 +6,8 @@ import { Users, Plus, CheckCircle, Trash2, ArrowUpRight, ArrowDownRight, Trendin
 import useFinanceStore from '../store/useFinanceStore';
 
 const Debts = () => {
-  const { formatCurrency, currency } = useSettings();
-  const { debts, debtsLoaded, fetchDebts } = useFinanceStore();
+  const { currency, formatCurrency } = useSettings();
+  const { debts, debtsLoaded, fetchDebts, dataVersion, markDataDirty } = useFinanceStore();
 
   // New debt form
   const [personName, setPersonName] = useState('');
@@ -28,7 +28,7 @@ const Debts = () => {
 
   useEffect(() => {
     fetchDebts();
-  }, [fetchDebts]);
+  }, [fetchDebts, dataVersion]);
 
   const handleCreateDebt = async (e) => {
     e.preventDefault();
@@ -47,7 +47,7 @@ const Debts = () => {
       setAmount('');
       setInterestRate('');
       setInterestPeriod('monthly');
-      fetchDebts(true); // force refresh
+      markDataDirty();
     } catch (err) {
       toast.error('Failed to record debt.');
     }
@@ -57,7 +57,7 @@ const Debts = () => {
     try {
       await api.put(`/debts/${debt.id}/`, { ...debt, is_settled: true });
       toast.success(`${debt.person_name}'s debt settled!`);
-      fetchDebts(true);
+      markDataDirty();
     } catch (err) {
       toast.error('Failed to settle debt.');
     }
@@ -68,7 +68,7 @@ const Debts = () => {
     try {
       await api.delete(`/debts/${id}/`);
       toast.success('Record deleted');
-      fetchDebts(true);
+      markDataDirty();
     } catch (err) {
       toast.error('Failed to delete record');
     }
@@ -87,7 +87,7 @@ const Debts = () => {
       toast.success('Payment logged successfully!');
       setPaymentAmount('');
       setPaymentNote('');
-      fetchDebts(true);
+      markDataDirty();
     } catch (err) {
       toast.error('Failed to log payment.');
     } finally {
@@ -100,7 +100,7 @@ const Debts = () => {
     try {
       await api.delete(`/debt-payments/${paymentId}/`);
       toast.success('Payment deleted');
-      fetchDebts(true);
+      markDataDirty();
     } catch (err) {
       toast.error('Failed to delete payment');
     }

@@ -25,7 +25,7 @@ const LogTransaction = () => {
   const [isRecurring, setIsRecurring] = useState(false);
 
   const [submitting, setSubmitting] = useState(false);
-  const { categories, categoriesLoaded, fetchCategories, incomes, incomesLoaded, fetchIncomes, expenses, expensesLoaded, fetchExpenses } = useFinanceStore();
+  const { categories, categoriesLoaded, fetchCategories, incomesLoaded, fetchIncomes, expensesLoaded, fetchExpenses, markDataDirty } = useFinanceStore();
 
   const { currency, formatCurrency } = useSettings();
   const currencySymbol = new Intl.NumberFormat('en-US', { style: 'currency', currency: currency }).formatToParts(1).find(x => x.type === 'currency').value;
@@ -77,12 +77,8 @@ const LogTransaction = () => {
       setAmount('');
       setDescription('');
       
-      // Force refresh data in store
-      if (type === 'income') {
-        fetchIncomes(true);
-      } else {
-        fetchExpenses(true);
-      }
+      // Force global refresh of data
+      markDataDirty();
     } catch (err) {
       toast.error('Failed to log transaction. Please try again.');
     } finally {

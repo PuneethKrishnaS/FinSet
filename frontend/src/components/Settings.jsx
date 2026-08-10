@@ -4,6 +4,7 @@ import { Moon, Sun, Globe, Save, Plus, Trash2, Bell, Settings as SettingsIcon, L
 import toast from 'react-hot-toast';
 import api from '../services/api';
 import { ICON_MAP, PREDEFINED_CATEGORIES, getCategoryIcon } from '../utils/CategoryIcons';
+import useFinanceStore from '../store/useFinanceStore';
 
 const CURRENCIES = [
   { code: 'USD', label: 'US Dollar ($)' },
@@ -23,6 +24,7 @@ const Settings = () => {
   const [newCategoryName, setNewCategoryName] = useState('');
   const [newCategoryIcon, setNewCategoryIcon] = useState('DollarSign');
   const [showIconPicker, setShowIconPicker] = useState(false);
+  const { markDataDirty } = useFinanceStore();
 
   // UI State
   const [activeTab, setActiveTab] = useState('general');
@@ -55,6 +57,7 @@ const Settings = () => {
       setNewCategoryName('');
       setNewCategoryIcon('DollarSign');
       setShowIconPicker(false);
+      markDataDirty();
       toast.success('Category added');
     } catch (err) {
       toast.error('Failed to add category');
@@ -69,6 +72,7 @@ const Settings = () => {
     try {
       const res = await api.post('/categories/', { name: predef.name, type: 'expense', icon: predef.icon });
       setCategories([...categories, res.data]);
+      markDataDirty();
       toast.success(`${predef.name} added`);
     } catch (err) {
       toast.error(`Failed to add ${predef.name}`);
@@ -79,6 +83,7 @@ const Settings = () => {
     try {
       await api.delete(`/categories/${id}/`);
       setCategories(categories.filter(c => c.id !== id));
+      markDataDirty();
       toast.success('Category deleted');
     } catch (err) {
       toast.error('Failed to delete category');
