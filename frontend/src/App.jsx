@@ -123,7 +123,7 @@ const AppLayout = ({ children }) => {
   }
 
   if (isAuthPage) {
-    return <div className="auth-layout">{children}</div>;
+    return <div className="min-h-screen bg-background flex items-center justify-center p-0 md:p-6">{children}</div>;
   }
 
   return (

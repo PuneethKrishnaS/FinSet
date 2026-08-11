@@ -32,90 +32,97 @@ const Login = () => {
   };
 
   return (
-    <div className="auth-split-card">
-      {/* Left Abstract Illustration Panel */}
-      <div className="auth-left">
-        <img src="/auth-bg.png" alt="Abstract Wealth" className="auth-bg-img" />
-        <div className="auth-left-content">
-          <div className="auth-logo" style={{ display: 'flex', alignItems: 'center' }}>
-            <img src="/FinSet_Logo.svg" alt="FinSet" style={{ height: '32px' }} />
+    <div className="w-full flex-1 flex flex-col md:flex-row bg-background md:bg-card md:rounded-3xl md:shadow-2xl overflow-hidden md:max-w-5xl md:min-h-[600px] border-border md:border relative z-10">
+      
+      {/* Left Abstract Illustration Panel (Desktop Only) */}
+      <div className="hidden md:flex md:w-1/2 relative bg-primary items-center justify-center overflow-hidden">
+        <img src="/auth-bg.png" alt="Abstract Wealth" className="absolute inset-0 w-full h-full object-cover opacity-20 mix-blend-overlay" />
+        <div className="relative z-10 p-12 flex flex-col justify-between h-full text-primary-foreground">
+          <div className="flex items-center">
+            <img src="/FinSet_Logo.svg" alt="FinSet" className="h-8 brightness-0 invert" />
           </div>
           
-          <div className="auth-quote-container">
-            <p className="auth-quote">"Tracking your expenses is the first step towards taking control of your financial future and building lasting wealth."</p>
-            <div className="auth-author">
-              <div style={{ width: '20px', height: '2px', backgroundColor: 'white', borderRadius: '2px' }}></div>
+          <div className="mt-auto">
+            <p className="text-xl font-bold leading-relaxed mb-4">"Tracking your expenses is the first step towards taking control of your financial future and building lasting wealth."</p>
+            <div className="flex items-center gap-3 text-sm font-semibold opacity-80">
+              <div className="w-5 h-0.5 bg-white rounded-full"></div>
               Financial Wisdom
             </div>
           </div>
         </div>
       </div>
 
-      {/* Right Form Panel */}
-      <div className="auth-right" style={{ position: 'relative' }}>
+      {/* Right Form Panel (Full screen mobile, half screen desktop) */}
+      <div className="w-full md:w-1/2 flex flex-col justify-center px-6 py-12 md:px-16 md:py-12 relative min-h-screen md:min-h-0 bg-background md:bg-card">
+        
+        {/* Mobile Logo */}
+        <div className="md:hidden flex items-center mb-8">
+          <img src="/FinSet_Logo.svg" alt="FinSet" className="h-8" />
+        </div>
+
         <button 
           type="button"
           onClick={toggleTheme} 
-          style={{ position: 'absolute', top: '2rem', right: '2rem', background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', padding: '0.5rem' }}
+          className="absolute top-6 right-6 p-2 text-muted-foreground hover:text-foreground hover:bg-muted/50 rounded-full transition-colors"
           title="Toggle Theme"
         >
           {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
         </button>
         
-        <div className="auth-header">
-          <h2 className="auth-title">Welcome Back</h2>
-          <p className="auth-subtitle">Enter your credentials to access your dashboard.</p>
+        <div className="mb-8">
+          <h2 className="text-2xl md:text-3xl font-black text-foreground mb-2">Welcome Back</h2>
+          <p className="text-sm font-medium text-muted-foreground">Enter your credentials to access your dashboard.</p>
         </div>
 
         {error && (
-          <div style={{ padding: '0.8rem 1rem', background: 'var(--danger-light)', color: 'var(--danger)', borderRadius: 'var(--radius-md)', marginBottom: '1.5rem', fontSize: '0.9rem', fontWeight: '500', border: '1px solid #fecaca' }}>
+          <div className="mb-6 p-3.5 bg-destructive/10 border border-destructive/20 text-destructive text-sm font-bold rounded-xl flex items-center gap-2">
             {error}
           </div>
         )}
 
-        <form onSubmit={handleLogin}>
-          <div className="auth-form-group">
-            <label className="auth-label">Email Address</label>
-            <div className="auth-input-wrapper">
-              <User size={18} className="auth-input-icon" />
+        <form onSubmit={handleLogin} className="space-y-5">
+          <div className="space-y-1.5">
+            <label className="text-xs font-bold text-foreground uppercase tracking-wider">Email Address</label>
+            <div className="relative">
+              <User size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground" />
               <input 
                 type="email" 
-                className="auth-input" 
                 placeholder="name@example.com" 
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
+                className="w-full bg-background md:bg-muted/30 border border-border rounded-xl pl-11 pr-4 py-3 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 transition-shadow"
               />
             </div>
           </div>
 
-          <div className="auth-form-group">
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
-              <label className="auth-label" style={{ marginBottom: 0 }}>Password</label>
-              <Link to="/forgot-password" style={{ fontSize: '0.8rem', color: 'var(--primary-color)', textDecoration: 'none', fontWeight: 600 }}>Forgot Password?</Link>
+          <div className="space-y-1.5">
+            <div className="flex justify-between items-center">
+              <label className="text-xs font-bold text-foreground uppercase tracking-wider">Password</label>
+              <Link to="/forgot-password" className="text-xs font-bold text-primary hover:text-primary/80 transition-colors">Forgot Password?</Link>
             </div>
-            <div className="auth-input-wrapper">
-              <Lock size={18} className="auth-input-icon" />
+            <div className="relative">
+              <Lock size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground" />
               <input 
                 type="password" 
-                className="auth-input" 
                 placeholder="••••••••" 
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
+                className="w-full bg-background md:bg-muted/30 border border-border rounded-xl pl-11 pr-4 py-3 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 transition-shadow"
               />
             </div>
           </div>
 
-          <button type="submit" className="auth-btn" disabled={loading}>
+          <button type="submit" disabled={loading} className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-3.5 rounded-xl transition-all shadow-md active:scale-[0.98] flex items-center justify-center gap-2 mt-2">
             {loading ? 'Authenticating...' : (
               <>Sign In <ArrowRight size={18} /></>
             )}
           </button>
         </form>
 
-        <div className="auth-footer">
-          Don't have an account? <Link to="/register" className="auth-link">Create one now</Link>
+        <div className="mt-8 text-center text-sm font-medium text-muted-foreground">
+          Don't have an account? <Link to="/register" className="font-bold text-primary hover:text-primary/80 transition-colors ml-1">Create one now</Link>
         </div>
       </div>
     </div>

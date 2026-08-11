@@ -228,7 +228,7 @@ const History = () => {
         )}
 
         {/* Transaction List (Edge-to-Edge on Mobile) */}
-        <div className="-mx-4 md:mx-0 flex-1">
+        <div className="-mx-4 md:mx-0 flex-1 px-5">
           {loading ? (
             <div className="text-center p-12 text-muted-foreground">Loading history...</div>
           ) : filteredTransactions.length === 0 ? (
@@ -238,7 +238,7 @@ const History = () => {
               <div className="text-sm text-muted-foreground">Try adjusting your search or filters.</div>
             </div>
           ) : (
-            <div className="flex flex-col">
+            <div className="flex flex-col ">
               <AnimatePresence>
                 {groupedTransactions.map((group, gIndex) => (
                   <motion.div 
