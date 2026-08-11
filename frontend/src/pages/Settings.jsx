@@ -106,7 +106,7 @@ const Settings = () => {
       className={`w-11 h-6 rounded-full relative cursor-pointer transition-colors shadow-inner ${checked ? 'bg-primary' : 'bg-muted-foreground/30'}`}
     >
       <div 
-        className={`w-5 h-5 rounded-full bg-white absolute top-0.5 shadow-md transition-all ${checked ? 'left-[22px]' : 'left-0.5'}`}
+        className={`w-5 h-5 rounded-full bg-white absolute top-0.5  transition-all ${checked ? 'left-[22px]' : 'left-0.5'}`}
       />
     </div>
   );
@@ -145,13 +145,13 @@ const Settings = () => {
         {activeTab === 'general' && (
           <div className="flex flex-col gap-6 md:gap-8">
 
-            <div className="bg-card border border-border rounded-2xl p-6 md:p-8 shadow-sm">
+            <div className="bg-card border border-border rounded-2xl p-6 md:p-8 ">
               <h3 className="flex items-center gap-3 text-xl font-bold text-foreground mb-6">
                 <div className="p-2 bg-primary/10 text-primary rounded-xl"><Sun size={20} /></div>
                 Appearance
               </h3>
 
-              <div className="flex justify-between items-center p-5 bg-background rounded-xl border border-border shadow-sm">
+              <div className="flex justify-between items-center p-5 bg-background rounded-xl border border-border ">
                 <div>
                   <p className="font-bold text-foreground text-base mb-1">Theme Mode</p>
                   <p className="text-muted-foreground text-sm font-medium">Choose between light and dark modes.</p>
@@ -163,20 +163,20 @@ const Settings = () => {
               </div>
             </div>
 
-            <div className="bg-card border border-border rounded-2xl p-6 md:p-8 shadow-sm">
+            <div className="bg-card border border-border rounded-2xl p-6 md:p-8 ">
               <h3 className="flex items-center gap-3 text-xl font-bold text-foreground mb-6">
                 <div className="p-2 bg-primary/10 text-primary rounded-xl"><Globe size={20} /></div>
                 Regional Preferences
               </h3>
 
-              <div className="p-5 bg-background rounded-xl border border-border shadow-sm">
+              <div className="p-5 bg-background rounded-xl border border-border ">
                 <label className="block font-bold text-foreground mb-1">Base Currency</label>
                 <p className="text-sm text-muted-foreground font-medium mb-4">This currency is used globally across your dashboard and transaction history.</p>
 
                 <select
                   value={selectedCurrency}
                   onChange={(e) => setSelectedCurrency(e.target.value)}
-                  className="w-full max-w-sm bg-card border border-border rounded-xl px-4 py-2.5 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 shadow-sm"
+                  className="w-full max-w-sm bg-card border border-border rounded-xl px-4 py-2.5 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 "
                 >
                   {CURRENCIES.map(c => (
                     <option key={c.code} value={c.code}>{c.label}</option>
@@ -189,7 +189,7 @@ const Settings = () => {
               <button
                 onClick={handleSave}
                 disabled={saving || selectedCurrency === currency}
-                className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-3 px-8 rounded-xl transition-colors shadow-sm text-sm flex items-center gap-2"
+                className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-3 px-8 rounded-xl transition-colors  text-sm flex items-center gap-2"
               >
                 <Save size={18} /> {saving ? 'Saving...' : 'Save Preferences'}
               </button>
@@ -199,7 +199,7 @@ const Settings = () => {
 
         {/* Categories Tab */}
         {activeTab === 'categories' && (
-          <div className="bg-card border border-border rounded-2xl p-6 md:p-8 shadow-sm">
+          <div className="bg-card border border-border rounded-2xl p-6 md:p-8 ">
             <div className="mb-8">
               <h3 className="flex items-center gap-3 text-xl font-bold text-foreground mb-2">
                 <div className="p-2 bg-primary/10 text-primary rounded-xl"><Layout size={20} /></div>
@@ -222,7 +222,7 @@ const Settings = () => {
                       className={`flex items-center gap-2 py-2 px-4 rounded-xl text-sm font-bold transition-all ${
                         alreadyAdded 
                           ? 'bg-muted/30 border border-border text-muted-foreground cursor-not-allowed opacity-60' 
-                          : 'bg-primary/5 border border-primary/20 text-primary hover:bg-primary/10 hover:border-primary/40 shadow-sm'
+                          : 'bg-primary/5 border border-primary/20 text-primary hover:bg-primary/10 hover:border-primary/40 '
                       }`}
                     >
                       {getCategoryIcon(predef.icon, 16, 'currentColor')}
@@ -236,13 +236,13 @@ const Settings = () => {
             <hr className="border-border my-8" />
 
             <h4 className="text-sm font-bold text-muted-foreground uppercase tracking-wider mb-4">Add Custom Category</h4>
-            <form onSubmit={handleAddCategory} className="flex flex-col gap-4 mb-8 bg-background p-6 rounded-2xl border border-border shadow-sm">
+            <form onSubmit={handleAddCategory} className="flex flex-col gap-4 mb-8 bg-background p-6 rounded-2xl border border-border ">
 
               <div className="flex flex-col md:flex-row gap-4">
                 <button
                   type="button"
                   onClick={() => setShowIconPicker(!showIconPicker)}
-                  className="w-12 h-12 flex items-center justify-center bg-card border border-border rounded-xl text-primary hover:bg-muted/50 transition-colors shadow-sm shrink-0"
+                  className="w-12 h-12 flex items-center justify-center bg-card border border-border rounded-xl text-primary hover:bg-muted/50 transition-colors  shrink-0"
                   title="Choose Icon"
                 >
                   {getCategoryIcon(newCategoryIcon, 20)}
@@ -252,19 +252,19 @@ const Settings = () => {
                   value={newCategoryName}
                   onChange={e => setNewCategoryName(e.target.value)}
                   placeholder="Enter custom category name..."
-                  className="flex-1 bg-card border border-border rounded-xl px-4 py-3 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 shadow-sm"
+                  className="flex-1 bg-card border border-border rounded-xl px-4 py-3 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 "
                   required
                 />
                 <button
                   type="submit"
-                  className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-3 px-6 rounded-xl transition-colors shadow-sm text-sm flex items-center justify-center gap-2 shrink-0"
+                  className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-3 px-6 rounded-xl transition-colors  text-sm flex items-center justify-center gap-2 shrink-0"
                 >
                   <Plus size={18} /> Add
                 </button>
               </div>
 
               {showIconPicker && (
-                <div className="flex flex-wrap gap-2 p-4 bg-card rounded-xl border border-border mt-2 shadow-sm">
+                <div className="flex flex-wrap gap-2 p-4 bg-card rounded-xl border border-border mt-2 ">
                   {Object.keys(ICON_MAP).map(iconName => (
                     <button
                       key={iconName}
@@ -286,7 +286,7 @@ const Settings = () => {
             <h4 className="text-sm font-bold text-muted-foreground uppercase tracking-wider mb-4">Your Categories</h4>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {categories.map(cat => (
-                <div key={cat.id} className="flex justify-between items-center p-4 bg-background rounded-xl border border-border shadow-sm group">
+                <div key={cat.id} className="flex justify-between items-center p-4 bg-background rounded-xl border border-border  group">
                   <span className="font-bold text-sm text-foreground flex items-center gap-3">
                     <div className="w-10 h-10 flex items-center justify-center bg-primary/10 text-primary rounded-lg">
                       {getIconForCategory(cat, 18)}

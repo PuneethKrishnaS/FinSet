@@ -86,7 +86,7 @@ const Sidebar = () => {
           </button>
           
           {isOpen && (
-            <div className="absolute right-0 top-full mt-1 w-48 bg-popover border border-border rounded-xl shadow-lg py-2 z-50">
+            <div className="absolute right-0 top-full mt-1 w-48 bg-popover border border-border rounded-xl  py-2 z-50">
               <Link to="/profile" onClick={closeMenu} className="flex items-center gap-3 px-4 py-2 text-sm text-popover-foreground hover:bg-accent hover:text-accent-foreground transition-colors">
                 <User size={16} /> Profile
               </Link>

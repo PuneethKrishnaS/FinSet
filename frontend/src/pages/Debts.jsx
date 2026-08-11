@@ -150,7 +150,7 @@ const Debts = () => {
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-6 md:mb-8">
-        <div className="bg-card border border-border rounded-2xl p-6 shadow-sm flex flex-col justify-center relative overflow-hidden group">
+        <div className="bg-card border border-border rounded-2xl p-6  flex flex-col justify-center relative overflow-hidden group">
           <div className="absolute inset-0 bg-emerald-500/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
           <div className="relative z-10">
             <div className="flex items-center justify-between mb-3">
@@ -166,7 +166,7 @@ const Debts = () => {
           </div>
         </div>
         
-        <div className="bg-card border border-border rounded-2xl p-6 shadow-sm flex flex-col justify-center relative overflow-hidden group">
+        <div className="bg-card border border-border rounded-2xl p-6  flex flex-col justify-center relative overflow-hidden group">
           <div className="absolute inset-0 bg-destructive/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
           <div className="relative z-10">
             <div className="flex items-center justify-between mb-3">
@@ -186,7 +186,7 @@ const Debts = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
         
         {/* Create Form */}
-        <div className="bg-card border border-border rounded-2xl p-6 shadow-sm lg:sticky lg:top-6">
+        <div className="bg-card border border-border rounded-2xl p-6  lg:sticky lg:top-6">
           <h3 className="text-base font-bold text-foreground mb-5 flex items-center gap-2">
             <Plus size={18} className="text-primary" /> New Record
           </h3>
@@ -196,14 +196,14 @@ const Debts = () => {
               <button 
                 type="button" 
                 onClick={() => setType('lent')}
-                className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${type === 'lent' ? 'bg-emerald-500 text-white shadow-sm' : 'text-muted-foreground hover:bg-muted/80'}`}
+                className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${type === 'lent' ? 'bg-emerald-500 text-white ' : 'text-muted-foreground hover:bg-muted/80'}`}
               >
                 I Lent Money
               </button>
               <button 
                 type="button" 
                 onClick={() => setType('borrowed')}
-                className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${type === 'borrowed' ? 'bg-destructive text-white shadow-sm' : 'text-muted-foreground hover:bg-muted/80'}`}
+                className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${type === 'borrowed' ? 'bg-destructive text-white ' : 'text-muted-foreground hover:bg-muted/80'}`}
               >
                 I Borrowed
               </button>
@@ -280,7 +280,7 @@ const Debts = () => {
 
             <button 
               type="submit" 
-              className={`w-full font-bold py-3 px-4 rounded-xl transition-all shadow-md active:scale-[0.98] ${type === 'lent' ? 'bg-emerald-500 hover:bg-emerald-600 text-white shadow-emerald-500/20' : 'bg-destructive hover:bg-destructive/90 text-white shadow-destructive/20'}`}
+              className={`w-full font-bold py-3 px-4 rounded-xl transition-all  active:scale-[0.98] ${type === 'lent' ? 'bg-emerald-500 hover:bg-emerald-600 text-white shadow-emerald-500/20' : 'bg-destructive hover:bg-destructive/90 text-white shadow-destructive/20'}`}
             >
               Save Record
             </button>
@@ -309,7 +309,7 @@ const Debts = () => {
               const { principal, paymentsTotal, remaining, fixedInterestAmount, interestLabel } = calculateDebtTotals(d);
               
               return (
-                <div key={d.id} className={`bg-card border border-border rounded-2xl overflow-hidden transition-all ${d.is_settled ? 'opacity-60 grayscale' : 'hover:shadow-md'}`}>
+                <div key={d.id} className={`bg-card border border-border rounded-2xl overflow-hidden transition-all ${d.is_settled ? 'opacity-60 grayscale' : 'hover:'}`}>
                   
                   {/* Card Header (Clickable) */}
                   <div 

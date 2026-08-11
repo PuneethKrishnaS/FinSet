@@ -52,7 +52,7 @@ const ResetPassword = () => {
   };
 
   return (
-    <div className="w-full flex-1 flex flex-col md:flex-row bg-background md:bg-card md:rounded-3xl md:shadow-2xl overflow-hidden md:max-w-5xl md:min-h-[600px] border-border md:border relative z-10">
+    <div className="w-full flex-1 flex flex-col md:flex-row bg-background md:bg-card md:rounded-3xl md: overflow-hidden md:max-w-5xl md:min-h-[600px] border-border md:border relative z-10">
       
       {/* Left Abstract Illustration Panel (Desktop Only) */}
       <div className="hidden md:flex md:w-1/2 relative bg-primary items-center justify-center overflow-hidden">
@@ -107,7 +107,7 @@ const ResetPassword = () => {
             <p className="text-sm font-medium text-muted-foreground mb-8">
               Your password has been changed successfully. You can now log in with your new credentials.
             </p>
-            <Link to="/login" className="inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-3 px-6 rounded-xl transition-all shadow-md active:scale-[0.98]">
+            <Link to="/login" className="inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-3 px-6 rounded-xl transition-all  active:scale-[0.98]">
               <ArrowLeft size={16} /> Back to Login
             </Link>
           </div>
@@ -121,7 +121,7 @@ const ResetPassword = () => {
             <p className="text-sm font-medium text-muted-foreground mb-8">
               Please request a new password reset link if you still need to change your password.
             </p>
-            <Link to="/forgot-password" className="inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-3 px-6 rounded-xl transition-all shadow-md active:scale-[0.98]">
+            <Link to="/forgot-password" className="inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-3 px-6 rounded-xl transition-all  active:scale-[0.98]">
               Request New Link
             </Link>
           </div>
@@ -157,7 +157,7 @@ const ResetPassword = () => {
               </div>
             </div>
 
-            <button type="submit" disabled={loading} className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-3.5 rounded-xl transition-all shadow-md active:scale-[0.98] flex items-center justify-center gap-2 mt-2">
+            <button type="submit" disabled={loading} className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-3.5 rounded-xl transition-all  active:scale-[0.98] flex items-center justify-center gap-2 mt-2">
               {loading ? 'Resetting...' : (
                 <>Reset Password <ArrowRight size={18} /></>
               )}

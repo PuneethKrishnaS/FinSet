@@ -164,7 +164,7 @@ const Notifications = () => {
       </div>
 
       {!isPushEnabled && (
-        <div className="bg-card border border-border rounded-2xl p-5 flex flex-wrap justify-between items-center gap-4 mb-6 shadow-sm">
+        <div className="bg-card border border-border rounded-2xl p-5 flex flex-wrap justify-between items-center gap-4 mb-6 ">
           <div>
             <h4 className="flex items-center gap-2 text-foreground font-bold text-sm mb-1">
               <Smartphone size={18} className="text-primary" /> Enable Push Alerts
@@ -173,7 +173,7 @@ const Notifications = () => {
           </div>
           <button 
             onClick={subscribeToPush} 
-            className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-2 px-5 rounded-xl transition-colors text-sm whitespace-nowrap shadow-sm"
+            className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-2 px-5 rounded-xl transition-colors text-sm whitespace-nowrap "
           >
             Enable
           </button>
@@ -196,8 +196,8 @@ const Notifications = () => {
                 key={notif.id}
                 className={`flex justify-between items-start p-5 rounded-2xl border transition-all ${
                   notif.is_read 
-                    ? 'bg-card border-border hover:shadow-sm' 
-                    : 'bg-primary/5 border-primary/20 shadow-sm'
+                    ? 'bg-card border-border hover:' 
+                    : 'bg-primary/5 border-primary/20 '
                 }`}
               >
                 <div className="flex-1 pr-4">

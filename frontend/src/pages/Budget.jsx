@@ -158,7 +158,7 @@ const Budget = () => {
               const icon = catObj ? getIconForCategory(catObj, 20) : <Target size={20} />;
 
               return (
-                <div key={b.id} className="bg-card border border-border rounded-2xl p-5 flex items-center gap-5 hover:shadow-md transition-shadow group">
+                <div key={b.id} className="bg-card border border-border rounded-2xl p-5 flex items-center gap-5 hover: transition-shadow group">
                   
                   {/* Circular Gauge */}
                   <div className="shrink-0">
@@ -235,7 +235,7 @@ const Budget = () => {
           </div>
 
           {/* Create Form Panel */}
-          <div className="bg-card border border-border rounded-2xl p-6 shadow-sm">
+          <div className="bg-card border border-border rounded-2xl p-6 ">
             <h3 className="text-base font-bold text-foreground mb-5 flex items-center gap-2">
               <Plus size={18} className="text-primary" /> Create Budget
             </h3>
@@ -269,7 +269,7 @@ const Budget = () => {
               </div>
               <button 
                 type="submit" 
-                className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-3 rounded-xl transition-colors shadow-md active:scale-[0.98]"
+                className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-3 rounded-xl transition-colors  active:scale-[0.98]"
               >
                 Save Budget
               </button>

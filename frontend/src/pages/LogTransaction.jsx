@@ -98,7 +98,7 @@ const LogTransaction = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
 
         {/* Left Column: Log Form */}
-        <div className="lg:col-span-2 bg-card rounded-2xl border border-border shadow-sm overflow-hidden">
+        <div className="lg:col-span-2 bg-card rounded-2xl border border-border  overflow-hidden">
           
           {/* Header Toggle */}
           <div className="flex border-b border-border bg-muted/30">
@@ -199,11 +199,11 @@ const LogTransaction = () => {
                         key={c.id}
                         onClick={() => setCategory(c.name)}
                         className={`flex flex-col items-center justify-center p-3 rounded-xl cursor-pointer transition-all border-2 select-none ${
-                          isSelected ? 'bg-primary/5 border-primary shadow-sm' : 'bg-muted/30 border-transparent hover:bg-muted/60'
+                          isSelected ? 'bg-primary/5 border-primary ' : 'bg-muted/30 border-transparent hover:bg-muted/60'
                         }`}
                       >
                         <div 
-                          className="w-10 h-10 rounded-full flex items-center justify-center shadow-sm mb-2 transition-transform duration-200"
+                          className="w-10 h-10 rounded-full flex items-center justify-center  mb-2 transition-transform duration-200"
                           style={{ 
                             backgroundColor: isSelected ? color : 'var(--card)', 
                             color: isSelected ? '#fff' : color,
@@ -229,11 +229,11 @@ const LogTransaction = () => {
                         key={c.value}
                         onClick={() => setIncomeSource(c.value)}
                         className={`flex flex-col items-center justify-center p-3 rounded-xl cursor-pointer transition-all border-2 select-none ${
-                          isSelected ? 'bg-emerald-500/5 border-emerald-500 shadow-sm' : 'bg-muted/30 border-transparent hover:bg-muted/60'
+                          isSelected ? 'bg-emerald-500/5 border-emerald-500 ' : 'bg-muted/30 border-transparent hover:bg-muted/60'
                         }`}
                       >
                         <div 
-                          className="w-12 h-12 rounded-full flex items-center justify-center shadow-sm mb-2 transition-transform duration-200"
+                          className="w-12 h-12 rounded-full flex items-center justify-center  mb-2 transition-transform duration-200"
                           style={{ 
                             backgroundColor: isSelected ? c.color : 'var(--card)', 
                             color: isSelected ? '#fff' : c.color,
@@ -272,12 +272,12 @@ const LogTransaction = () => {
             <button
               type="submit"
               disabled={submitting || !isFormValid}
-              className={`w-full flex items-center justify-center gap-2 py-4 rounded-xl text-base font-bold text-white transition-all shadow-md active:scale-[0.98] ${
+              className={`w-full flex items-center justify-center gap-2 py-4 rounded-xl text-base font-bold text-white transition-all  active:scale-[0.98] ${
                 !isFormValid || submitting 
                   ? 'bg-muted-foreground/40 cursor-not-allowed shadow-none'
                   : type === 'expense' 
-                    ? 'bg-primary hover:bg-primary/90 hover:shadow-primary/25 shadow-lg' 
-                    : 'bg-emerald-500 hover:bg-emerald-600 hover:shadow-emerald-500/25 shadow-lg'
+                    ? 'bg-primary hover:bg-primary/90 hover:shadow-primary/25 ' 
+                    : 'bg-emerald-500 hover:bg-emerald-600 hover:shadow-emerald-500/25 '
               }`}
             >
               <Save size={18} />
@@ -289,7 +289,7 @@ const LogTransaction = () => {
 
         {/* Right Column: Mini History Feed */}
         <div className="lg:sticky lg:top-6">
-          <div className="bg-card rounded-2xl border border-border p-5 md:p-6 shadow-sm">
+          <div className="bg-card rounded-2xl border border-border p-5 md:p-6 ">
             <div className="flex justify-between items-center mb-6">
               <h3 className="text-base font-bold text-foreground flex items-center gap-2">
                 <History size={18} className="text-primary" /> Recent Activity

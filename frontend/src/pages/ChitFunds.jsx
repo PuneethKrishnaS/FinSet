@@ -108,7 +108,7 @@ const ChitFunds = () => {
         <div className="flex justify-end">
           <button 
             onClick={() => setShowCreateForm(!showCreateForm)}
-            className="bg-primary hover:bg-primary/90 text-primary-foreground text-sm font-bold py-2 px-4 rounded-xl transition-colors shadow-sm active:scale-[0.98] flex items-center gap-2"
+            className="bg-primary hover:bg-primary/90 text-primary-foreground text-sm font-bold py-2 px-4 rounded-xl transition-colors  active:scale-[0.98] flex items-center gap-2"
           >
             {showCreateForm ? 'Cancel' : <><Plus size={16} /> New Chit Fund</>}
           </button>
@@ -117,7 +117,7 @@ const ChitFunds = () => {
 
       {/* Create Form */}
       {showCreateForm && (
-        <div className="bg-card border border-border rounded-2xl p-6 shadow-sm mb-6 relative overflow-hidden">
+        <div className="bg-card border border-border rounded-2xl p-6  mb-6 relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-50"></div>
           <div className="relative z-10">
             <h3 className="text-lg font-bold text-foreground mb-5 flex items-center gap-2">
@@ -168,7 +168,7 @@ const ChitFunds = () => {
                 />
               </div>
               <div className="lg:col-span-5 flex justify-end mt-2">
-                <button type="submit" className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-2.5 px-6 rounded-xl transition-colors shadow-sm">
+                <button type="submit" className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-2.5 px-6 rounded-xl transition-colors ">
                   Create
                 </button>
               </div>
@@ -197,7 +197,7 @@ const ChitFunds = () => {
             const targetStr = chit.target_amount ? formatCurrency(chit.target_amount) : 'Flexible';
             
             return (
-              <div key={chit.id} className="bg-card border border-border rounded-2xl overflow-hidden hover:shadow-md transition-shadow">
+              <div key={chit.id} className="bg-card border border-border rounded-2xl overflow-hidden hover: transition-shadow">
                 <div 
                   onClick={() => setExpandedChitId(expandedChitId === chit.id ? null : chit.id)}
                   className="p-5 md:p-6 flex flex-wrap gap-6 justify-between items-center cursor-pointer group hover:bg-muted/10 transition-colors"
