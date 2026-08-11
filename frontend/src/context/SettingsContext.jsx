@@ -20,11 +20,13 @@ export const SettingsProvider = ({ children }) => {
     }).format(amount);
   };
 
-  useEffect(() => {
+    useEffect(() => {
     // Load theme from local storage if available
     const savedTheme = localStorage.getItem('theme') || 'light';
     setTheme(savedTheme);
     document.documentElement.setAttribute('data-theme', savedTheme);
+    if (savedTheme === 'dark') document.documentElement.classList.add('dark');
+    else document.documentElement.classList.remove('dark');
 
     // Fetch user profile for currency
     const fetchProfile = async () => {
@@ -40,6 +42,8 @@ export const SettingsProvider = ({ children }) => {
               setTheme(res.data.profile.theme);
               localStorage.setItem('theme', res.data.profile.theme);
               document.documentElement.setAttribute('data-theme', res.data.profile.theme);
+              if (res.data.profile.theme === 'dark') document.documentElement.classList.add('dark');
+              else document.documentElement.classList.remove('dark');
             }
           }
         }
@@ -58,6 +62,8 @@ export const SettingsProvider = ({ children }) => {
     setTheme(newTheme);
     localStorage.setItem('theme', newTheme);
     document.documentElement.setAttribute('data-theme', newTheme);
+    if (newTheme === 'dark') document.documentElement.classList.add('dark');
+    else document.documentElement.classList.remove('dark');
 
     try {
       const token = localStorage.getItem('access_token');
