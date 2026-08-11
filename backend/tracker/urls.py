@@ -1,7 +1,7 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-from .views import RegisterView, IncomeViewSet, ExpenseViewSet, DashboardDataView, UserProfileView, BudgetViewSet, DebtViewSet, DebtPaymentViewSet, CategoryViewSet, ProcessRecurringView, ChitFundViewSet, ChitContributionViewSet, PasswordResetRequestView, PasswordResetConfirmView, ChangePasswordView, ExportDataView, NotificationListView, SubscribeToPushView, VapidPublicKeyView
+from .views import RegisterView, IncomeViewSet, ExpenseViewSet, DashboardDataView, UserProfileView, BudgetViewSet, DebtViewSet, DebtPaymentViewSet, CategoryViewSet, ProcessRecurringView, ChitFundViewSet, ChitContributionViewSet, PasswordResetRequestView, PasswordResetConfirmView, ChangePasswordView, ExportDataView, NotificationListView, SubscribeToPushView, VapidPublicKeyView, ParseBankStatementView, BulkImportTransactionsView
 
 router = DefaultRouter()
 router.register(r'incomes', IncomeViewSet, basename='income')
@@ -26,6 +26,8 @@ urlpatterns = [
     path('notifications/subscribe/', SubscribeToPushView.as_view(), name='subscribe_to_push'),
     path('dashboard/', DashboardDataView.as_view(), name='dashboard_data'),
     path('export-data/', ExportDataView.as_view(), name='export_data'),
+    path('parse-statement/', ParseBankStatementView.as_view(), name='parse_statement'),
+    path('bulk-import/', BulkImportTransactionsView.as_view(), name='bulk_import'),
     path('process-recurring/', ProcessRecurringView.as_view(), name='process_recurring'),
     path('', include(router.urls)),
 ]

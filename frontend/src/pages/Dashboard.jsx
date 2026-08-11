@@ -7,7 +7,7 @@ import {
 import api from '../services/api';
 import {
   ArrowUpRight, ArrowDownRight, TrendingDown, TrendingUp, Wallet, Target,
-  History, Calendar as CalendarIcon, X, ChevronLeft, ChevronRight, MoreHorizontal
+  History, Calendar as CalendarIcon, X, ChevronLeft, ChevronRight, MoreHorizontal, UploadCloud
 } from 'lucide-react';
 import { useSettings } from '../context/SettingsContext';
 import useFinanceStore from '../store/useFinanceStore';
@@ -221,9 +221,14 @@ const Dashboard = () => {
           <h1 className="header-title">Financial Overview</h1>
           <p className="header-subtitle">Your complete money analysis</p>
         </div>
-        <button onClick={() => setIsCalendarOpen(true)} className="btn btn-secondary" style={{ padding: '0.5rem 1rem', fontSize: '0.85rem', display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-          <CalendarIcon size={16} /> View Calendar
-        </button>
+        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+          <button onClick={() => navigate('/import')} className="btn btn-secondary" style={{ padding: '0.5rem 1rem', fontSize: '0.85rem', display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+            <UploadCloud size={16} /> Import Data
+          </button>
+          <button onClick={() => setIsCalendarOpen(true)} className="btn btn-secondary" style={{ padding: '0.5rem 1rem', fontSize: '0.85rem', display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+            <CalendarIcon size={16} /> View Calendar
+          </button>
+        </div>
       </header>
 
       {/* Top 4 Stat Cards */}

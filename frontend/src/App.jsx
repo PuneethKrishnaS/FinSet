@@ -12,10 +12,12 @@ import LogTransaction from './pages/LogTransaction';
 import History from './pages/History';
 import Budget from './pages/Budget';
 import Debts from './pages/Debts';
+import DebtPayment from './pages/DebtPayment';
 import Sidebar from './components/Sidebar';
 import Settings from './pages/Settings';
 import Profile from './pages/Profile';
 import ChitFunds from './pages/ChitFunds';
+import ImportStatement from './pages/ImportStatement';
 import Notifications from './pages/Notifications';
 import useFinanceStore from './store/useFinanceStore';
 
@@ -91,6 +93,7 @@ function App() {
 
             <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
             <Route path="/log-transaction" element={<ProtectedRoute><LogTransaction /></ProtectedRoute>} />
+            <Route path="/import" element={<ProtectedRoute><ImportStatement /></ProtectedRoute>} />
             <Route path="/history" element={<ProtectedRoute><History /></ProtectedRoute>} />
             <Route path="/budgets" element={<ProtectedRoute><Budget /></ProtectedRoute>} />
             <Route path="/debts" element={<ProtectedRoute><Debts /></ProtectedRoute>} />

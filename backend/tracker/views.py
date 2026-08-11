@@ -14,6 +14,9 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.core.mail import send_mail
 from django.conf import settings
 import os
+import re
+from datetime import datetime
+import PyPDF2
 
 def add_months(sourcedate, months):
     month = sourcedate.month - 1 + months
@@ -547,3 +550,137 @@ class DashboardDataView(APIView):
             'expenses_by_category': expenses_by_category,
             'expenses_by_day': expenses_by_day
         })
+
+class ParseBankStatementView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        if 'file' not in request.FILES:
+            return Response({'error': 'No file uploaded'}, status=400)
+        
+        file = request.FILES['file']
+        
+        try:
+            reader = PyPDF2.PdfReader(file)
+            text = ""
+            for page in reader.pages:
+                text += page.extract_text() + "\n"
+        except Exception as e:
+            return Response({'error': 'Failed to read PDF file. ' + str(e)}, status=400)
+            
+        lines = text.strip().split('\n')
+        transactions = []
+        current_txn = ""
+
+        for line in lines:
+            line = line.strip()
+            if not line:
+                continue
+            if re.match(r'^\d{2}-\d{2}-\d{4}', line):
+                if current_txn:
+                    transactions.append(current_txn)
+                current_txn = line
+            else:
+                current_txn += " " + line
+        if current_txn:
+            transactions.append(current_txn)
+
+        parsed = []
+        last_balance = 0.0
+
+        for txn in transactions:
+            match = re.search(r'^(\d{2}-\d{2}-\d{4})\s+(.+?)\s+([\d\.]+)\s+([\d\.]+)\s+(Cr|Dr)$', txn)
+            if match:
+                date_str = match.group(1)
+                # Convert DD-MM-YYYY to YYYY-MM-DD
+                try:
+                    iso_date = datetime.strptime(date_str, '%d-%m-%Y').strftime('%Y-%m-%d')
+                except ValueError:
+                    iso_date = date_str
+                    
+                narration = match.group(2).strip()
+                amount = float(match.group(3))
+                balance = float(match.group(4))
+                
+                if "Opening Balance" in narration:
+                    last_balance = balance
+                    continue
+                    
+                is_deposit = (balance > last_balance)
+                last_balance = balance
+                
+                # Auto-categorization basic logic
+                category_key = "other"
+                narration_lower = narration.lower()
+                
+                if is_deposit:
+                    source_key = 'other'
+                    if 'salary' in narration_lower:
+                        source_key = 'salary'
+                    elif 'interest' in narration_lower or 'dividend' in narration_lower:
+                        source_key = 'investment'
+                    
+                    parsed.append({
+                        "id": f"tmp_{len(parsed)}", # temporary ID for frontend keying
+                        "date": iso_date,
+                        "description": narration,
+                        "amount": amount,
+                        "type": "income",
+                        "category": source_key,
+                        "selected": True
+                    })
+                else:
+                    if any(x in narration_lower for x in ['zomato', 'swiggy', 'mcdonald', 'kfc', 'restaurant']):
+                        category_key = 'food'
+                    elif any(x in narration_lower for x in ['uber', 'ola', 'irctc', 'flight', 'petrol', 'fuel']):
+                        category_key = 'transportation'
+                    elif any(x in narration_lower for x in ['amazon', 'flipkart', 'myntra', 'shopping']):
+                        category_key = 'shopping'
+                    elif any(x in narration_lower for x in ['electricity', 'water', 'bill', 'recharge', 'jio', 'airtel']):
+                        category_key = 'utilities'
+                    elif any(x in narration_lower for x in ['netflix', 'prime', 'spotify', 'movie']):
+                        category_key = 'entertainment'
+                        
+                    parsed.append({
+                        "id": f"tmp_{len(parsed)}",
+                        "date": iso_date,
+                        "description": narration,
+                        "amount": amount,
+                        "type": "expense",
+                        "category": category_key,
+                        "selected": True
+                    })
+                    
+        return Response({'transactions': parsed})
+
+class BulkImportTransactionsView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        transactions = request.data.get('transactions', [])
+        if not transactions:
+            return Response({'error': 'No transactions provided'}, status=400)
+            
+        imported_count = 0
+        for txn in transactions:
+            try:
+                if txn.get('type') == 'income':
+                    Income.objects.create(
+                        user=request.user,
+                        amount=txn['amount'],
+                        source=txn['category'], # The frontend maps category to source for incomes
+                        date=txn['date'],
+                    )
+                else:
+                    Expense.objects.create(
+                        user=request.user,
+                        amount=txn['amount'],
+                        category=txn['category'],
+                        description=txn['description'][:255],
+                        date=txn['date']
+                    )
+                imported_count += 1
+            except Exception as e:
+                print(f"Failed to import transaction: {e}")
+                
+        return Response({'success': True, 'imported_count': imported_count})
