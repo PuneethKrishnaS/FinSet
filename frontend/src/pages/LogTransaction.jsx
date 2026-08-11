@@ -25,7 +25,7 @@ const LogTransaction = () => {
   const [isRecurring, setIsRecurring] = useState(false);
 
   const [submitting, setSubmitting] = useState(false);
-  const { categories, categoriesLoaded, fetchCategories, incomes, incomesLoaded, fetchIncomes, expenses, expensesLoaded, fetchExpenses, markDataDirty } = useFinanceStore();
+  const { fetchIncomes, fetchExpenses, markDataDirty, categories, categoriesLoaded, fetchCategories, incomes, incomesLoaded, expenses, expensesLoaded } = useFinanceStore();
 
   const { currency, formatCurrency } = useSettings();
   const currencySymbol = new Intl.NumberFormat('en-US', { style: 'currency', currency: currency }).formatToParts(1).find(x => x.type === 'currency').value;
@@ -138,24 +138,28 @@ const LogTransaction = () => {
               <label style={{ display: 'block', color: 'var(--text-muted)', fontWeight: '600', marginBottom: '0.25rem', fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '1px' }}>
                 Enter Amount
               </label>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.25rem' }}>
-                <span style={{ fontSize: '1.75rem', fontWeight: '800', color: type === 'expense' ? 'var(--text-main)' : 'var(--success)' }}>{currencySymbol}</span>
-                <input
-                  type="number"
-                  step="0.01"
-                  min="0.01"
-                  required
-                  placeholder="0"
-                  value={amount}
-                  onChange={(e) => setAmount(e.target.value)}
-                  className="amount-input"
-                  style={{
-                    fontSize: '2.5rem', fontWeight: '800', border: 'none', background: 'transparent',
-                    width: '150px',
-                    color: type === 'expense' ? 'var(--text-main)' : 'var(--success)',
-                    outline: 'none', textAlign: 'left', padding: 0
-                  }}
-                />
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', maxWidth: '300px', margin: '0 auto' }}>
+                <div style={{ flex: 1, textAlign: 'right', paddingRight: '0.25rem' }}>
+                  <span style={{ fontSize: '1.75rem', fontWeight: '800', color: type === 'expense' ? 'var(--text-main)' : 'var(--success)' }}>{currencySymbol}</span>
+                </div>
+                <div style={{ flex: 1, textAlign: 'left' }}>
+                  <input
+                    type="number"
+                    step="0.01"
+                    min="0.01"
+                    required
+                    placeholder="0"
+                    value={amount}
+                    onChange={(e) => setAmount(e.target.value)}
+                    className="amount-input"
+                    style={{
+                      fontSize: '2.5rem', fontWeight: '800', border: 'none', background: 'transparent',
+                      width: '100%',
+                      color: type === 'expense' ? 'var(--text-main)' : 'var(--success)',
+                      outline: 'none', padding: 0
+                    }}
+                  />
+                </div>
               </div>
             </div>
 
