@@ -4,7 +4,7 @@ import api from '../services/api';
 import toast from 'react-hot-toast';
 import { Target, Plus, Save, Trash2, Calendar, AlertCircle } from 'lucide-react';
 import useFinanceStore from '../store/useFinanceStore';
-import { getCategoryIcon, getIconForCategory } from '../utils/CategoryIcons';
+import { getIconForCategory } from '../utils/CategoryIcons';
 import ConfirmDialog from '../components/ConfirmDialog';
 
 // Circular Progress Component
@@ -12,16 +12,19 @@ const CircularProgress = ({ percentage, isOver, isWarning, size = 60, strokeWidt
   const radius = (size - strokeWidth) / 2;
   const circumference = radius * 2 * Math.PI;
   const offset = circumference - (Math.min(percentage, 100) / 100) * circumference;
-  const color = isOver ? 'var(--danger)' : isWarning ? '#f59e0b' : 'var(--primary-color)';
+  
+  let colorClass = 'text-primary';
+  if (isOver) colorClass = 'text-destructive';
+  else if (isWarning) colorClass = 'text-amber-500';
 
   return (
-    <div style={{ position: 'relative', width: size, height: size }}>
-      <svg width={size} height={size} style={{ transform: 'rotate(-90deg)' }}>
+    <div className="relative" style={{ width: size, height: size }}>
+      <svg width={size} height={size} className="-rotate-90">
         <circle
           cx={size / 2}
           cy={size / 2}
           r={radius}
-          stroke="var(--bg-main)"
+          className="stroke-muted"
           strokeWidth={strokeWidth}
           fill="none"
         />
@@ -29,16 +32,16 @@ const CircularProgress = ({ percentage, isOver, isWarning, size = 60, strokeWidt
           cx={size / 2}
           cy={size / 2}
           r={radius}
-          stroke={color}
+          className={`${colorClass} transition-all duration-1000 ease-in-out`}
+          stroke="currentColor"
           strokeWidth={strokeWidth}
           strokeDasharray={circumference}
           strokeDashoffset={offset}
           strokeLinecap="round"
           fill="none"
-          style={{ transition: 'stroke-dashoffset 1s ease-in-out' }}
         />
       </svg>
-      <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.7rem', fontWeight: 700, color: 'var(--text-main)' }}>
+      <div className="absolute inset-0 flex items-center justify-center text-[11px] font-bold text-foreground">
         {percentage > 999 ? '>999%' : `${percentage.toFixed(0)}%`}
       </div>
     </div>
@@ -125,26 +128,26 @@ const Budget = () => {
   const daysLeft = lastDay.getDate() - today.getDate();
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100%', fontSize: '0.85rem', width: '100%' }}>
-      <header className="responsive-header" style={{ marginBottom: '1.5rem' }}>
-        <div>
-          <h1 className="header-title">Budgets</h1>
-          <p className="header-subtitle">Track your spending against goals</p>
-        </div>
+    <div className="flex flex-col w-full h-full pb-10">
+      <header className="mb-6 md:mb-8">
+        <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-foreground mb-1">Budgets</h1>
+        <p className="text-sm md:text-base text-muted-foreground font-medium">Track your spending against monthly goals</p>
       </header>
 
       {/* Split Layout: 2/3 List, 1/3 Sidebar */}
-      <div className="responsive-grid-2-1" style={{ alignItems: 'start' }}>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
         
         {/* Left Side: Budget List */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+        <div className="lg:col-span-2 flex flex-col gap-4">
           {loading ? (
-            <div style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-muted)' }}>Loading...</div>
+            <div className="p-8 text-center text-muted-foreground bg-card rounded-xl border border-border">Loading...</div>
           ) : budgets.length === 0 ? (
-            <div className="card" style={{ padding: '3rem 2rem', textAlign: 'center', color: 'var(--text-muted)' }}>
-              <Target size={32} style={{ margin: '0 auto 1rem auto', opacity: 0.5 }} />
-              <p style={{ fontWeight: 600, fontSize: '1rem', color: 'var(--text-main)' }}>No budgets set</p>
-              <p style={{ fontSize: '0.85rem' }}>Use the control panel to create your first budget.</p>
+            <div className="bg-card border border-border rounded-2xl p-12 text-center flex flex-col items-center justify-center">
+              <div className="w-16 h-16 bg-muted/50 rounded-full flex items-center justify-center mb-4">
+                <Target size={32} className="text-muted-foreground/50" />
+              </div>
+              <p className="font-bold text-lg text-foreground mb-2">No budgets set</p>
+              <p className="text-sm text-muted-foreground">Use the control panel to create your first monthly budget.</p>
             </div>
           ) : (
             budgets.map(b => {
@@ -155,37 +158,42 @@ const Budget = () => {
               const isWarning = percentage >= 80 && !isOver;
               const catObj = categories.find(c => c.name.toLowerCase() === b.category.toLowerCase());
               const catLabel = catObj ? catObj.name : b.category;
-              const icon = catObj ? getIconForCategory(catObj, 18) : <Target size={18} />;
+              const icon = catObj ? getIconForCategory(catObj, 20) : <Target size={20} />;
 
               return (
-                <div key={b.id} className="card interactive-table" style={{ padding: '1.25rem', display: 'flex', alignItems: 'center', gap: '1.5rem', transition: 'transform 0.2s, box-shadow 0.2s' }}>
+                <div key={b.id} className="bg-card border border-border rounded-2xl p-5 flex items-center gap-5 hover:shadow-md transition-shadow group">
                   
                   {/* Circular Gauge */}
-                  <CircularProgress percentage={percentage} isOver={isOver} isWarning={isWarning} />
+                  <div className="shrink-0">
+                    <CircularProgress percentage={percentage} isOver={isOver} isWarning={isWarning} />
+                  </div>
 
                   {/* Details */}
-                  <div style={{ flex: 1 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem' }}>
-                      <div style={{ color: 'var(--text-light)' }}>{icon}</div>
-                      <span style={{ fontWeight: 700, fontSize: '1.05rem', color: 'var(--text-main)' }}>{catLabel}</span>
-                      {isOver && <AlertCircle size={14} color="var(--danger)" style={{ marginLeft: '0.5rem' }} />}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-1">
+                      <div className="text-muted-foreground bg-muted/30 p-1.5 rounded-md">{icon}</div>
+                      <span className="font-bold text-base text-foreground truncate">{catLabel}</span>
+                      {isOver && <AlertCircle size={16} className="text-destructive shrink-0" />}
                     </div>
-                    <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-                      <span style={{ fontWeight: 600, color: isOver ? 'var(--danger)' : 'var(--text-main)' }}>{formatCurrency(spent)}</span> spent of {formatCurrency(limit)}
+                    <div className="text-sm text-muted-foreground flex items-baseline gap-1 truncate">
+                      <span className={`font-bold ${isOver ? 'text-destructive' : 'text-foreground'}`}>
+                        {formatCurrency(spent)}
+                      </span> 
+                      <span>spent of {formatCurrency(limit)}</span>
                     </div>
                   </div>
 
                   {/* Right Actions */}
-                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '0.5rem' }}>
+                  <div className="flex flex-col items-end gap-2 shrink-0">
                     <button 
                       onClick={() => confirmDeleteBudget(b.id)}
-                      style={{ background: 'var(--bg-main)', color: 'var(--text-light)', border: 'none', padding: '0.4rem', borderRadius: '50%', cursor: 'pointer', transition: 'all 0.2s' }}
-                      onMouseOver={(e) => { e.currentTarget.style.color = 'var(--danger)'; e.currentTarget.style.background = 'var(--danger-light)'; }}
-                      onMouseOut={(e) => { e.currentTarget.style.color = 'var(--text-light)'; e.currentTarget.style.background = 'var(--bg-main)'; }}
+                      className="p-2 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-full transition-colors opacity-0 group-hover:opacity-100"
                     >
-                      <Trash2 size={16} />
+                      <Trash2 size={18} />
                     </button>
-                    <div style={{ fontSize: '0.75rem', fontWeight: 600, color: isOver ? 'var(--danger)' : isWarning ? '#f59e0b' : 'var(--success)' }}>
+                    <div className={`text-xs font-bold px-2.5 py-1 rounded-full ${
+                      isOver ? 'bg-destructive/10 text-destructive' : isWarning ? 'bg-amber-500/10 text-amber-600' : 'bg-emerald-500/10 text-emerald-600'
+                    }`}>
                       {isOver ? `${formatCurrency(Math.abs(limit - spent))} over` : `${formatCurrency(limit - spent)} left`}
                     </div>
                   </div>
@@ -196,59 +204,61 @@ const Budget = () => {
         </div>
 
         {/* Right Side: Control Panel (Sticky) */}
-        <div style={{ position: 'sticky', top: '1rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+        <div className="lg:sticky lg:top-6 flex flex-col gap-6">
           
           {/* Overview Panel */}
-          <div className="card" style={{ padding: '1.5rem', background: 'linear-gradient(135deg, var(--bg-panel) 0%, var(--bg-main) 100%)' }}>
-            <h3 style={{ fontSize: '0.9rem', color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: '1rem', display: 'flex', justifyContent: 'space-between' }}>
-              Month Overview
-              <span style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', color: 'var(--primary-color)', fontWeight: 600, textTransform: 'none' }}>
-                <Calendar size={14} /> {daysLeft} days left
-              </span>
-            </h3>
-            
-            <div style={{ marginBottom: '1.25rem' }}>
-              <div style={{ fontSize: '0.8rem', color: 'var(--text-light)', marginBottom: '0.2rem' }}>Total Budgeted</div>
-              <div style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--text-main)' }}>{formatCurrency(totalBudgeted)}</div>
-            </div>
-            
-            <div style={{ display: 'flex', gap: '1rem' }}>
-              <div style={{ flex: 1 }}>
-                <div style={{ fontSize: '0.8rem', color: 'var(--text-light)', marginBottom: '0.2rem' }}>Spent</div>
-                <div style={{ fontSize: '1.1rem', fontWeight: 700, color: '#f59e0b' }}>{formatCurrency(totalSpentInBudgets)}</div>
+          <div className="bg-card border border-border rounded-2xl p-6 relative overflow-hidden group">
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-50"></div>
+            <div className="relative z-10">
+              <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-4 flex justify-between items-center">
+                Month Overview
+                <span className="flex items-center gap-1.5 text-primary bg-primary/10 px-2 py-1 rounded-md normal-case text-[11px]">
+                  <Calendar size={14} /> {daysLeft} days left
+                </span>
+              </h3>
+              
+              <div className="mb-5">
+                <div className="text-xs font-medium text-muted-foreground mb-1">Total Budgeted</div>
+                <div className="text-3xl font-black text-foreground">{formatCurrency(totalBudgeted)}</div>
               </div>
-              <div style={{ flex: 1, borderLeft: '1px solid var(--border-color)', paddingLeft: '1rem' }}>
-                <div style={{ fontSize: '0.8rem', color: 'var(--text-light)', marginBottom: '0.2rem' }}>Remaining</div>
-                <div style={{ fontSize: '1.1rem', fontWeight: 700, color: totalRemaining >= 0 ? 'var(--success)' : 'var(--danger)' }}>
-                  {formatCurrency(Math.abs(totalRemaining))}
+              
+              <div className="flex gap-4">
+                <div className="flex-1">
+                  <div className="text-xs font-medium text-muted-foreground mb-1">Spent</div>
+                  <div className="text-lg font-bold text-amber-500">{formatCurrency(totalSpentInBudgets)}</div>
+                </div>
+                <div className="flex-1 border-l border-border pl-4">
+                  <div className="text-xs font-medium text-muted-foreground mb-1">Remaining</div>
+                  <div className={`text-lg font-bold ${totalRemaining >= 0 ? 'text-emerald-500' : 'text-destructive'}`}>
+                    {formatCurrency(Math.abs(totalRemaining))}
+                  </div>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Create Form Panel */}
-          <div className="card" style={{ padding: '1.5rem' }}>
-            <h3 style={{ fontSize: '1rem', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <Plus size={16} className="text-primary" /> Create Budget
+          <div className="bg-card border border-border rounded-2xl p-6 shadow-sm">
+            <h3 className="text-base font-bold text-foreground mb-5 flex items-center gap-2">
+              <Plus size={18} className="text-primary" /> Create Budget
             </h3>
-            <form onSubmit={handleCreateBudget}>
-              <div style={{ marginBottom: '1rem' }}>
-                <label style={{ display: 'block', marginBottom: '0.4rem', fontWeight: '600', fontSize: '0.8rem' }}>Category</label>
+            <form onSubmit={handleCreateBudget} className="space-y-4">
+              <div>
+                <label className="block text-sm font-semibold text-foreground mb-1.5">Category</label>
                 <select 
                   value={category} 
                   onChange={(e) => setCategory(e.target.value)}
-                  className="input-field" 
-                  style={{ marginBottom: 0, padding: '0.6rem' }}
+                  className="w-full bg-background border border-border rounded-xl px-4 py-2.5 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50"
                 >
                   {categories.map(c => (
                     <option key={c.id} value={c.name}>{c.name}</option>
                   ))}
                 </select>
               </div>
-              <div style={{ marginBottom: '1.5rem' }}>
-                <label style={{ display: 'block', marginBottom: '0.4rem', fontWeight: '600', fontSize: '0.8rem' }}>Monthly Limit</label>
-                <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-                  <span style={{ position: 'absolute', left: '0.75rem', color: 'var(--text-light)', fontWeight: 600 }}>{currencySymbol}</span>
+              <div>
+                <label className="block text-sm font-semibold text-foreground mb-1.5">Monthly Limit</label>
+                <div className="relative flex items-center">
+                  <span className="absolute left-4 text-muted-foreground font-bold">{currencySymbol}</span>
                   <input 
                     type="number" 
                     step="0.01"
@@ -256,12 +266,14 @@ const Budget = () => {
                     placeholder="0.00"
                     value={amount}
                     onChange={(e) => setAmount(e.target.value)}
-                    className="input-field"
-                    style={{ marginBottom: 0, paddingLeft: '2rem' }}
+                    className="w-full bg-background border border-border rounded-xl pl-10 pr-4 py-2.5 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50"
                   />
                 </div>
               </div>
-              <button type="submit" className="btn" style={{ width: '100%', padding: '0.75rem' }}>
+              <button 
+                type="submit" 
+                className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-3 rounded-xl transition-colors shadow-md active:scale-[0.98]"
+              >
                 Save Budget
               </button>
             </form>

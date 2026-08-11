@@ -145,81 +145,90 @@ const Debts = () => {
   const totalBorrowed = debts.filter(d => d.type === 'borrowed' && !d.is_settled).reduce((acc, d) => acc + calculateDebtTotals(d).remaining, 0);
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100%', fontSize: '0.9rem', width: '100%' }}>
-      <header className="header" style={{ marginBottom: '1.5rem' }}>
-        <div>
-          <h1 className="header-title">Lending & Borrowing</h1>
-          <p className="header-subtitle">Track money you owe and money owed to you</p>
-        </div>
+    <div className="flex flex-col w-full h-full pb-10">
+      <header className="mb-6 md:mb-8">
+        <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-foreground mb-1">Lending & Borrowing</h1>
+        <p className="text-sm md:text-base text-muted-foreground font-medium">Track money you owe and money owed to you</p>
       </header>
 
       {/* Summary Cards */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.5rem', marginBottom: '1.5rem' }}>
-        <div className="card" style={{ padding: '1.5rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
-            <span className="card-title" style={{ fontSize: '0.9rem' }}>People Owe Me (Remaining)</span>
-            <span style={{ padding: '0.5rem', background: 'var(--success-light)', color: 'var(--success)', borderRadius: '50%' }}><ArrowUpRight size={20} /></span>
-          </div>
-          <div className="amount stat-pulse" style={{ fontSize: '1.5rem', color: 'var(--success)', display: 'inline-block' }}>
-            {formatCurrency(totalLent)}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-6 md:mb-8">
+        <div className="bg-card border border-border rounded-2xl p-6 shadow-sm flex flex-col justify-center relative overflow-hidden group">
+          <div className="absolute inset-0 bg-emerald-500/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          <div className="relative z-10">
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-sm font-bold text-muted-foreground uppercase tracking-wider">People Owe Me</span>
+              <div className="w-10 h-10 rounded-full bg-emerald-500/10 text-emerald-500 flex items-center justify-center">
+                <ArrowUpRight size={20} />
+              </div>
+            </div>
+            <div className="text-3xl font-black text-emerald-500">
+              {formatCurrency(totalLent)}
+            </div>
+            <div className="text-xs font-semibold text-muted-foreground mt-1">Total outstanding balance</div>
           </div>
         </div>
         
-        <div className="card" style={{ padding: '1.5rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
-            <span className="card-title" style={{ fontSize: '0.9rem' }}>I Owe People (Remaining)</span>
-            <span style={{ padding: '0.5rem', background: 'var(--danger-light)', color: 'var(--danger)', borderRadius: '50%' }}><ArrowDownRight size={20} /></span>
-          </div>
-          <div className="amount stat-pulse" style={{ fontSize: '1.5rem', color: 'var(--danger)', display: 'inline-block' }}>
-            {formatCurrency(totalBorrowed)}
+        <div className="bg-card border border-border rounded-2xl p-6 shadow-sm flex flex-col justify-center relative overflow-hidden group">
+          <div className="absolute inset-0 bg-destructive/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          <div className="relative z-10">
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-sm font-bold text-muted-foreground uppercase tracking-wider">I Owe People</span>
+              <div className="w-10 h-10 rounded-full bg-destructive/10 text-destructive flex items-center justify-center">
+                <ArrowDownRight size={20} />
+              </div>
+            </div>
+            <div className="text-3xl font-black text-destructive">
+              {formatCurrency(totalBorrowed)}
+            </div>
+            <div className="text-xs font-semibold text-muted-foreground mt-1">Total outstanding balance</div>
           </div>
         </div>
       </div>
 
-      <div className="responsive-grid-1-2">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
         
         {/* Create Form */}
-        <div className="card" style={{ padding: '1.5rem', height: 'fit-content' }}>
-          <h3 style={{ fontSize: '1rem', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+        <div className="bg-card border border-border rounded-2xl p-6 shadow-sm lg:sticky lg:top-6">
+          <h3 className="text-base font-bold text-foreground mb-5 flex items-center gap-2">
             <Plus size={18} className="text-primary" /> New Record
           </h3>
-          <form onSubmit={handleCreateDebt}>
+          <form onSubmit={handleCreateDebt} className="space-y-4">
             
-            <div style={{ display: 'flex', background: 'var(--bg-main)', padding: '0.25rem', borderRadius: 'var(--radius-lg)', marginBottom: '1rem' }}>
+            <div className="flex bg-muted/40 p-1.5 rounded-xl border border-border/50">
               <button 
                 type="button" 
                 onClick={() => setType('lent')}
-                style={{ flex: 1, padding: '0.5rem', border: 'none', borderRadius: 'var(--radius-md)', background: type === 'lent' ? 'var(--success)' : 'transparent', color: type === 'lent' ? 'white' : 'var(--text-muted)', fontWeight: '600', cursor: 'pointer' }}
+                className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${type === 'lent' ? 'bg-emerald-500 text-white shadow-sm' : 'text-muted-foreground hover:bg-muted/80'}`}
               >
                 I Lent Money
               </button>
               <button 
                 type="button" 
                 onClick={() => setType('borrowed')}
-                style={{ flex: 1, padding: '0.5rem', border: 'none', borderRadius: 'var(--radius-md)', background: type === 'borrowed' ? 'var(--danger)' : 'transparent', color: type === 'borrowed' ? 'white' : 'var(--text-muted)', fontWeight: '600', cursor: 'pointer' }}
+                className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${type === 'borrowed' ? 'bg-destructive text-white shadow-sm' : 'text-muted-foreground hover:bg-muted/80'}`}
               >
                 I Borrowed
               </button>
             </div>
 
-            <div style={{ marginBottom: '1rem' }}>
-              <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600', fontSize: '0.85rem' }}>Person's Name</label>
+            <div>
+              <label className="block text-xs font-semibold text-foreground mb-1.5">Person's Name</label>
               <input 
                 type="text" 
                 required
                 placeholder="e.g. John Doe"
                 value={personName}
                 onChange={(e) => setPersonName(e.target.value)}
-                className="input-field"
-                style={{ marginBottom: 0 }}
+                className="w-full bg-background border border-border rounded-xl px-4 py-2.5 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50"
               />
             </div>
             
-            <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem', flexWrap: 'wrap' }}>
-              <div style={{ flex: '1 1 150px' }}>
-                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600', fontSize: '0.85rem' }}>Principal Amount</label>
-                <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-                  <span style={{ position: 'absolute', left: '1rem', color: 'var(--text-light)', fontWeight: 600 }}>{currencySymbol}</span>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-semibold text-foreground mb-1.5">Principal Amount</label>
+                <div className="relative flex items-center">
+                  <span className="absolute left-3 text-muted-foreground font-bold">{currencySymbol}</span>
                   <input 
                     type="number" 
                     step="0.01"
@@ -227,49 +236,43 @@ const Debts = () => {
                     placeholder="0.00"
                     value={amount}
                     onChange={(e) => setAmount(e.target.value)}
-                    className="input-field"
-                    style={{ marginBottom: 0, paddingLeft: '2.5rem' }}
+                    className="w-full bg-background border border-border rounded-xl pl-8 pr-4 py-2.5 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50"
                   />
                 </div>
               </div>
-              <div style={{ flex: '1 1 150px' }}>
-                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600', fontSize: '0.85rem' }}>Date Issued</label>
+              <div>
+                <label className="block text-xs font-semibold text-foreground mb-1.5">Date Issued</label>
                 <input 
                   type="date" 
                   required
                   value={date}
                   onChange={(e) => setDate(e.target.value)}
-                  className="input-field"
-                  style={{ marginBottom: 0 }}
+                  className="w-full bg-background border border-border rounded-xl px-4 py-2.5 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50"
                 />
               </div>
             </div>
             
-            <div style={{ marginBottom: '1.5rem', background: 'var(--bg-main)', padding: '1rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)' }}>
-              <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem', fontWeight: '600', fontSize: '0.85rem', color: 'var(--primary-color)' }}>
-                <TrendingUp size={16} /> Interest (Optional)
+            <div className="bg-muted/20 p-4 rounded-xl border border-border">
+              <label className="flex items-center gap-1.5 text-xs font-bold text-primary uppercase tracking-wider mb-3">
+                <TrendingUp size={14} /> Interest (Optional)
               </label>
-              <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-                <div style={{ flex: '1 1 120px' }}>
-                  <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-                    <input 
-                      type="number" 
-                      step="0.01"
-                      placeholder="Rate"
-                      value={interestRate}
-                      onChange={(e) => setInterestRate(e.target.value)}
-                      className="input-field"
-                      style={{ marginBottom: 0, paddingRight: '2rem' }}
-                    />
-                    <span style={{ position: 'absolute', right: '0.75rem', color: 'var(--text-light)', fontWeight: 600 }}>%</span>
-                  </div>
+              <div className="flex gap-3">
+                <div className="flex-1 relative flex items-center">
+                  <input 
+                    type="number" 
+                    step="0.01"
+                    placeholder="Rate"
+                    value={interestRate}
+                    onChange={(e) => setInterestRate(e.target.value)}
+                    className="w-full bg-background border border-border rounded-xl px-4 py-2.5 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50"
+                  />
+                  <span className="absolute right-4 text-muted-foreground font-bold">%</span>
                 </div>
-                <div style={{ flex: '1 1 120px' }}>
+                <div className="flex-1">
                   <select 
                     value={interestPeriod}
                     onChange={(e) => setInterestPeriod(e.target.value)}
-                    className="input-field"
-                    style={{ marginBottom: 0 }}
+                    className="w-full bg-background border border-border rounded-xl px-4 py-2.5 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50"
                   >
                     <option value="monthly">Per Month</option>
                     <option value="yearly">Per Year</option>
@@ -278,93 +281,103 @@ const Debts = () => {
               </div>
             </div>
 
-            <button type="submit" className="btn" style={{ width: '100%', background: type === 'lent' ? 'var(--success)' : 'var(--danger)' }}>
+            <button 
+              type="submit" 
+              className={`w-full font-bold py-3 px-4 rounded-xl transition-all shadow-md active:scale-[0.98] ${type === 'lent' ? 'bg-emerald-500 hover:bg-emerald-600 text-white shadow-emerald-500/20' : 'bg-destructive hover:bg-destructive/90 text-white shadow-destructive/20'}`}
+            >
               Save Record
             </button>
           </form>
         </div>
 
         {/* Debts Accordion List */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-          <h3 style={{ fontSize: '1rem', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+        <div className="lg:col-span-2 flex flex-col gap-4">
+          <h3 className="text-base font-bold text-foreground mb-1 flex items-center gap-2">
             <Users size={18} className="text-primary" /> Active Records
           </h3>
           
           {!debtsLoaded ? (
-            <div className="card" style={{ padding: '2rem', textAlign: 'center' }}>Loading...</div>
+            <div className="bg-card border border-border rounded-2xl p-8 text-center text-muted-foreground">Loading...</div>
           ) : debts.length === 0 ? (
-            <div className="card" style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-muted)' }}>No records found.</div>
+            <div className="bg-card border border-border rounded-2xl p-12 text-center flex flex-col items-center justify-center">
+              <div className="w-16 h-16 bg-muted/50 rounded-full flex items-center justify-center mb-4">
+                <Users size={32} className="text-muted-foreground/50" />
+              </div>
+              <p className="font-bold text-lg text-foreground mb-2">No records found</p>
+              <p className="text-sm text-muted-foreground">Use the form to log a new lending or borrowing record.</p>
+            </div>
           ) : (
             debts.map(d => {
               const isExpanded = expandedId === d.id;
               const { principal, paymentsTotal, remaining, fixedInterestAmount, interestLabel } = calculateDebtTotals(d);
               
               return (
-                <div key={d.id} className="card" style={{ overflow: 'hidden', padding: 0, opacity: d.is_settled ? 0.6 : 1, transition: 'all 0.2s' }}>
+                <div key={d.id} className={`bg-card border border-border rounded-2xl overflow-hidden transition-all ${d.is_settled ? 'opacity-60 grayscale' : 'hover:shadow-md'}`}>
                   
                   {/* Card Header (Clickable) */}
                   <div 
                     onClick={() => handleExpand(d)}
-                    style={{ padding: '1.25rem 1.5rem', cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: isExpanded ? 'rgba(0,0,0,0.02)' : 'transparent' }}
+                    className={`p-5 md:p-6 cursor-pointer flex flex-wrap gap-4 justify-between items-center transition-colors group ${isExpanded ? 'bg-muted/10' : 'hover:bg-muted/5'}`}
                   >
                     <div>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.25rem' }}>
-                        <span style={{ fontSize: '1.1rem', fontWeight: 700 }}>{d.person_name}</span>
-                        <span className={`badge ${d.type === 'lent' ? 'badge-success' : 'badge-danger'}`} style={{ fontSize: '0.7rem' }}>
+                      <div className="flex items-center gap-3 mb-1.5">
+                        <span className="text-lg font-bold text-foreground">{d.person_name}</span>
+                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded-md uppercase tracking-wide ${d.type === 'lent' ? 'bg-emerald-500/10 text-emerald-600' : 'bg-destructive/10 text-destructive'}`}>
                           {d.type === 'lent' ? 'Lent' : 'Borrowed'}
                         </span>
-                        {d.is_settled && <span className="badge badge-success" style={{ background: 'var(--success)', color: 'white' }}>Settled</span>}
+                        {d.is_settled && <span className="text-[10px] font-bold px-2 py-0.5 rounded-md uppercase tracking-wide bg-emerald-500 text-white">Settled</span>}
                       </div>
-                      <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+                      <div className="text-xs font-semibold text-muted-foreground">
                         Issued: {new Date(d.date).toLocaleDateString()}
                       </div>
                     </div>
                     
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
-                      <div style={{ textAlign: 'right' }}>
-                        <div style={{ fontWeight: 800, fontSize: '1.1rem', color: d.type === 'lent' ? 'var(--success)' : 'var(--danger)' }}>
-                          {formatCurrency(remaining)} <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: 500 }}>Remaining</span>
+                    <div className="flex items-center gap-6">
+                      <div className="text-right">
+                        <div className={`text-xl font-black ${d.type === 'lent' ? 'text-emerald-500' : 'text-destructive'}`}>
+                          {formatCurrency(remaining)}
                         </div>
+                        <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider mt-0.5">Remaining</div>
                         {d.interest_rate && (
-                          <div style={{ fontSize: '0.75rem', color: 'var(--primary-color)', fontWeight: 600 }}>
+                          <div className="text-[10px] font-bold text-primary mt-1">
                             {d.interest_rate}% ({formatCurrency(fixedInterestAmount)} {interestLabel})
                           </div>
                         )}
                       </div>
-                      <div style={{ color: 'var(--text-light)' }}>
-                        {isExpanded ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                      <div className="text-muted-foreground group-hover:text-foreground transition-colors shrink-0">
+                        <ChevronDown size={20} className={`transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`} />
                       </div>
                     </div>
                   </div>
 
                   {/* Expanded Content */}
                   {isExpanded && (
-                    <div style={{ padding: '1.5rem', borderTop: '1px solid var(--border-color)', background: 'var(--bg-main)' }}>
+                    <div className="p-5 md:p-6 border-t border-border bg-background/50">
                       
-                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '2rem', marginBottom: '2rem' }}>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                         
                         {/* Add Payment Form */}
                         {!d.is_settled && (
-                          <div style={{ flex: '1 1 300px', background: 'var(--bg-panel)', padding: '1.25rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)' }}>
-                            <h4 style={{ fontSize: '0.9rem', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                              <Plus size={16} /> Log a Payment (Interest / Principal)
+                          <div className="bg-card border border-border p-5 rounded-xl">
+                            <h4 className="text-sm font-bold text-foreground mb-4 flex items-center gap-2">
+                              <Plus size={16} className="text-primary" /> Log a Payment
                             </h4>
-                            <form onSubmit={(e) => handleAddPayment(e, d.id)}>
-                              <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
-                                <div style={{ flex: 1 }}>
-                                  <label style={{ fontSize: '0.8rem', fontWeight: 600, display: 'block', marginBottom: '0.25rem' }}>Amount</label>
-                                  <input type="number" step="0.01" required value={paymentAmount} onChange={e => setPaymentAmount(e.target.value)} className="input-field" style={{ marginBottom: 0, padding: '0.6rem' }} placeholder="0.00" />
+                            <form onSubmit={(e) => handleAddPayment(e, d.id)} className="space-y-4">
+                              <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                  <label className="block text-xs font-semibold text-foreground mb-1.5">Amount</label>
+                                  <input type="number" step="0.01" required value={paymentAmount} onChange={e => setPaymentAmount(e.target.value)} className="w-full bg-background border border-border rounded-lg px-3 py-2 text-sm text-foreground focus:ring-2 focus:ring-primary/50 outline-none" placeholder="0.00" />
                                 </div>
-                                <div style={{ flex: 1 }}>
-                                  <label style={{ fontSize: '0.8rem', fontWeight: 600, display: 'block', marginBottom: '0.25rem' }}>Date</label>
-                                  <input type="date" required value={paymentDate} onChange={e => setPaymentDate(e.target.value)} className="input-field" style={{ marginBottom: 0, padding: '0.6rem' }} />
+                                <div>
+                                  <label className="block text-xs font-semibold text-foreground mb-1.5">Date</label>
+                                  <input type="date" required value={paymentDate} onChange={e => setPaymentDate(e.target.value)} className="w-full bg-background border border-border rounded-lg px-3 py-2 text-sm text-foreground focus:ring-2 focus:ring-primary/50 outline-none" />
                                 </div>
                               </div>
-                              <div style={{ marginBottom: '1rem' }}>
-                                <label style={{ fontSize: '0.8rem', fontWeight: 600, display: 'block', marginBottom: '0.25rem' }}>Note / Month (Optional)</label>
-                                <input type="text" value={paymentNote} onChange={e => setPaymentNote(e.target.value)} className="input-field" style={{ marginBottom: 0, padding: '0.6rem' }} placeholder="e.g. Jan Interest" />
+                              <div>
+                                <label className="block text-xs font-semibold text-foreground mb-1.5">Note (Optional)</label>
+                                <input type="text" value={paymentNote} onChange={e => setPaymentNote(e.target.value)} className="w-full bg-background border border-border rounded-lg px-3 py-2 text-sm text-foreground focus:ring-2 focus:ring-primary/50 outline-none" placeholder="e.g. Jan Interest" />
                               </div>
-                              <button type="submit" disabled={paymentLoading} className="btn" style={{ width: '100%', padding: '0.6rem', fontSize: '0.85rem' }}>
+                              <button type="submit" disabled={paymentLoading} className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-2.5 rounded-lg transition-colors text-sm">
                                 Save Payment
                               </button>
                             </form>
@@ -372,30 +385,38 @@ const Debts = () => {
                         )}
 
                         {/* Summary & Actions */}
-                        <div style={{ flex: '1 1 200px', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                          <div style={{ background: 'var(--bg-panel)', padding: '1.25rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)' }}>
-                            <h4 style={{ fontSize: '0.9rem', marginBottom: '1rem', color: 'var(--text-muted)' }}>Debt Summary</h4>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', fontSize: '0.85rem' }}>
-                              <span>Principal:</span>
-                              <span style={{ fontWeight: 600 }}>{formatCurrency(principal)}</span>
-                            </div>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', fontSize: '0.85rem' }}>
-                              <span>Total Paid:</span>
-                              <span style={{ fontWeight: 600, color: 'var(--primary-color)' }}>{formatCurrency(paymentsTotal)}</span>
-                            </div>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', paddingTop: '0.5rem', borderTop: '1px dashed var(--border-color)' }}>
-                              <span>Balance Remaining:</span>
-                              <span style={{ fontWeight: 800 }}>{formatCurrency(remaining)}</span>
+                        <div className="flex flex-col gap-4">
+                          <div className="bg-card border border-border p-5 rounded-xl">
+                            <h4 className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-4">Debt Summary</h4>
+                            <div className="space-y-2">
+                              <div className="flex justify-between text-sm font-medium">
+                                <span className="text-muted-foreground">Principal:</span>
+                                <span className="text-foreground">{formatCurrency(principal)}</span>
+                              </div>
+                              <div className="flex justify-between text-sm font-medium">
+                                <span className="text-muted-foreground">Total Paid:</span>
+                                <span className="text-primary font-bold">{formatCurrency(paymentsTotal)}</span>
+                              </div>
+                              <div className="flex justify-between text-base font-black pt-3 border-t border-border/50">
+                                <span className="text-foreground">Balance:</span>
+                                <span>{formatCurrency(remaining)}</span>
+                              </div>
                             </div>
                           </div>
 
-                          <div style={{ display: 'flex', gap: '1rem' }}>
+                          <div className="flex gap-3">
                             {!d.is_settled && (
-                              <button onClick={() => handleSettle(d)} className="btn-secondary" style={{ flex: 1, color: 'var(--success)', borderColor: 'var(--success)' }}>
+                              <button 
+                                onClick={() => handleSettle(d)} 
+                                className="flex-1 flex items-center justify-center gap-2 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 border border-emerald-500/20 py-2.5 rounded-xl text-sm font-bold transition-colors"
+                              >
                                 <CheckCircle size={16} /> Settle Debt
                               </button>
                             )}
-                            <button onClick={() => confirmDelete(d.id, 'debt')} className="btn-secondary" style={{ flex: 1, color: 'var(--danger)', borderColor: 'var(--danger)' }}>
+                            <button 
+                              onClick={() => confirmDelete(d.id, 'debt')} 
+                              className="flex-1 flex items-center justify-center gap-2 bg-destructive/10 hover:bg-destructive/20 text-destructive border border-destructive/20 py-2.5 rounded-xl text-sm font-bold transition-colors"
+                            >
                               <Trash2 size={16} /> Delete
                             </button>
                           </div>
@@ -404,40 +425,46 @@ const Debts = () => {
                       </div>
 
                       {/* Payment History Table */}
-                      <h4 style={{ fontSize: '0.9rem', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                        <History size={16} /> Payment History
-                      </h4>
-                      <div style={{ overflowX: 'auto' }}>
-                        <table className="interactive-table" style={{ fontSize: '0.8rem', background: 'var(--bg-panel)', borderRadius: 'var(--radius-md)', overflow: 'hidden' }}>
-                          <thead>
-                            <tr>
-                              <th>Date</th>
-                              <th>Note</th>
-                              <th style={{ textAlign: 'right' }}>Amount</th>
-                              <th style={{ textAlign: 'right', width: '50px' }}></th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {(!d.payments || d.payments.length === 0) ? (
-                              <tr><td colSpan="4" style={{ textAlign: 'center', padding: '1.5rem', color: 'var(--text-muted)' }}>No payments logged yet.</td></tr>
-                            ) : (
-                              d.payments.map(p => (
-                                <tr key={p.id}>
-                                  <td>{new Date(p.date).toLocaleDateString()}</td>
-                                  <td>{p.note || '-'}</td>
-                                  <td style={{ textAlign: 'right', fontWeight: 600, color: 'var(--primary-color)' }}>
-                                    {formatCurrency(p.amount)}
-                                  </td>
-                                  <td style={{ textAlign: 'right' }}>
-                                    <button onClick={() => confirmDelete(p.id, 'payment')} style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: 'var(--danger)' }}>
-                                      <Trash2 size={14} />
-                                    </button>
-                                  </td>
-                                </tr>
-                              ))
-                            )}
-                          </tbody>
-                        </table>
+                      <div className="bg-card border border-border rounded-xl overflow-hidden">
+                        <div className="px-5 py-4 border-b border-border flex items-center gap-2">
+                          <History size={16} className="text-primary" />
+                          <h4 className="text-sm font-bold text-foreground">Payment History</h4>
+                        </div>
+                        <div className="overflow-x-auto">
+                          <table className="w-full text-left text-sm whitespace-nowrap">
+                            <thead className="bg-muted/30 text-xs font-bold text-muted-foreground uppercase tracking-wider">
+                              <tr>
+                                <th className="px-5 py-3">Date</th>
+                                <th className="px-5 py-3">Note</th>
+                                <th className="px-5 py-3 text-right">Amount</th>
+                                <th className="px-5 py-3 text-right w-12"></th>
+                              </tr>
+                            </thead>
+                            <tbody className="divide-y divide-border/50">
+                              {(!d.payments || d.payments.length === 0) ? (
+                                <tr><td colSpan="4" className="text-center py-8 text-sm font-medium text-muted-foreground">No payments logged yet.</td></tr>
+                              ) : (
+                                d.payments.map(p => (
+                                  <tr key={p.id} className="hover:bg-muted/10 transition-colors">
+                                    <td className="px-5 py-3 font-medium text-foreground">{new Date(p.date).toLocaleDateString()}</td>
+                                    <td className="px-5 py-3 text-muted-foreground">{p.note || '-'}</td>
+                                    <td className="px-5 py-3 text-right font-bold text-primary">
+                                      {formatCurrency(p.amount)}
+                                    </td>
+                                    <td className="px-5 py-3 text-right">
+                                      <button 
+                                        onClick={() => confirmDelete(p.id, 'payment')} 
+                                        className="p-1.5 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-lg transition-colors"
+                                      >
+                                        <Trash2 size={14} />
+                                      </button>
+                                    </td>
+                                  </tr>
+                                ))
+                              )}
+                            </tbody>
+                          </table>
+                        </div>
                       </div>
                     </div>
                   )}

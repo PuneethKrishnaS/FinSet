@@ -102,63 +102,94 @@ const ChitFunds = () => {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100%', fontSize: '0.85rem', width: '100%' }}>
-      <header className="responsive-header" style={{ marginBottom: '1.5rem' }}>
+    <div className="flex flex-col w-full h-full pb-10">
+      
+      <header className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 md:mb-8">
         <div>
-          <h1 className="header-title">Chit Funds (Cheeti)</h1>
-          <p className="header-subtitle">Track your community savings & contributions</p>
+          <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-foreground mb-1">Chit Funds (Cheeti)</h1>
+          <p className="text-sm md:text-base text-muted-foreground font-medium">Track your community savings & contributions</p>
         </div>
         <button 
           onClick={() => setShowCreateForm(!showCreateForm)}
-          className="btn" 
-          style={{ padding: '0.5rem 1rem', fontSize: '0.85rem', display: 'flex', gap: '0.5rem', alignItems: 'center' }}
+          className="bg-primary hover:bg-primary/90 text-primary-foreground text-sm font-bold py-2 px-4 rounded-xl transition-colors shadow-sm active:scale-[0.98] flex items-center gap-2 w-fit"
         >
-          {showCreateForm ? 'Cancel' : <><Plus size={16} /> New Chit Fund</>}
+          {showCreateForm ? 'Cancel' : <><Plus size={18} /> New Chit Fund</>}
         </button>
       </header>
 
       {/* Create Form */}
       {showCreateForm && (
-        <div className="card" style={{ padding: '1.5rem', marginBottom: '1.5rem', background: 'linear-gradient(135deg, var(--bg-panel) 0%, var(--bg-main) 100%)' }}>
-          <h3 style={{ fontSize: '1.1rem', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <Target size={20} className="text-primary" /> Start a New Chit Fund
-          </h3>
-          <form onSubmit={handleCreateChit} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
-            <div>
-              <label style={{ display: 'block', marginBottom: '0.4rem', fontWeight: '600' }}>Name (e.g. 5L Kuugo Cheeti)</label>
-              <input type="text" className="input-field" value={newChit.name} onChange={e => setNewChit({...newChit, name: e.target.value})} required />
-            </div>
-            <div>
-              <label style={{ display: 'block', marginBottom: '0.4rem', fontWeight: '600' }}>Target Amount (Total Pot)</label>
-              <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-                <span style={{ position: 'absolute', left: '0.75rem', color: 'var(--text-light)', fontWeight: 600 }}>{currencySymbol}</span>
-                <input type="number" step="0.01" className="input-field" style={{ paddingLeft: '2rem' }} value={newChit.target_amount} onChange={e => setNewChit({...newChit, target_amount: e.target.value})} />
+        <div className="bg-card border border-border rounded-2xl p-6 shadow-sm mb-6 relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-50"></div>
+          <div className="relative z-10">
+            <h3 className="text-lg font-bold text-foreground mb-5 flex items-center gap-2">
+              <Target size={20} className="text-primary" /> Start a New Chit Fund
+            </h3>
+            <form onSubmit={handleCreateChit} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 items-end">
+              <div className="lg:col-span-2">
+                <label className="block text-xs font-semibold text-foreground mb-1.5">Name (e.g. 5L Kuugo Cheeti)</label>
+                <input 
+                  type="text" 
+                  required
+                  value={newChit.name} 
+                  onChange={e => setNewChit({...newChit, name: e.target.value})} 
+                  className="w-full bg-background border border-border rounded-xl px-4 py-2.5 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50"
+                />
               </div>
-            </div>
-            <div>
-              <label style={{ display: 'block', marginBottom: '0.4rem', fontWeight: '600' }}>Start Date</label>
-              <input type="date" className="input-field" value={newChit.start_date} onChange={e => setNewChit({...newChit, start_date: e.target.value})} required />
-            </div>
-            <div>
-              <label style={{ display: 'block', marginBottom: '0.4rem', fontWeight: '600' }}>Duration (Months)</label>
-              <input type="number" className="input-field" value={newChit.duration_months} onChange={e => setNewChit({...newChit, duration_months: parseInt(e.target.value)})} required />
-            </div>
-            <div style={{ display: 'flex', alignItems: 'flex-end' }}>
-              <button type="submit" className="btn" style={{ width: '100%' }}>Create</button>
-            </div>
-          </form>
+              <div>
+                <label className="block text-xs font-semibold text-foreground mb-1.5">Target Amount</label>
+                <div className="relative flex items-center">
+                  <span className="absolute left-3 text-muted-foreground font-bold">{currencySymbol}</span>
+                  <input 
+                    type="number" 
+                    step="0.01"
+                    value={newChit.target_amount} 
+                    onChange={e => setNewChit({...newChit, target_amount: e.target.value})} 
+                    className="w-full bg-background border border-border rounded-xl pl-8 pr-4 py-2.5 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50"
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-foreground mb-1.5">Start Date</label>
+                <input 
+                  type="date" 
+                  required
+                  value={newChit.start_date} 
+                  onChange={e => setNewChit({...newChit, start_date: e.target.value})} 
+                  className="w-full bg-background border border-border rounded-xl px-4 py-2.5 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-foreground mb-1.5">Duration (Months)</label>
+                <input 
+                  type="number" 
+                  required
+                  value={newChit.duration_months} 
+                  onChange={e => setNewChit({...newChit, duration_months: parseInt(e.target.value)})} 
+                  className="w-full bg-background border border-border rounded-xl px-4 py-2.5 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50"
+                />
+              </div>
+              <div className="lg:col-span-5 flex justify-end mt-2">
+                <button type="submit" className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-2.5 px-6 rounded-xl transition-colors shadow-sm">
+                  Create
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       )}
 
       {/* Chit Funds List */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+      <div className="flex flex-col gap-6">
         {!chitFundsLoaded ? (
-          <div style={{ textAlign: 'center', padding: '2rem', color: 'var(--text-muted)' }}>Loading...</div>
+          <div className="text-center p-8 text-muted-foreground bg-card border border-border rounded-2xl">Loading...</div>
         ) : chits.length === 0 ? (
-          <div className="card" style={{ padding: '3rem 2rem', textAlign: 'center', color: 'var(--text-muted)' }}>
-            <PieChart size={32} style={{ margin: '0 auto 1rem auto', opacity: 0.5 }} />
-            <p style={{ fontWeight: 600, fontSize: '1rem', color: 'var(--text-main)' }}>No Chit Funds yet</p>
-            <p style={{ fontSize: '0.85rem' }}>Create one to start tracking your monthly contributions.</p>
+          <div className="bg-card border border-border rounded-2xl p-12 text-center flex flex-col items-center justify-center">
+            <div className="w-16 h-16 bg-muted/50 rounded-full flex items-center justify-center mb-4">
+              <PieChart size={32} className="text-muted-foreground/50" />
+            </div>
+            <p className="font-bold text-lg text-foreground mb-2">No Chit Funds yet</p>
+            <p className="text-sm text-muted-foreground">Create one to start tracking your monthly community contributions.</p>
           </div>
         ) : (
           chits.map(chit => {
@@ -168,49 +199,56 @@ const ChitFunds = () => {
             const targetStr = chit.target_amount ? formatCurrency(chit.target_amount) : 'Flexible';
             
             return (
-              <div key={chit.id} className="card interactive-table" style={{ overflow: 'hidden', padding: 0 }}>
+              <div key={chit.id} className="bg-card border border-border rounded-2xl overflow-hidden hover:shadow-md transition-shadow">
                 <div 
                   onClick={() => setExpandedChitId(expandedChitId === chit.id ? null : chit.id)}
-                  style={{ padding: '1.5rem', display: 'flex', flexWrap: 'wrap', gap: '2rem', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer' }}
+                  className="p-5 md:p-6 flex flex-wrap gap-6 justify-between items-center cursor-pointer group hover:bg-muted/10 transition-colors"
                 >
                   
                   {/* Left Info */}
-                  <div style={{ flex: '1 1 300px' }}>
-                    <h2 style={{ fontSize: '1.25rem', marginBottom: '0.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                      <PieChart className="text-primary" size={20} />
+                  <div className="flex-1 min-w-[280px]">
+                    <h2 className="text-lg md:text-xl font-bold text-foreground mb-1.5 flex items-center gap-2">
+                      <PieChart className="text-primary shrink-0" size={22} />
                       {chit.name}
                     </h2>
-                    <div style={{ display: 'flex', gap: '1.5rem', color: 'var(--text-muted)', fontSize: '0.8rem', marginTop: '0.75rem' }}>
-                      <span style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                    <div className="flex gap-4 text-xs font-semibold text-muted-foreground mt-2">
+                      <span className="flex items-center gap-1.5">
                         <Calendar size={14} /> Started {chit.start_date}
                       </span>
-                      <span style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-                        <Target size={14} /> Target: <strong style={{ color: 'var(--text-main)' }}>{targetStr}</strong>
+                      <span className="flex items-center gap-1.5 bg-muted/50 px-2 py-0.5 rounded-md">
+                        <Target size={14} /> Target: <strong className="text-foreground">{targetStr}</strong>
                       </span>
                     </div>
                   </div>
                   
                   {/* Stats */}
-                  <div style={{ display: 'flex', gap: '2rem', alignItems: 'center' }}>
-                    <div style={{ textAlign: 'right' }}>
-                      <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 600 }}>Total Saved</div>
-                      <div style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--success)' }}>
+                  <div className="flex gap-6 items-center">
+                    <div className="text-right">
+                      <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider mb-0.5">Total Saved</div>
+                      <div className="text-2xl font-black text-emerald-500">
                         {formatCurrency(totalContributed)}
                       </div>
                     </div>
                     
                     {/* Progress Circle */}
-                    <div style={{ width: '60px', height: '60px', position: 'relative' }}>
-                      <svg width="60" height="60" style={{ transform: 'rotate(-90deg)' }}>
-                        <circle cx="30" cy="30" r="26" stroke="var(--bg-main)" strokeWidth="6" fill="none" />
-                        <circle cx="30" cy="30" r="26" stroke="var(--primary-color)" strokeWidth="6" strokeDasharray="163" strokeDashoffset={163 - (progressPercent / 100) * 163} strokeLinecap="round" fill="none" style={{ transition: 'stroke-dashoffset 1s ease' }} />
+                    <div className="w-14 h-14 relative shrink-0">
+                      <svg width="56" height="56" className="-rotate-90">
+                        <circle cx="28" cy="28" r="24" className="stroke-muted" strokeWidth="5" fill="none" />
+                        <circle 
+                          cx="28" cy="28" r="24" 
+                          className="stroke-primary transition-all duration-1000 ease-in-out" 
+                          strokeWidth="5" 
+                          strokeDasharray="150" 
+                          strokeDashoffset={150 - (progressPercent / 100) * 150} 
+                          strokeLinecap="round" fill="none" 
+                        />
                       </svg>
-                      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.7rem', fontWeight: 700 }}>
+                      <div className="absolute inset-0 flex items-center justify-center text-[10px] font-bold text-foreground">
                         {monthsPaid}/{chit.duration_months}
                       </div>
                     </div>
-                    <div style={{ color: 'var(--text-light)', display: 'flex', alignItems: 'center' }}>
-                      <ChevronRight size={24} style={{ transform: expandedChitId === chit.id ? 'rotate(90deg)' : 'none', transition: 'transform 0.2s' }} />
+                    <div className="text-muted-foreground group-hover:text-foreground transition-colors shrink-0">
+                      <ChevronRight size={24} className={`transition-transform duration-200 ${expandedChitId === chit.id ? 'rotate-90' : ''}`} />
                     </div>
                   </div>
                   
@@ -218,61 +256,64 @@ const ChitFunds = () => {
                 
                 {/* Expandable Contribution Area */}
                 {expandedChitId === chit.id && (
-                <div style={{ background: 'var(--bg-main)', borderTop: '1px solid var(--border-color)', padding: '1.5rem' }}>
+                <div className="bg-background border-t border-border p-5 md:p-6">
                   
                   {selectedChitId === chit.id ? (
-                    <form onSubmit={(e) => handleAddContribution(e, chit.id)} style={{ display: 'flex', gap: '1rem', alignItems: 'flex-end', flexWrap: 'wrap' }}>
-                      <div>
-                        <label style={{ display: 'block', marginBottom: '0.4rem', fontWeight: '600', fontSize: '0.75rem' }}>Month Number</label>
-                        <input type="number" min="1" max={chit.duration_months} className="input-field" style={{ marginBottom: 0, width: '100px' }} value={contribution.month_number} onChange={e => setContribution({...contribution, month_number: e.target.value})} required />
-                      </div>
-                      <div>
-                        <label style={{ display: 'block', marginBottom: '0.4rem', fontWeight: '600', fontSize: '0.75rem' }}>Your Contribution (Paid)</label>
-                        <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-                          <span style={{ position: 'absolute', left: '0.75rem', color: 'var(--text-light)', fontWeight: 600 }}>{currencySymbol}</span>
-                          <input type="number" step="0.01" className="input-field" style={{ paddingLeft: '2rem', marginBottom: 0, width: '150px' }} value={contribution.amount} onChange={e => setContribution({...contribution, amount: e.target.value})} required />
+                    <div className="bg-card border border-border p-5 rounded-xl mb-6">
+                      <h4 className="text-sm font-bold mb-4">Log New Contribution</h4>
+                      <form onSubmit={(e) => handleAddContribution(e, chit.id)} className="flex flex-wrap gap-4 items-end">
+                        <div>
+                          <label className="block text-xs font-semibold text-foreground mb-1.5">Month Num</label>
+                          <input type="number" min="1" max={chit.duration_months} required value={contribution.month_number} onChange={e => setContribution({...contribution, month_number: e.target.value})} className="w-20 bg-background border border-border rounded-xl px-3 py-2.5 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50" />
                         </div>
-                      </div>
-                      <div>
-                        <label style={{ display: 'block', marginBottom: '0.4rem', fontWeight: '600', fontSize: '0.75rem' }}>Payment Date</label>
-                        <input type="date" className="input-field" style={{ marginBottom: 0 }} value={contribution.date} onChange={e => setContribution({...contribution, date: e.target.value})} required />
-                      </div>
-                      <div style={{ display: 'flex', gap: '0.5rem' }}>
-                        <button type="submit" className="btn">Save</button>
-                        <button type="button" className="btn btn-secondary" onClick={() => setSelectedChitId(null)}>Cancel</button>
-                      </div>
-                    </form>
+                        <div>
+                          <label className="block text-xs font-semibold text-foreground mb-1.5">Amount Paid</label>
+                          <div className="relative flex items-center">
+                            <span className="absolute left-3 text-muted-foreground font-bold">{currencySymbol}</span>
+                            <input type="number" step="0.01" required value={contribution.amount} onChange={e => setContribution({...contribution, amount: e.target.value})} className="w-32 bg-background border border-border rounded-xl pl-8 pr-3 py-2.5 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50" />
+                          </div>
+                        </div>
+                        <div>
+                          <label className="block text-xs font-semibold text-foreground mb-1.5">Payment Date</label>
+                          <input type="date" required value={contribution.date} onChange={e => setContribution({...contribution, date: e.target.value})} className="w-40 bg-background border border-border rounded-xl px-3 py-2.5 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50" />
+                        </div>
+                        <div className="flex gap-2">
+                          <button type="submit" className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-2.5 px-5 rounded-xl transition-colors text-sm">Save</button>
+                          <button type="button" onClick={() => setSelectedChitId(null)} className="bg-muted hover:bg-muted/80 text-foreground font-bold py-2.5 px-5 rounded-xl transition-colors text-sm">Cancel</button>
+                        </div>
+                      </form>
+                    </div>
                   ) : (
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <h4 style={{ fontSize: '0.9rem', margin: 0, color: 'var(--text-main)' }}>Contribution Log</h4>
+                    <div className="flex flex-col gap-4">
+                      <div className="flex justify-between items-center">
+                        <h4 className="text-base font-bold text-foreground">Contribution Log</h4>
                         <button onClick={() => {
                           setSelectedChitId(chit.id);
                           setContribution({ ...contribution, month_number: monthsPaid + 1 });
-                        }} className="btn" style={{ padding: '0.5rem 1rem' }}>
-                          <Plus size={16} /> Log Payment
+                        }} className="bg-primary/10 hover:bg-primary/20 text-primary text-xs font-bold py-1.5 px-3 rounded-lg transition-colors flex items-center gap-1.5">
+                          <Plus size={14} /> Log Payment
                         </button>
                       </div>
                       
-                      <div style={{ overflowX: 'auto' }}>
+                      <div className="overflow-x-auto rounded-xl border border-border">
                         {chit.contributions.length === 0 ? (
-                          <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '1rem 0' }}>
-                            <Info size={14} /> No contributions logged yet.
+                          <div className="flex items-center justify-center gap-2 py-8 text-sm text-muted-foreground bg-muted/20">
+                            <Info size={16} /> No contributions logged yet.
                           </div>
                         ) : (
-                          <table style={{ width: '100%', minWidth: '700px', borderCollapse: 'collapse', fontSize: '0.8rem', textAlign: 'left', whiteSpace: 'nowrap' }}>
-                            <thead>
-                              <tr style={{ borderBottom: '1px solid var(--border-color)', color: 'var(--text-muted)' }}>
-                                <th style={{ padding: '0.5rem 0' }}>Month</th>
-                                <th style={{ padding: '0.5rem 0' }}>Date</th>
-                                <th style={{ padding: '0.5rem 0' }}>Standard ({chit.target_amount ? formatCurrency(chit.target_amount / chit.duration_months) : 'N/A'})</th>
-                                <th style={{ padding: '0.5rem 0', color: 'var(--text-main)' }}>You Paid</th>
-                                <th style={{ padding: '0.5rem 0', color: 'var(--success)' }}>Dividend Saved</th>
-                                <th style={{ padding: '0.5rem 0' }}>Total Pool Collected</th>
-                                <th style={{ padding: '0.5rem 0', width: '40px' }}></th>
+                          <table className="w-full text-left text-sm whitespace-nowrap">
+                            <thead className="bg-muted/50 text-xs font-bold text-muted-foreground uppercase tracking-wider">
+                              <tr>
+                                <th className="px-4 py-3">Mth</th>
+                                <th className="px-4 py-3">Date</th>
+                                <th className="px-4 py-3">Standard ({chit.target_amount ? formatCurrency(chit.target_amount / chit.duration_months) : 'N/A'})</th>
+                                <th className="px-4 py-3 text-foreground">You Paid</th>
+                                <th className="px-4 py-3 text-emerald-500">Div Saved</th>
+                                <th className="px-4 py-3">Total Pool</th>
+                                <th className="px-4 py-3 w-10"></th>
                               </tr>
                             </thead>
-                            <tbody>
+                            <tbody className="divide-y divide-border bg-card/50">
                               {chit.contributions.sort((a, b) => a.month_number - b.month_number).map(c => {
                                 const standardContribution = chit.target_amount ? (chit.target_amount / chit.duration_months) : 0;
                                 const amountPaid = parseFloat(c.amount);
@@ -281,44 +322,40 @@ const ChitFunds = () => {
                                 const isEditable = c.created_at ? (new Date() - new Date(c.created_at)) <= 24 * 60 * 60 * 1000 : true;
                                 
                                 return editingContributionId === c.id ? (
-                                  <tr key={`edit-${c.id}`} style={{ borderBottom: '1px solid var(--border-color)' }}>
-                                    <td colSpan={7} style={{ padding: '0.75rem 0' }}>
-                                      <form onSubmit={(e) => handleEditContributionSubmit(e, c.id)} style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap', margin: 0 }}>
-                                        <input type="number" min="1" max={chit.duration_months} className="input-field" style={{ marginBottom: 0, width: '70px', padding: '0.4rem', fontSize: '0.75rem' }} value={editingContributionData.month_number} onChange={e => setEditingContributionData({...editingContributionData, month_number: e.target.value})} required />
-                                        <input type="date" className="input-field" style={{ marginBottom: 0, width: '130px', padding: '0.4rem', fontSize: '0.75rem' }} value={editingContributionData.date} onChange={e => setEditingContributionData({...editingContributionData, date: e.target.value})} required />
-                                        <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-                                          <span style={{ position: 'absolute', left: '0.5rem', color: 'var(--text-light)', fontWeight: 600, fontSize: '0.75rem' }}>{currencySymbol}</span>
-                                          <input type="number" step="0.01" className="input-field" style={{ paddingLeft: '1.5rem', marginBottom: 0, width: '100px', padding: '0.4rem 0.4rem 0.4rem 1.5rem', fontSize: '0.75rem' }} value={editingContributionData.amount} onChange={e => setEditingContributionData({...editingContributionData, amount: e.target.value})} required />
+                                  <tr key={`edit-${c.id}`} className="bg-primary/5">
+                                    <td colSpan={7} className="p-3">
+                                      <form onSubmit={(e) => handleEditContributionSubmit(e, c.id)} className="flex gap-2 items-center">
+                                        <input type="number" min="1" max={chit.duration_months} required value={editingContributionData.month_number} onChange={e => setEditingContributionData({...editingContributionData, month_number: e.target.value})} className="w-16 bg-background border border-border rounded-lg px-2 py-1.5 text-xs text-foreground font-medium" />
+                                        <input type="date" required value={editingContributionData.date} onChange={e => setEditingContributionData({...editingContributionData, date: e.target.value})} className="w-32 bg-background border border-border rounded-lg px-2 py-1.5 text-xs text-foreground font-medium" />
+                                        <div className="relative flex items-center">
+                                          <span className="absolute left-2 text-muted-foreground font-bold text-xs">{currencySymbol}</span>
+                                          <input type="number" step="0.01" required value={editingContributionData.amount} onChange={e => setEditingContributionData({...editingContributionData, amount: e.target.value})} className="w-24 bg-background border border-border rounded-lg pl-6 pr-2 py-1.5 text-xs text-foreground font-medium" />
                                         </div>
-                                        <div style={{ display: 'flex', gap: '0.5rem', marginLeft: 'auto' }}>
-                                          <button type="submit" className="btn" style={{ padding: '0.3rem 0.6rem', fontSize: '0.7rem' }}>Save</button>
-                                          <button type="button" className="btn btn-secondary" onClick={() => setEditingContributionId(null)} style={{ padding: '0.3rem 0.6rem', fontSize: '0.7rem' }}>Cancel</button>
+                                        <div className="flex gap-1 ml-auto">
+                                          <button type="submit" className="bg-primary text-primary-foreground text-xs font-bold py-1.5 px-3 rounded-lg">Save</button>
+                                          <button type="button" onClick={() => setEditingContributionId(null)} className="bg-muted text-foreground text-xs font-bold py-1.5 px-3 rounded-lg">Cancel</button>
                                         </div>
                                       </form>
                                     </td>
                                   </tr>
                                 ) : (
-                                  <tr key={c.id} style={{ borderBottom: '1px solid var(--border-color)' }}>
-                                    <td style={{ padding: '0.75rem 0', fontWeight: 600 }}>{c.month_number}</td>
-                                    <td style={{ padding: '0.75rem 0', color: 'var(--text-muted)' }}>{c.date}</td>
-                                    <td style={{ padding: '0.75rem 0' }}>{chit.target_amount ? formatCurrency(standardContribution) : '-'}</td>
-                                    <td style={{ padding: '0.75rem 0', fontWeight: 700, color: 'var(--text-main)' }}>{formatCurrency(amountPaid)}</td>
-                                    <td style={{ padding: '0.75rem 0', fontWeight: 700, color: 'var(--success)' }}>{chit.target_amount ? `+${formatCurrency(dividend)}` : '-'}</td>
-                                    <td style={{ padding: '0.75rem 0', fontWeight: 600 }}>{formatCurrency(totalPool)}</td>
-                                    <td style={{ padding: '0.75rem 0', textAlign: 'right' }}>
+                                  <tr key={c.id} className="hover:bg-muted/20 transition-colors">
+                                    <td className="px-4 py-3 font-bold">{c.month_number}</td>
+                                    <td className="px-4 py-3 text-muted-foreground font-medium">{c.date}</td>
+                                    <td className="px-4 py-3 font-medium text-muted-foreground">{chit.target_amount ? formatCurrency(standardContribution) : '-'}</td>
+                                    <td className="px-4 py-3 font-bold text-foreground">{formatCurrency(amountPaid)}</td>
+                                    <td className="px-4 py-3 font-bold text-emerald-500">{chit.target_amount ? `+${formatCurrency(dividend)}` : '-'}</td>
+                                    <td className="px-4 py-3 font-semibold text-muted-foreground">{formatCurrency(totalPool)}</td>
+                                    <td className="px-4 py-3 text-right">
                                       {isEditable ? (
                                         <button onClick={() => {
                                           setEditingContributionId(c.id);
-                                          setEditingContributionData({
-                                            amount: c.amount,
-                                            date: c.date,
-                                            month_number: c.month_number
-                                          });
-                                        }} style={{ background: 'none', border: 'none', color: 'var(--primary-color)', cursor: 'pointer', padding: '0.2rem' }} title="Edit Contribution">
+                                          setEditingContributionData({ amount: c.amount, date: c.date, month_number: c.month_number });
+                                        }} className="text-primary hover:text-primary/80 transition-colors p-1" title="Edit Contribution">
                                           <Edit2 size={14} />
                                         </button>
                                       ) : (
-                                        <button disabled style={{ background: 'none', border: 'none', color: 'var(--text-muted)', opacity: 0.3, padding: '0.2rem' }} title="Can only edit within 24 hours of logging">
+                                        <button disabled className="text-muted-foreground opacity-30 p-1 cursor-not-allowed" title="Can only edit within 24 hours">
                                           <Edit2 size={14} />
                                         </button>
                                       )}
