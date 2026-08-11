@@ -12,7 +12,6 @@ import LogTransaction from './pages/LogTransaction';
 import History from './pages/History';
 import Budget from './pages/Budget';
 import Debts from './pages/Debts';
-import DebtPayment from './pages/DebtPayment';
 import Sidebar from './components/Sidebar';
 import Settings from './pages/Settings';
 import Profile from './pages/Profile';
