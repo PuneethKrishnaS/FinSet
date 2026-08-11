@@ -7,11 +7,13 @@ import {
 import api from '../services/api';
 import {
   ArrowUpRight, ArrowDownRight, TrendingDown, TrendingUp, Wallet, Target,
-  History, Calendar as CalendarIcon, X, ChevronLeft, ChevronRight, MoreHorizontal
+  History, Calendar as CalendarIcon, X, ChevronLeft, ChevronRight, MoreHorizontal,
+  PlusCircle, MinusCircle, PieChart as PieChartIcon
 } from 'lucide-react';
 import { useSettings } from '../context/SettingsContext';
 import useFinanceStore from '../store/useFinanceStore';
 import { getCategoryIcon, getIconForCategory } from '../utils/CategoryIcons';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const COLORS = ['#4f46e5', '#8b5cf6', '#ec4899', '#f59e0b', '#10b981', '#14b8a6', '#3b82f6', '#6366f1'];
 
@@ -37,48 +39,48 @@ const CalendarOverlay = ({ isOpen, onClose, transactions, formatCurrency }) => {
   const days = Array.from({length: daysInMonth}, (_, i) => i + 1);
 
   return (
-    <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem' }}>
-      <div className="card" style={{ width: '100%', height: '100%', maxWidth: '1600px', display: 'flex', flexDirection: 'column', padding: 0, overflow: 'hidden', boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)' }}>
+    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+      <div className="bg-slate-900 w-full max-w-4xl max-h-full rounded-2xl flex flex-col overflow-hidden shadow-2xl border border-slate-800">
         
         {/* Calendar Header */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1rem 1.5rem', borderBottom: '1px solid var(--border-color)', background: 'var(--bg-panel)' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-            <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'var(--primary-light)', color: 'var(--primary-color)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <CalendarIcon size={18} />
+        <div className="flex justify-between items-center p-4 border-b border-slate-800 bg-slate-950">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-indigo-500/20 text-indigo-400 flex items-center justify-center">
+              <CalendarIcon size={20} />
             </div>
-            <h2 style={{ fontSize: '1.25rem', margin: 0, color: 'var(--text-main)' }}>Transaction Calendar</h2>
+            <h2 className="text-xl font-bold text-white m-0">Transaction Calendar</h2>
           </div>
-          <button onClick={onClose} style={{ background: 'var(--bg-main)', border: 'none', width: '36px', height: '36px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: 'var(--text-light)' }}>
-            <X size={18} />
+          <button onClick={onClose} className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:text-white transition-colors">
+            <X size={20} />
           </button>
         </div>
 
         {/* Calendar Controls */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.75rem 1.5rem', background: 'var(--bg-main)' }}>
-          <h3 style={{ fontSize: '1.1rem', fontWeight: 800, margin: 0, color: 'var(--text-main)' }}>
+        <div className="flex justify-between items-center p-4 bg-slate-900">
+          <h3 className="text-lg font-bold text-white m-0">
             {monthNames[month]} {year}
           </h3>
-          <div style={{ display: 'flex', gap: '0.5rem' }}>
-            <button onClick={prevMonth} className="icon-btn" style={{ width: '32px', height: '32px' }}><ChevronLeft size={16} /></button>
-            <button onClick={nextMonth} className="icon-btn" style={{ width: '32px', height: '32px' }}><ChevronRight size={16} /></button>
+          <div className="flex gap-2">
+            <button onClick={prevMonth} className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-white"><ChevronLeft size={16} /></button>
+            <button onClick={nextMonth} className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-white"><ChevronRight size={16} /></button>
           </div>
         </div>
 
         {/* Calendar Grid */}
-        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', background: 'var(--border-color)', gap: '1px', minHeight: 0 }}>
+        <div className="flex-1 flex flex-col bg-slate-800 gap-[1px] min-h-0">
           {/* Days Header */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', background: 'var(--bg-panel)', gap: '1px' }}>
+          <div className="grid grid-cols-7 bg-slate-950 gap-[1px]">
             {dayNames.map(day => (
-              <div key={day} style={{ padding: '0.5rem', textAlign: 'center', fontWeight: 700, fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
+              <div key={day} className="p-2 text-center font-bold text-xs text-slate-400 uppercase">
                 {day}
               </div>
             ))}
           </div>
           
           {/* Calendar Body */}
-          <div style={{ flex: 1, display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gridAutoRows: '1fr', background: 'var(--border-color)', gap: '1px', overflowY: 'auto' }}>
+          <div className="flex-1 grid grid-cols-7 auto-rows-fr bg-slate-800 gap-[1px] overflow-y-auto">
             {blanks.map((_, i) => (
-              <div key={`blank-${i}`} style={{ background: 'var(--bg-main)', opacity: 0.5 }}></div>
+              <div key={`blank-${i}`} className="bg-slate-900/50"></div>
             ))}
             
             {days.map(day => {
@@ -91,38 +93,26 @@ const CalendarOverlay = ({ isOpen, onClose, transactions, formatCurrency }) => {
               const isToday = new Date().toISOString().startsWith(dateStr);
 
               return (
-                <div key={day} style={{ background: 'var(--bg-panel)', padding: '0.4rem', display: 'flex', flexDirection: 'column', overflow: 'hidden', minHeight: '80px' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.25rem' }}>
-                    <span style={{ 
-                      display: 'flex', alignItems: 'center', justifyContent: 'center', 
-                      width: '24px', height: '24px', borderRadius: '50%', 
-                      fontWeight: 700, fontSize: '0.8rem',
-                      background: isToday ? 'var(--primary-color)' : 'transparent',
-                      color: isToday ? '#fff' : 'var(--text-main)'
-                    }}>
+                <div key={day} className="bg-slate-950 p-1 md:p-2 flex flex-col overflow-hidden min-h-[80px]">
+                  <div className="flex justify-between items-start mb-1">
+                    <span className={`flex items-center justify-center w-6 h-6 rounded-full font-bold text-xs ${isToday ? 'bg-indigo-500 text-white' : 'text-slate-300'}`}>
                       {day}
                     </span>
                   </div>
                   
-                  <div style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '0.15rem', paddingRight: '2px' }}>
+                  <div className="flex-1 overflow-y-auto flex flex-col gap-1 pr-1">
                     {dayTransactions.map((t, idx) => (
-                      <div key={idx} style={{ 
-                        fontSize: '0.65rem', padding: '0.15rem 0.3rem', borderRadius: '3px', 
-                        background: t.type === 'income' ? 'var(--success-light)' : 'var(--danger-light)',
-                        color: t.type === 'income' ? 'var(--success)' : 'var(--danger)',
-                        display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-                        gap: '0.25rem'
-                      }}>
-                        <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', fontWeight: 600 }}>{t.title}</span>
-                        <span style={{ fontWeight: 800 }}>{formatCurrency(t.amount)}</span>
+                      <div key={idx} className={`text-[10px] md:text-xs px-1 md:px-1.5 py-0.5 rounded flex justify-between items-center gap-1 ${t.type === 'income' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-rose-500/20 text-rose-400'}`}>
+                        <span className="whitespace-nowrap overflow-hidden text-ellipsis font-semibold">{t.title}</span>
+                        <span className="font-bold">{formatCurrency(t.amount)}</span>
                       </div>
                     ))}
                   </div>
                   
                   {(dayIncome > 0 || dayExpense > 0) && (
-                    <div style={{ marginTop: '0.25rem', paddingTop: '0.25rem', borderTop: '1px solid var(--border-color)', display: 'flex', justifyContent: 'space-between', fontSize: '0.65rem', fontWeight: 800 }}>
-                      <span style={{ color: 'var(--success)' }}>{dayIncome > 0 ? `+${formatCurrency(dayIncome)}` : ''}</span>
-                      <span style={{ color: 'var(--danger)' }}>{dayExpense > 0 ? `-${formatCurrency(dayExpense)}` : ''}</span>
+                    <div className="mt-1 pt-1 border-t border-slate-800/50 flex justify-between text-[10px] md:text-xs font-bold">
+                      <span className="text-emerald-400">{dayIncome > 0 ? `+${formatCurrency(dayIncome)}` : ''}</span>
+                      <span className="text-rose-400">{dayExpense > 0 ? `-${formatCurrency(dayExpense)}` : ''}</span>
                     </div>
                   )}
                 </div>
@@ -171,8 +161,8 @@ const Dashboard = () => {
       };
     });
 
-    const mappedIncomes = incomes.map(i => ({ ...i, type: 'income', title: i.source, amount: parseFloat(i.amount) }));
-    const mappedExpenses = expenses.map(e => ({ ...e, type: 'expense', title: e.description || e.category, amount: parseFloat(e.amount) }));
+    const mappedIncomes = incomes.map(i => ({ ...i, type: 'income', title: i.source, amount: parseFloat(i.amount), date: i.date }));
+    const mappedExpenses = expenses.map(e => ({ ...e, type: 'expense', title: e.description || e.category, amount: parseFloat(e.amount), date: e.date, categoryKey: e.category.toLowerCase() }));
     const combined = [...mappedIncomes, ...mappedExpenses].sort((a, b) => new Date(b.date || b.created_at) - new Date(a.date || a.created_at));
     
     const daysMap = {};
@@ -204,10 +194,12 @@ const Dashboard = () => {
     };
   }, [loading, dashboardData, incomes, expenses, budgets]);
 
-  if (loading || !processedData) return <div style={{ textAlign: 'center', marginTop: '4rem', color: 'var(--text-muted)' }}>Loading Analytics...</div>;
+  if (loading || !processedData) return <div className="text-center mt-16 text-slate-400">Loading Analytics...</div>;
+
+  const netSavings = dashboardData.total_income - dashboardData.total_expense;
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', minHeight: '100%', fontSize: '0.85rem', width: '100%' }}>
+    <div className="min-h-screen bg-[#0f0f11] text-slate-50 flex flex-col font-sans -mx-4 -mt-4 pb-20 md:mx-0 md:mt-0 md:pb-0">
       
       <CalendarOverlay 
         isOpen={isCalendarOpen} 
@@ -216,207 +208,210 @@ const Dashboard = () => {
         formatCurrency={formatCurrency} 
       />
 
-      <header className="responsive-header">
-        <div>
-          <h1 className="header-title">Financial Overview</h1>
-          <p className="header-subtitle">Your complete money analysis</p>
-        </div>
-        <button onClick={() => setIsCalendarOpen(true)} className="btn btn-secondary" style={{ padding: '0.5rem 1rem', fontSize: '0.85rem', display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-          <CalendarIcon size={16} /> View Calendar
+      {/* Header Area */}
+      <header className="px-5 pt-8 pb-4 flex justify-between items-center bg-[#17171a] sticky top-0 z-10 border-b border-white/5">
+        <h1 className="text-2xl font-bold tracking-tight m-0 text-white">Dashboard</h1>
+        <button onClick={() => setIsCalendarOpen(true)} className="p-2 rounded-full bg-white/5 hover:bg-white/10 transition-colors">
+          <CalendarIcon size={20} className="text-slate-300" />
         </button>
       </header>
 
-      {/* Top 4 Stat Cards */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
-        
-        <div className="card" style={{ padding: '1.25rem', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-          <div style={{ color: 'var(--text-muted)', fontSize: '0.75rem', fontWeight: 600, textTransform: 'uppercase', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <Wallet size={14} className="text-primary" /> Current Balance
-          </div>
-          <div style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--text-main)' }}>{formatCurrency(dashboardData.balance)}</div>
-        </div>
-
-        <div className="card" style={{ padding: '1.25rem', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-          <div style={{ color: 'var(--text-muted)', fontSize: '0.75rem', fontWeight: 600, textTransform: 'uppercase', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <TrendingUp size={14} className="text-success" /> Monthly Income
-          </div>
-          <div style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--success)' }}>{formatCurrency(dashboardData.total_income)}</div>
-        </div>
-
-        <div className="card" style={{ padding: '1.25rem', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-          <div style={{ color: 'var(--text-muted)', fontSize: '0.75rem', fontWeight: 600, textTransform: 'uppercase', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <TrendingDown size={14} className="text-danger" /> Monthly Expenses
-          </div>
-          <div style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--danger)' }}>{formatCurrency(dashboardData.total_expense)}</div>
-        </div>
-
-        <div className="card" style={{ padding: '1.25rem', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-          <div style={{ color: 'var(--text-muted)', fontSize: '0.75rem', fontWeight: 600, textTransform: 'uppercase', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <Target size={14} color="#f59e0b" /> Net Savings
-          </div>
-          <div style={{ fontSize: '1.75rem', fontWeight: 800, color: (dashboardData.total_income - dashboardData.total_expense) >= 0 ? 'var(--primary-color)' : 'var(--danger)' }}>
-            {formatCurrency(dashboardData.total_income - dashboardData.total_expense)}
-          </div>
-        </div>
-
+      {/* Main Balance */}
+      <div className="px-5 py-6 bg-[#17171a]">
+        <div className="text-slate-400 text-sm font-medium mb-1">Total Net Balance</div>
+        <div className="text-4xl font-extrabold text-white tracking-tight">{formatCurrency(dashboardData.balance)}</div>
       </div>
 
-      <div className="responsive-grid-2-1" style={{ alignItems: 'start' }}>
+      {/* Overview Cards (Horizontal Scroll) */}
+      <div className="px-5 pb-6 bg-[#17171a] flex gap-3 overflow-x-auto no-scrollbar snap-x">
+        <div className="min-w-[140px] flex-1 bg-[#222226] p-4 rounded-2xl snap-start border border-white/5">
+          <div className="flex items-center gap-2 text-emerald-400 mb-2">
+            <TrendingUp size={16} />
+            <span className="text-xs font-semibold uppercase tracking-wider">Income</span>
+          </div>
+          <div className="text-lg font-bold text-white">{formatCurrency(dashboardData.total_income)}</div>
+        </div>
         
-        {/* Cash Flow Chart */}
-        <div className="card" style={{ padding: '1.5rem', height: '100%', minHeight: '350px', display: 'flex', flexDirection: 'column' }}>
-          <h3 style={{ fontSize: '1rem', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <TrendingUp size={18} className="text-primary" /> Cash Flow Analysis
-          </h3>
-          <div style={{ flex: 1, minHeight: '250px' }}>
-            {processedData.cashFlowData.length > 0 ? (
+        <div className="min-w-[140px] flex-1 bg-[#222226] p-4 rounded-2xl snap-start border border-white/5">
+          <div className="flex items-center gap-2 text-rose-400 mb-2">
+            <TrendingDown size={16} />
+            <span className="text-xs font-semibold uppercase tracking-wider">Spent</span>
+          </div>
+          <div className="text-lg font-bold text-white">{formatCurrency(dashboardData.total_expense)}</div>
+        </div>
+
+        <div className="min-w-[140px] flex-1 bg-[#222226] p-4 rounded-2xl snap-start border border-white/5">
+          <div className="flex items-center gap-2 text-indigo-400 mb-2">
+            <Wallet size={16} />
+            <span className="text-xs font-semibold uppercase tracking-wider">Savings</span>
+          </div>
+          <div className="text-lg font-bold text-white">{formatCurrency(netSavings)}</div>
+        </div>
+      </div>
+
+      {/* Quick Actions */}
+      <div className="grid grid-cols-4 gap-2 px-5 py-6 bg-[#17171a] border-t border-white/5">
+        <button onClick={() => navigate('/log-transaction')} className="flex flex-col items-center gap-2 focus:outline-none">
+          <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 text-indigo-500 flex items-center justify-center">
+            <MinusCircle size={24} />
+          </div>
+          <span className="text-[11px] font-medium text-slate-300">Expense</span>
+        </button>
+        <button onClick={() => navigate('/log-transaction')} className="flex flex-col items-center gap-2 focus:outline-none">
+          <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center">
+            <PlusCircle size={24} />
+          </div>
+          <span className="text-[11px] font-medium text-slate-300">Income</span>
+        </button>
+        <button onClick={() => navigate('/budgets')} className="flex flex-col items-center gap-2 focus:outline-none">
+          <div className="w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-500 flex items-center justify-center">
+            <Target size={24} />
+          </div>
+          <span className="text-[11px] font-medium text-slate-300">Budgets</span>
+        </button>
+        <button onClick={() => navigate('/history')} className="flex flex-col items-center gap-2 focus:outline-none">
+          <div className="w-12 h-12 rounded-2xl bg-sky-500/10 text-sky-500 flex items-center justify-center">
+            <History size={24} />
+          </div>
+          <span className="text-[11px] font-medium text-slate-300">History</span>
+        </button>
+      </div>
+
+      {/* Thick Divider */}
+      <div className="h-3 w-full bg-[#0a0a0b]"></div>
+
+      {/* Cash Flow Chart */}
+      <div className="bg-[#17171a] py-6 px-5">
+        <div className="flex justify-between items-center mb-6">
+          <h3 className="text-lg font-bold text-white m-0">Cash Flow</h3>
+        </div>
+        <div className="h-[220px] w-full">
+          {processedData.cashFlowData.length > 0 ? (
+            <ResponsiveContainer width="100%" height="100%">
+              <AreaChart data={processedData.cashFlowData} margin={{ top: 5, right: 0, left: -20, bottom: 0 }}>
+                <defs>
+                  <linearGradient id="colorInc2" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#10b981" stopOpacity={0.3}/>
+                    <stop offset="95%" stopColor="#10b981" stopOpacity={0}/>
+                  </linearGradient>
+                  <linearGradient id="colorExp2" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#f43f5e" stopOpacity={0.3}/>
+                    <stop offset="95%" stopColor="#f43f5e" stopOpacity={0}/>
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#27272a" />
+                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#71717a' }} dy={10} />
+                <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#71717a' }} tickFormatter={val => formatCurrency(val)} />
+                <Tooltip contentStyle={{ borderRadius: '12px', border: '1px solid #27272a', backgroundColor: '#18181b', color: '#fff' }} />
+                <Area type="monotone" dataKey="income" name="Income" stroke="#10b981" strokeWidth={2} fillOpacity={1} fill="url(#colorInc2)" />
+                <Area type="monotone" dataKey="expense" name="Expense" stroke="#f43f5e" strokeWidth={2} fillOpacity={1} fill="url(#colorExp2)" />
+              </AreaChart>
+            </ResponsiveContainer>
+          ) : (
+            <div className="h-full flex items-center justify-center text-slate-500 text-sm">No data for this month yet.</div>
+          )}
+        </div>
+      </div>
+
+      <div className="h-3 w-full bg-[#0a0a0b]"></div>
+
+      {/* Category Breakdown */}
+      <div className="bg-[#17171a] py-6 px-5">
+        <h3 className="text-lg font-bold text-white mb-6">Where your money goes</h3>
+        
+        {processedData.pieData.length > 0 ? (
+          <div className="flex flex-col gap-6">
+            <div className="h-[200px] w-full relative">
               <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={processedData.cashFlowData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                  <defs>
-                    <linearGradient id="colorInc" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="var(--success)" stopOpacity={0.3}/>
-                      <stop offset="95%" stopColor="var(--success)" stopOpacity={0}/>
-                    </linearGradient>
-                    <linearGradient id="colorExp" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="var(--danger)" stopOpacity={0.3}/>
-                      <stop offset="95%" stopColor="var(--danger)" stopOpacity={0}/>
-                    </linearGradient>
-                  </defs>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border-color)" />
-                  <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: 'var(--text-light)' }} dy={10} />
-                  <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: 'var(--text-light)' }} tickFormatter={val => formatCurrency(val)} />
-                  <Tooltip contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: 'var(--shadow-md)', fontSize: '0.8rem', background: 'var(--bg-panel)', color: 'var(--text-main)' }} />
-                  <Area type="monotone" dataKey="income" name="Income" stroke="var(--success)" strokeWidth={3} fillOpacity={1} fill="url(#colorInc)" />
-                  <Area type="monotone" dataKey="expense" name="Expense" stroke="var(--danger)" strokeWidth={3} fillOpacity={1} fill="url(#colorExp)" />
-                </AreaChart>
+                <PieChart>
+                  <Pie data={processedData.pieData} cx="50%" cy="50%" innerRadius={70} outerRadius={90} paddingAngle={4} dataKey="value" stroke="none">
+                    {processedData.pieData.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)}
+                  </Pie>
+                  <Tooltip formatter={val => formatCurrency(val)} contentStyle={{ borderRadius: '12px', border: '1px solid #27272a', backgroundColor: '#18181b', color: '#fff' }} />
+                </PieChart>
               </ResponsiveContainer>
-            ) : (
-              <div style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-muted)' }}>No data for this month yet.</div>
-            )}
-          </div>
-        </div>
-
-        {/* Recent Transactions */}
-        <div className="card" style={{ padding: '1.5rem', height: '100%', minHeight: '350px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-            <h3 style={{ fontSize: '1rem', margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <History size={18} className="text-primary" /> Recent Activity
-            </h3>
-            <button onClick={() => navigate('/history')} style={{ background: 'none', border: 'none', color: 'var(--primary-color)', fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer' }}>View All</button>
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-            {processedData.recentActivity.length === 0 ? (
-              <div style={{ textAlign: 'center', padding: '2rem 0', color: 'var(--text-muted)' }}>No recent activity.</div>
-            ) : (
-              processedData.recentActivity.map((t, i) => {
-                const isInc = t.type === 'income';
-                return (
-                  <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '1rem', paddingBottom: '1rem', borderBottom: i !== processedData.recentActivity.length -1 ? '1px solid var(--border-color)' : 'none' }}>
-                    <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: isInc ? 'var(--success-light)' : 'var(--bg-main)', color: isInc ? 'var(--success)' : 'var(--text-light)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      {isInc ? <ArrowDownRight size={16} /> : <ArrowUpRight size={16} />}
-                    </div>
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ fontWeight: 600, color: 'var(--text-main)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{t.title}</div>
-                      <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{t.date}</div>
-                    </div>
-                    <div style={{ fontWeight: 700, color: isInc ? 'var(--success)' : 'var(--text-main)' }}>
-                      {isInc ? '+' : '-'}{formatCurrency(t.amount)}
-                    </div>
-                  </div>
-                );
-              })
-            )}
-          </div>
-        </div>
-
-      </div>
-
-      <div className="responsive-grid-2-1" style={{ alignItems: 'start', marginBottom: '2rem' }}>
-        
-        {/* Expenses Breakdown */}
-        <div className="card" style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column' }}>
-          <h3 style={{ fontSize: '1rem', marginBottom: '1rem' }}>Category Breakdown</h3>
-          <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '2rem' }}>
-            <div style={{ width: '200px', height: '200px', position: 'relative' }}>
-              {processedData.pieData.length > 0 ? (
-                <>
-                  <ResponsiveContainer width="100%" height="100%">
-                    <PieChart>
-                      <Pie data={processedData.pieData} cx="50%" cy="50%" innerRadius={60} outerRadius={80} paddingAngle={5} dataKey="value" stroke="none">
-                        {processedData.pieData.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)}
-                      </Pie>
-                      <Tooltip formatter={val => formatCurrency(val)} contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: 'var(--shadow-md)', fontSize: '0.8rem' }} />
-                    </PieChart>
-                  </ResponsiveContainer>
-                  <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', textAlign: 'center' }}>
-                    <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>Total</div>
-                    <div style={{ fontSize: '1rem', fontWeight: 800 }}>{formatCurrency(dashboardData.total_expense)}</div>
-                  </div>
-                </>
-              ) : (
-                <div style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-muted)' }}>No data</div>
-              )}
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center">
+                <div className="text-xs text-slate-400">Total</div>
+                <div className="text-lg font-bold text-white">{formatCurrency(dashboardData.total_expense)}</div>
+              </div>
             </div>
             
-            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-              {processedData.pieData.slice(0, 5).map((cat, i) => {
-                const icon = cat ? getIconForCategory(cat, 14) : <MoreHorizontal size={14} />;
+            <div className="flex flex-col gap-4">
+              {processedData.pieData.slice(0, 4).map((cat, i) => {
+                const icon = cat ? getIconForCategory(cat, 16) : <MoreHorizontal size={16} />;
                 const percentage = ((cat.value / dashboardData.total_expense) * 100).toFixed(0);
                 return (
-                  <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '0.8rem' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                      <div style={{ color: COLORS[i % COLORS.length] }}>{icon}</div>
-                      <span style={{ fontWeight: 600, color: 'var(--text-main)' }}>{cat.name}</span>
+                  <div key={i} className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: `${COLORS[i % COLORS.length]}15`, color: COLORS[i % COLORS.length] }}>
+                        {icon}
+                      </div>
+                      <span className="font-semibold text-slate-200 text-sm">{cat.name}</span>
                     </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                      <span style={{ color: 'var(--text-muted)' }}>{percentage}%</span>
-                      <span style={{ fontWeight: 700, width: '60px', textAlign: 'right' }}>{formatCurrency(cat.value)}</span>
+                    <div className="flex items-center gap-3 text-sm">
+                      <span className="text-slate-500">{percentage}%</span>
+                      <span className="font-bold text-white">{formatCurrency(cat.value)}</span>
                     </div>
                   </div>
                 );
               })}
             </div>
           </div>
-        </div>
+        ) : (
+          <div className="h-[200px] flex items-center justify-center text-slate-500 text-sm">No expense data</div>
+        )}
+      </div>
 
-        {/* Budgets Health */}
-        <div className="card" style={{ padding: '1.5rem', height: '100%' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-            <h3 style={{ fontSize: '1rem', margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <Target size={18} color="#f59e0b" /> Top Budgets
-            </h3>
-            <button onClick={() => navigate('/budgets')} style={{ background: 'none', border: 'none', color: 'var(--primary-color)', fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer' }}>Manage</button>
-          </div>
-          
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-            {processedData.topBudgets.length === 0 ? (
-              <div style={{ textAlign: 'center', padding: '1rem 0', color: 'var(--text-muted)' }}>No active budgets.</div>
-            ) : (
-              processedData.topBudgets.map(b => {
-                const limit = parseFloat(b.amount);
-                const spent = processedData.budgetSpends[b.category] || 0;
-                const percentage = Math.min((spent / limit) * 100, 100);
-                const isOver = spent > limit;
-                const catLabel = b.category.charAt(0).toUpperCase() + b.category.slice(1);
-                
-                return (
-                  <div key={b.id}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', marginBottom: '0.4rem' }}>
-                      <span style={{ fontWeight: 600, color: 'var(--text-main)' }}>{catLabel}</span>
-                      <span style={{ fontWeight: 700, color: isOver ? 'var(--danger)' : 'var(--text-main)' }}>
-                        {formatCurrency(spent)} <span style={{ color: 'var(--text-muted)', fontWeight: 500 }}>/ {formatCurrency(limit)}</span>
-                      </span>
-                    </div>
-                    <div style={{ height: '6px', background: 'var(--bg-main)', borderRadius: '3px', overflow: 'hidden' }}>
-                      <div style={{ height: '100%', width: `${percentage}%`, background: isOver ? 'var(--danger)' : 'var(--primary-color)', borderRadius: '3px' }}></div>
+      <div className="h-3 w-full bg-[#0a0a0b]"></div>
+
+      {/* Recent Activity (Edge to Edge List) */}
+      <div className="bg-[#17171a] py-6">
+        <div className="flex justify-between items-center mb-4 px-5">
+          <h3 className="text-lg font-bold text-white m-0">Recent Activity</h3>
+          <button onClick={() => navigate('/history')} className="text-indigo-400 text-sm font-semibold hover:text-indigo-300">View All</button>
+        </div>
+        
+        <div className="flex flex-col">
+          {processedData.recentActivity.length === 0 ? (
+            <div className="text-center py-8 text-slate-500 text-sm">No recent activity.</div>
+          ) : (
+            processedData.recentActivity.map((t, i) => {
+              const isInc = t.type === 'income';
+              let bgColor = isInc ? '#10b981' : '#64748b'; // default slate for others
+              let typeLabel = 'Other';
+              
+              if (!isInc) {
+                const catObj = categories.find(c => c.name.toLowerCase() === t.categoryKey);
+                if (catObj) { bgColor = catObj.color || '#64748b'; typeLabel = catObj.name; }
+                else { typeLabel = t.category; }
+              }
+
+              return (
+                <div key={i} className="flex items-center gap-4 px-5 py-3.5 border-b border-white/5 active:bg-white/5 transition-colors">
+                  <div className="w-12 h-12 rounded-full flex items-center justify-center shrink-0" style={{ backgroundColor: `${bgColor}15`, color: bgColor }}>
+                    {isInc ? <ArrowDownRight size={20} /> : getIconForCategory({ name: typeLabel, color: bgColor }, 20)}
+                  </div>
+                  
+                  <div className="flex-1 min-w-0 flex flex-col justify-center">
+                    <div className="font-semibold text-slate-100 text-[15px] mb-0.5 truncate">{t.title}</div>
+                    <div className="text-[11px] text-slate-400">
+                      Paid on {new Date(t.date).toLocaleDateString('en-US', { day: '2-digit', month: 'short' })}
                     </div>
                   </div>
-                );
-              })
-            )}
-          </div>
+                  
+                  <div className="flex flex-col items-end justify-center">
+                    <div className={`font-bold text-[15px] ${isInc ? 'text-emerald-400' : 'text-slate-100'}`}>
+                      {isInc ? '+' : '-'} {formatCurrency(t.amount)}
+                    </div>
+                    <div className="text-[10px] text-slate-500 mt-0.5 flex items-center gap-1">
+                      From <Wallet size={10} className="text-indigo-400" />
+                    </div>
+                  </div>
+                </div>
+              );
+            })
+          )}
         </div>
-
       </div>
 
     </div>
