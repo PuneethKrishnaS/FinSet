@@ -211,178 +211,224 @@ const Dashboard = () => {
         formatCurrency={formatCurrency} 
       />
 
-      {/* Main Balance & Stats Unified Header */}
-      <div className="mb-10 pb-10 border-b border-border flex flex-col xl:flex-row xl:items-end justify-between gap-8">
-        <div className="flex items-center justify-between xl:block">
-          <div>
-            <div className="text-muted-foreground text-xs font-bold uppercase tracking-widest mb-3">Total Net Balance</div>
-            <div className="text-5xl md:text-7xl font-black text-foreground tracking-tighter leading-none">
-              {formatCurrency(dashboardData.balance)}
-            </div>
-          </div>
-          <button 
-            onClick={() => setIsCalendarOpen(true)} 
-            className="xl:ml-6 xl:mt-4 bg-muted/50 p-3 rounded-full hover:bg-muted transition-colors flex items-center justify-center text-foreground group shadow-sm"
-          >
-            <CalendarIcon size={20} className="group-hover:text-primary transition-colors" />
-          </button>
-        </div>
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         
-        <div className="flex items-center gap-6 overflow-x-auto no-scrollbar pb-2 xl:pb-0">
-          <div className="flex flex-col min-w-[110px]">
-            <div className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-500 mb-1.5">
-              <TrendingUp size={16} strokeWidth={2.5} />
-              <span className="text-[10px] font-bold uppercase tracking-widest">Income</span>
-            </div>
-            <div className="text-xl font-bold text-foreground">{formatCurrency(dashboardData.total_income)}</div>
-          </div>
-
-          <div className="w-[1px] h-10 bg-border shrink-0"></div>
+        {/* Left/Main Column */}
+        <div className="lg:col-span-8 flex flex-col gap-6">
           
-          <div className="flex flex-col min-w-[110px]">
-            <div className="flex items-center gap-1.5 text-destructive mb-1.5">
-              <TrendingDown size={16} strokeWidth={2.5} />
-              <span className="text-[10px] font-bold uppercase tracking-widest">Spent</span>
-            </div>
-            <div className="text-xl font-bold text-foreground">{formatCurrency(dashboardData.total_expense)}</div>
-          </div>
-
-          <div className="w-[1px] h-10 bg-border shrink-0"></div>
-
-          <div className="flex flex-col min-w-[110px]">
-            <div className="flex items-center gap-1.5 text-primary mb-1.5">
-              <Wallet size={16} strokeWidth={2.5} />
-              <span className="text-[10px] font-bold uppercase tracking-widest">Savings</span>
-            </div>
-            <div className="text-xl font-bold text-foreground">{formatCurrency(netSavings)}</div>
-          </div>
-        </div>
-      </div>
-
-      {/* Cash Flow Chart */}
-      <section className="mb-10 pb-10 border-b border-border">
-        <h3 className="text-xl font-bold text-foreground mb-8">Cash Flow</h3>
-        <div className="h-[260px] w-full -ml-4">
-          {processedData.cashFlowData.length > 0 ? (
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={processedData.cashFlowData} margin={{ top: 5, right: 0, left: -20, bottom: 0 }}>
-                <defs>
-                  <linearGradient id="colorInc" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#10b981" stopOpacity={0.3}/>
-                    <stop offset="95%" stopColor="#10b981" stopOpacity={0}/>
-                  </linearGradient>
-                  <linearGradient id="colorExp" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#ef4444" stopOpacity={0.3}/>
-                    <stop offset="95%" stopColor="#ef4444" stopOpacity={0}/>
-                  </linearGradient>
-                </defs>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={theme === 'dark' ? '#27272a' : '#e5e7eb'} />
-                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: 'var(--text-muted)' }} dy={10} />
-                <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: 'var(--text-muted)' }} tickFormatter={val => formatCurrency(val)} />
-                <Tooltip contentStyle={{ borderRadius: '12px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-card)', color: 'var(--text-main)', boxShadow: 'none' }} />
-                <Area type="monotone" dataKey="income" name="Income" stroke="#10b981" strokeWidth={2} fillOpacity={1} fill="url(#colorInc)" />
-                <Area type="monotone" dataKey="expense" name="Expense" stroke="#ef4444" strokeWidth={2} fillOpacity={1} fill="url(#colorExp)" />
-              </AreaChart>
-            </ResponsiveContainer>
-          ) : (
-            <div className="h-full flex items-center justify-center text-muted-foreground text-sm font-medium">No data for this month yet.</div>
-          )}
-        </div>
-      </section>
-
-      {/* Category Breakdown */}
-      <section className="mb-10 pb-10 border-b border-border">
-        <h3 className="text-xl font-bold text-foreground mb-8">Where your money goes</h3>
-        
-        {processedData.pieData.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-            <div className="h-[240px] w-full relative">
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie data={processedData.pieData} cx="50%" cy="50%" innerRadius={85} outerRadius={110} paddingAngle={4} dataKey="value" stroke="none">
-                    {processedData.pieData.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)}
-                  </Pie>
-                  <Tooltip formatter={val => formatCurrency(val)} contentStyle={{ borderRadius: '12px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-card)', color: 'var(--text-main)', boxShadow: 'none' }} />
-                </PieChart>
-              </ResponsiveContainer>
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center">
-                <div className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Total</div>
-                <div className="text-xl font-black text-foreground">{formatCurrency(dashboardData.total_expense)}</div>
+          {/* The Consolidated Passbook */}
+          <section className="bg-card rounded-2xl shadow-sm border border-border p-6 md:p-8">
+            <div className="flex justify-between items-start mb-6">
+              <div>
+                <div className="text-muted-foreground text-xs md:text-sm font-bold uppercase tracking-widest mb-2">Total Net Balance</div>
+                <div className="text-4xl md:text-5xl font-black text-foreground tracking-tighter leading-none">
+                  {formatCurrency(dashboardData.balance)}
+                </div>
               </div>
+              <button 
+                onClick={() => setIsCalendarOpen(true)} 
+                className="bg-primary/10 text-primary p-3 rounded-full hover:bg-primary/20 transition-colors flex items-center justify-center shadow-sm"
+              >
+                <CalendarIcon size={20} />
+              </button>
             </div>
             
-            <div className="flex flex-col gap-1">
-              {processedData.pieData.slice(0, 5).map((cat, i) => {
-                const icon = cat ? getIconForCategory(cat, 18) : <MoreHorizontal size={18} />;
-                const percentage = ((cat.value / dashboardData.total_expense) * 100).toFixed(0);
-                return (
-                  <div key={i} className="flex items-center justify-between py-3 border-b border-border/50 last:border-0 hover:bg-muted/30 transition-colors -mx-2 px-2 rounded-lg">
-                    <div className="flex items-center gap-4">
-                      <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: `${COLORS[i % COLORS.length]}15`, color: COLORS[i % COLORS.length] }}>
-                        {icon}
-                      </div>
-                      <span className="font-bold text-foreground text-sm">{cat.name}</span>
-                    </div>
-                    <div className="flex items-center gap-4 text-sm">
-                      <span className="text-muted-foreground font-bold w-8 text-right">{percentage}%</span>
-                      <span className="font-black text-foreground w-20 text-right">{formatCurrency(cat.value)}</span>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        ) : (
-          <div className="h-[200px] flex items-center justify-center text-muted-foreground text-sm font-medium">No expense data</div>
-        )}
-      </section>
-
-      {/* Recent Activity */}
-      <section className="mb-4">
-        <div className="flex justify-between items-center mb-6">
-          <h3 className="text-xl font-bold text-foreground m-0">Recent Activity</h3>
-          <button onClick={() => navigate('/history')} className="text-primary text-sm font-bold hover:text-primary/80 transition-colors">View All</button>
-        </div>
-        
-        <div className="flex flex-col">
-          {processedData.recentActivity.length === 0 ? (
-            <div className="text-center py-8 text-muted-foreground text-sm font-medium">No recent activity.</div>
-          ) : (
-            processedData.recentActivity.map((t, i) => {
-              const isInc = t.type === 'income';
-              let bgColor = isInc ? '#10b981' : '#64748b'; // default slate for others
-              let typeLabel = 'Other';
+            <div className="grid grid-cols-3 gap-4 pt-6 border-t border-border">
+              <div className="flex flex-col">
+                <div className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-500 mb-1">
+                  <TrendingUp size={16} strokeWidth={2.5} />
+                  <span className="text-[10px] font-bold uppercase tracking-widest">Income</span>
+                </div>
+                <div className="text-lg md:text-xl font-bold text-foreground">{formatCurrency(dashboardData.total_income)}</div>
+              </div>
               
-              if (!isInc) {
-                const catObj = categories.find(c => c.name.toLowerCase() === t.categoryKey);
-                if (catObj) { bgColor = catObj.color || '#64748b'; typeLabel = catObj.name; }
-                else { typeLabel = t.category; }
-              }
+              <div className="flex flex-col">
+                <div className="flex items-center gap-1.5 text-destructive mb-1">
+                  <TrendingDown size={16} strokeWidth={2.5} />
+                  <span className="text-[10px] font-bold uppercase tracking-widest">Spent</span>
+                </div>
+                <div className="text-lg md:text-xl font-bold text-foreground">{formatCurrency(dashboardData.total_expense)}</div>
+              </div>
 
-              return (
-                <div key={i} className="flex items-center gap-4 py-4 border-b border-border last:border-0 hover:bg-muted/30 transition-colors -mx-4 px-4 md:-mx-2 md:px-2 rounded-lg cursor-pointer">
-                  <div className="w-12 h-12 rounded-full flex items-center justify-center shrink-0" style={{ backgroundColor: `${bgColor}15`, color: bgColor }}>
-                    {isInc ? <ArrowDownRight size={20} /> : getIconForCategory({ name: typeLabel, color: bgColor }, 20)}
-                  </div>
-                  
-                  <div className="flex-1 min-w-0 flex flex-col justify-center">
-                    <div className="font-bold text-foreground text-base mb-0.5 truncate">{t.title}</div>
-                    <div className="text-xs font-medium text-muted-foreground">
-                      {new Date(t.date).toLocaleDateString('en-US', { day: '2-digit', month: 'short' })}
-                    </div>
-                  </div>
-                  
-                  <div className="flex flex-col items-end justify-center">
-                    <div className={`font-black text-base ${isInc ? 'text-emerald-500' : 'text-foreground'}`}>
-                      {isInc ? '+' : '-'} {formatCurrency(t.amount)}
-                    </div>
+              <div className="flex flex-col">
+                <div className="flex items-center gap-1.5 text-primary mb-1">
+                  <Wallet size={16} strokeWidth={2.5} />
+                  <span className="text-[10px] font-bold uppercase tracking-widest">Savings</span>
+                </div>
+                <div className="text-lg md:text-xl font-bold text-foreground">{formatCurrency(netSavings)}</div>
+              </div>
+            </div>
+          </section>
+
+          {/* Quick-Action Grid */}
+          <section className="bg-card rounded-2xl shadow-sm border border-border p-6">
+            <div className="grid grid-cols-4 gap-4 md:gap-6">
+              <button onClick={() => navigate('/log?type=expense')} className="flex flex-col items-center justify-center gap-3 group">
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-red-100 to-red-50 dark:from-red-900/30 dark:to-red-900/10 flex items-center justify-center shadow-sm group-active:scale-95 transition-transform relative overflow-hidden">
+                  <MinusCircle size={28} className="text-red-500 relative z-10" />
+                  <div className="absolute inset-0 bg-white/20 dark:bg-white/5" />
+                </div>
+                <span className="text-xs font-semibold text-foreground text-center">Add<br/>Expense</span>
+              </button>
+              
+              <button onClick={() => navigate('/log?type=income')} className="flex flex-col items-center justify-center gap-3 group">
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-100 to-emerald-50 dark:from-emerald-900/30 dark:to-emerald-900/10 flex items-center justify-center shadow-sm group-active:scale-95 transition-transform relative overflow-hidden">
+                  <PlusCircle size={28} className="text-emerald-500 relative z-10" />
+                  <div className="absolute inset-0 bg-white/20 dark:bg-white/5" />
+                </div>
+                <span className="text-xs font-semibold text-foreground text-center">Add<br/>Income</span>
+              </button>
+              
+              <button onClick={() => navigate('/budgets')} className="flex flex-col items-center justify-center gap-3 group">
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-100 to-blue-50 dark:from-blue-900/30 dark:to-blue-900/10 flex items-center justify-center shadow-sm group-active:scale-95 transition-transform relative overflow-hidden">
+                  <Target size={28} className="text-blue-500 relative z-10" />
+                  <div className="absolute inset-0 bg-white/20 dark:bg-white/5" />
+                </div>
+                <span className="text-xs font-semibold text-foreground text-center">Track<br/>Budgets</span>
+              </button>
+              
+              <button onClick={() => navigate('/history')} className="flex flex-col items-center justify-center gap-3 group">
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-slate-100 to-slate-50 dark:from-slate-800/50 dark:to-slate-800/20 flex items-center justify-center shadow-sm group-active:scale-95 transition-transform relative overflow-hidden">
+                  <History size={28} className="text-slate-600 dark:text-slate-300 relative z-10" />
+                  <div className="absolute inset-0 bg-white/20 dark:bg-white/5" />
+                </div>
+                <span className="text-xs font-semibold text-foreground text-center">Passbook<br/>History</span>
+              </button>
+            </div>
+          </section>
+
+          {/* Cash Flow Chart */}
+          <section className="bg-card rounded-2xl shadow-sm border border-border p-6">
+            <h3 className="text-lg md:text-xl font-bold text-foreground mb-6">Cash Flow</h3>
+            <div className="h-[260px] w-full -ml-4">
+              {processedData.cashFlowData.length > 0 ? (
+                <ResponsiveContainer width="100%" height="100%">
+                  <AreaChart data={processedData.cashFlowData} margin={{ top: 5, right: 0, left: -20, bottom: 0 }}>
+                    <defs>
+                      <linearGradient id="colorInc" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#00AC4F" stopOpacity={0.3}/>
+                        <stop offset="95%" stopColor="#00AC4F" stopOpacity={0}/>
+                      </linearGradient>
+                      <linearGradient id="colorExp" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#FD3E3E" stopOpacity={0.3}/>
+                        <stop offset="95%" stopColor="#FD3E3E" stopOpacity={0}/>
+                      </linearGradient>
+                    </defs>
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={theme === 'dark' ? '#27272a' : '#e5e7eb'} />
+                    <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: 'var(--text-muted)' }} dy={10} />
+                    <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: 'var(--text-muted)' }} tickFormatter={val => formatCurrency(val)} />
+                    <Tooltip contentStyle={{ borderRadius: '12px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-card)', color: 'var(--text-main)', boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.04)' }} />
+                    <Area type="monotone" dataKey="income" name="Income" stroke="#00AC4F" strokeWidth={2} fillOpacity={1} fill="url(#colorInc)" />
+                    <Area type="monotone" dataKey="expense" name="Expense" stroke="#FD3E3E" strokeWidth={2} fillOpacity={1} fill="url(#colorExp)" />
+                  </AreaChart>
+                </ResponsiveContainer>
+              ) : (
+                <div className="h-full flex items-center justify-center text-muted-foreground text-sm font-medium">No data for this month yet.</div>
+              )}
+            </div>
+          </section>
+
+          {/* Category Breakdown */}
+          <section className="bg-card rounded-2xl shadow-sm border border-border p-6">
+            <h3 className="text-lg md:text-xl font-bold text-foreground mb-6">Where your money goes</h3>
+            
+            {processedData.pieData.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                <div className="h-[240px] w-full relative">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie data={processedData.pieData} cx="50%" cy="50%" innerRadius={85} outerRadius={110} paddingAngle={4} dataKey="value" stroke="none">
+                        {processedData.pieData.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)}
+                      </Pie>
+                      <Tooltip formatter={val => formatCurrency(val)} contentStyle={{ borderRadius: '12px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-card)', color: 'var(--text-main)', boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.04)' }} />
+                    </PieChart>
+                  </ResponsiveContainer>
+                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center">
+                    <div className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Total</div>
+                    <div className="text-xl font-black text-foreground">{formatCurrency(dashboardData.total_expense)}</div>
                   </div>
                 </div>
-              );
-            })
-          )}
+                
+                <div className="flex flex-col gap-1">
+                  {processedData.pieData.slice(0, 5).map((cat, i) => {
+                    const icon = cat ? getIconForCategory(cat, 18) : <MoreHorizontal size={18} />;
+                    const percentage = ((cat.value / dashboardData.total_expense) * 100).toFixed(0);
+                    return (
+                      <div key={i} className="flex items-center justify-between py-3 border-b border-border/50 last:border-0 hover:bg-muted/30 transition-colors px-2 rounded-lg cursor-default">
+                        <div className="flex items-center gap-4">
+                          <div className="w-10 h-10 rounded-full flex items-center justify-center shrink-0" style={{ backgroundColor: `${COLORS[i % COLORS.length]}15`, color: COLORS[i % COLORS.length] }}>
+                            {icon}
+                          </div>
+                          <span className="font-bold text-foreground text-sm truncate max-w-[100px]">{cat.name}</span>
+                        </div>
+                        <div className="flex items-center gap-3 text-sm shrink-0">
+                          <span className="text-muted-foreground font-bold">{percentage}%</span>
+                          <span className="font-black text-foreground">{formatCurrency(cat.value)}</span>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            ) : (
+              <div className="h-[200px] flex items-center justify-center text-muted-foreground text-sm font-medium">No expense data</div>
+            )}
+          </section>
+
         </div>
-      </section>
+
+        {/* Right Rail / Side Column */}
+        <div className="lg:col-span-4 flex flex-col gap-6">
+          
+          {/* Recent Activity */}
+          <section className="bg-card rounded-2xl shadow-sm border border-border p-6 flex flex-col h-full min-h-[400px]">
+            <div className="flex justify-between items-center mb-6">
+              <h3 className="text-lg md:text-xl font-bold text-foreground m-0">Recent Activity</h3>
+              <button onClick={() => navigate('/history')} className="text-primary text-sm font-bold hover:text-primary/80 transition-colors">View All</button>
+            </div>
+            
+            <div className="flex flex-col flex-1">
+              {processedData.recentActivity.length === 0 ? (
+                <div className="text-center py-8 text-muted-foreground text-sm font-medium m-auto">No recent activity.</div>
+              ) : (
+                processedData.recentActivity.map((t, i) => {
+                  const isInc = t.type === 'income';
+                  let bgColor = isInc ? '#00AC4F' : '#64748b'; // success green or slate
+                  let typeLabel = 'Other';
+                  
+                  if (!isInc) {
+                    const catObj = categories.find(c => c.name.toLowerCase() === t.categoryKey);
+                    if (catObj) { bgColor = catObj.color || '#64748b'; typeLabel = catObj.name; }
+                    else { typeLabel = t.category; }
+                  }
+
+                  return (
+                    <div key={i} className="flex items-center gap-3 py-3 border-b border-border/50 last:border-0 hover:bg-muted/30 transition-colors px-1 rounded-lg cursor-pointer">
+                      <div className="w-10 h-10 rounded-full flex items-center justify-center shrink-0" style={{ backgroundColor: `${bgColor}15`, color: bgColor }}>
+                        {isInc ? <ArrowDownRight size={18} /> : getIconForCategory({ name: typeLabel, color: bgColor }, 18)}
+                      </div>
+                      
+                      <div className="flex-1 min-w-0 flex flex-col justify-center">
+                        <div className="font-bold text-foreground text-sm mb-0.5 truncate">{t.title}</div>
+                        <div className="text-[10px] md:text-xs font-medium text-muted-foreground">
+                          {new Date(t.date).toLocaleDateString('en-US', { day: '2-digit', month: 'short' })}
+                        </div>
+                      </div>
+                      
+                      <div className="flex flex-col items-end justify-center shrink-0">
+                        <div className={`font-black text-sm md:text-base ${isInc ? 'text-[#00AC4F]' : 'text-foreground'}`}>
+                          {isInc ? '+' : '-'} {formatCurrency(t.amount)}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })
+              )}
+            </div>
+          </section>
+
+        </div>
+      </div>
 
     </div>
   );
