@@ -24,7 +24,6 @@ const Sidebar = () => {
   const { dataVersion } = useFinanceStore();
   const dropdownRef = useRef(null);
 
-  // Close dropdown on outside click
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -35,9 +34,7 @@ const Sidebar = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Note: For a real app, you might use context or a store for this,
-  // but we can fetch it periodically or on load here
-  React.useEffect(() => {
+  useEffect(() => {
     const fetchUnread = async () => {
       try {
         const res = await api.get('/notifications/');
@@ -47,7 +44,6 @@ const Sidebar = () => {
     };
     fetchUnread();
     
-    // Refresh unread count every 30 seconds
     const interval = setInterval(fetchUnread, 30000);
     return () => clearInterval(interval);
   }, [dataVersion]);
@@ -60,141 +56,130 @@ const Sidebar = () => {
 
   const closeMenu = () => setIsOpen(false);
 
+  const navItems = [
+    { name: 'Dashboard', icon: LayoutDashboard, path: '/dashboard' },
+    { name: 'Transactions', icon: ArrowRightLeft, path: '/log-transaction' },
+    { name: 'History', icon: HistoryIcon, path: '/history' },
+    { name: 'Budgets', icon: Target, path: '/budgets' },
+    { name: 'Debts', icon: Users, path: '/debts' },
+    { name: 'Chits', icon: PieChart, path: '/chits' },
+  ];
+
   return (
     <>
-      {/* Sidebar acts as header on mobile, actual sidebar on desktop */}
-      <aside className="sidebar">
-        <div className="sidebar-header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <div className="logo-area" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: 0 }}>
-            <img src="/FinSet_Logo.svg" alt="FinSet" style={{ height: '32px' }} />
-            <span style={{ fontSize: '1.4rem', fontWeight: '800' }}>FinSet</span>
-          </div>
-          
-          <div style={{ position: 'relative' }} ref={dropdownRef}>
-            <button className="mobile-menu-btn" onClick={() => setIsOpen(!isOpen)}>
-              <MoreVertical size={24} />
-              {unreadCount > 0 && !isOpen && (
-                <span style={{ 
-                  position: 'absolute', top: '-2px', right: '-2px', width: '10px', height: '10px', 
-                  background: 'var(--danger)', borderRadius: '50%', border: '2px solid var(--bg-main)' 
-                }} />
-              )}
-            </button>
-            
-            {/* 3-Dot Mobile Dropdown Menu */}
-            {isOpen && (
-              <div className="mobile-dropdown-menu">
-                <Link to="/profile" onClick={closeMenu} className="dropdown-item">
-                  <User size={18} /> Profile
-                </Link>
-                <Link to="/notifications" onClick={closeMenu} className="dropdown-item" style={{ position: 'relative' }}>
-                  <Bell size={18} /> Notifications
-                  {unreadCount > 0 && (
-                    <span style={{ 
-                      background: 'var(--primary-color)', color: 'white', fontSize: '0.7rem', 
-                      padding: '0.1rem 0.4rem', borderRadius: '10px', fontWeight: 'bold', marginLeft: 'auto'
-                    }}>
-                      {unreadCount}
-                    </span>
-                  )}
-                </Link>
-                <Link to="/settings" onClick={closeMenu} className="dropdown-item">
-                  <SettingsIcon size={18} /> Settings
-                </Link>
-                <div style={{ height: '1px', background: 'var(--border-color)', margin: '0.5rem 0' }} />
-                <button onClick={handleLogout} className="dropdown-item" style={{ color: 'var(--danger)' }}>
-                  <LogOut size={18} /> Log out
-                </button>
-              </div>
+      {/* --- MOBILE HEADER --- */}
+      <header className="md:hidden flex items-center justify-between px-5 h-16 bg-sidebar border-b border-sidebar-border shrink-0">
+        <div className="flex items-center gap-2">
+          <img src="/FinSet_Logo.svg" alt="FinSet" className="h-8" />
+          <span className="text-xl font-bold text-sidebar-foreground">FinSet</span>
+        </div>
+        
+        <div className="relative" ref={dropdownRef}>
+          <button 
+            onClick={() => setIsOpen(!isOpen)} 
+            className="p-2 text-sidebar-foreground relative hover:bg-sidebar-accent rounded-full transition-colors"
+          >
+            <MoreVertical size={24} />
+            {unreadCount > 0 && !isOpen && (
+              <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-destructive rounded-full border-2 border-sidebar"></span>
             )}
-          </div>
+          </button>
+          
+          {isOpen && (
+            <div className="absolute right-0 top-full mt-1 w-48 bg-popover border border-border rounded-xl shadow-lg py-2 z-50">
+              <Link to="/profile" onClick={closeMenu} className="flex items-center gap-3 px-4 py-2 text-sm text-popover-foreground hover:bg-accent hover:text-accent-foreground transition-colors">
+                <User size={16} /> Profile
+              </Link>
+              <Link to="/notifications" onClick={closeMenu} className="flex items-center justify-between px-4 py-2 text-sm text-popover-foreground hover:bg-accent hover:text-accent-foreground transition-colors">
+                <div className="flex items-center gap-3">
+                  <Bell size={16} /> Notifications
+                </div>
+                {unreadCount > 0 && (
+                  <span className="bg-primary text-primary-foreground text-[10px] font-bold px-1.5 py-0.5 rounded-full">
+                    {unreadCount}
+                  </span>
+                )}
+              </Link>
+              <Link to="/settings" onClick={closeMenu} className="flex items-center gap-3 px-4 py-2 text-sm text-popover-foreground hover:bg-accent hover:text-accent-foreground transition-colors">
+                <SettingsIcon size={16} /> Settings
+              </Link>
+              <div className="h-px bg-border my-1"></div>
+              <button onClick={handleLogout} className="w-full flex items-center gap-3 px-4 py-2 text-sm text-destructive hover:bg-destructive/10 transition-colors">
+                <LogOut size={16} /> Log out
+              </button>
+            </div>
+          )}
+        </div>
+      </header>
+
+      {/* --- DESKTOP SIDEBAR --- */}
+      <aside className="hidden md:flex flex-col w-[260px] bg-sidebar border-r border-sidebar-border h-screen shrink-0">
+        <div className="flex items-center gap-3 px-6 h-20 border-b border-sidebar-border shrink-0">
+          <img src="/FinSet_Logo.svg" alt="FinSet" className="h-8" />
+          <span className="text-2xl font-bold text-sidebar-foreground tracking-tight">FinSet</span>
         </div>
 
-        <div className="sidebar-content">
-          <nav className="nav-menu">
-          <Link to="/dashboard" onClick={closeMenu} className={`nav-item ${location.pathname === '/dashboard' ? 'active' : ''}`}>
-            <LayoutDashboard size={18} />
-            Dashboard
-          </Link>
-          <Link to="/log-transaction" onClick={closeMenu} className={`nav-item ${location.pathname === '/log-transaction' ? 'active' : ''}`}>
-            <ArrowRightLeft size={18} />
-            Transactions
-          </Link>
-          <Link to="/history" onClick={closeMenu} className={`nav-item ${location.pathname === '/history' ? 'active' : ''}`}>
-            <HistoryIcon size={18} />
-            History
-          </Link>
-          <Link to="/budgets" onClick={closeMenu} className={`nav-item ${location.pathname === '/budgets' ? 'active' : ''}`}>
-            <Target size={18} />
-            Budgets
-          </Link>
-          <Link to="/debts" onClick={closeMenu} className={`nav-item ${location.pathname === '/debts' ? 'active' : ''}`}>
-            <Users size={18} />
-            Debts
-          </Link>
-          <Link to="/chits" onClick={closeMenu} className={`nav-item ${location.pathname === '/chits' ? 'active' : ''}`}>
-            <PieChart size={18} />
-            Chit Funds
-          </Link>
+        <nav className="flex-1 px-4 py-6 flex flex-col gap-1 overflow-y-auto">
+          {navItems.map(item => {
+            const isActive = location.pathname === item.path;
+            return (
+              <Link 
+                key={item.path}
+                to={item.path} 
+                className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
+                  isActive 
+                    ? 'bg-sidebar-primary text-sidebar-primary-foreground' 
+                    : 'text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground'
+                }`}
+              >
+                <item.icon size={18} className={isActive ? 'text-sidebar-primary-foreground' : 'text-sidebar-foreground/70'} />
+                {item.name}
+              </Link>
+            )
+          })}
         </nav>
 
-        <div className="bottom-nav">
-          <Link to="/profile" className={`nav-item ${location.pathname === '/profile' ? 'active' : ''}`}>
-            <User size={18} />
-            Profile
+        <div className="p-4 border-t border-sidebar-border flex flex-col gap-1 shrink-0">
+          <Link to="/profile" className={`flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors ${location.pathname === '/profile' ? 'bg-sidebar-primary text-sidebar-primary-foreground' : 'text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground'}`}>
+            <User size={18} /> Profile
           </Link>
-          <Link to="/notifications" className={`nav-item ${location.pathname === '/notifications' ? 'active' : ''}`} style={{ position: 'relative' }}>
-            <Bell size={18} />
-            Notifications
+          <Link to="/notifications" className={`flex items-center justify-between px-4 py-2.5 rounded-lg text-sm font-medium transition-colors ${location.pathname === '/notifications' ? 'bg-sidebar-primary text-sidebar-primary-foreground' : 'text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground'}`}>
+            <div className="flex items-center gap-3">
+              <Bell size={18} /> Notifications
+            </div>
             {unreadCount > 0 && (
-              <span style={{ 
-                position: 'absolute', right: '1rem', background: 'var(--primary-color)', 
-                color: 'white', fontSize: '0.75rem', padding: '0.1rem 0.4rem', 
-                borderRadius: '10px', fontWeight: 'bold' 
-              }}>
+              <span className="bg-primary text-primary-foreground text-xs font-bold px-2 py-0.5 rounded-full">
                 {unreadCount}
               </span>
             )}
           </Link>
-          <Link to="/settings" className={`nav-item ${location.pathname === '/settings' ? 'active' : ''}`}>
-            <SettingsIcon size={18} />
-            Settings
+          <Link to="/settings" className={`flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors ${location.pathname === '/settings' ? 'bg-sidebar-primary text-sidebar-primary-foreground' : 'text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground'}`}>
+            <SettingsIcon size={18} /> Settings
           </Link>
-          <button onClick={handleLogout} className="nav-item" style={{ background: 'none', border: 'none', width: '100%', cursor: 'pointer', textAlign: 'left', fontFamily: 'inherit' }}>
-            <LogOut size={18} />
-            Log out
+          <button onClick={handleLogout} className="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium text-sidebar-foreground hover:bg-destructive/10 hover:text-destructive transition-colors">
+            <LogOut size={18} /> Log out
           </button>
         </div>
-      </div>
-    </aside>
+      </aside>
 
-    {/* Mobile Bottom Navigation Bar */}
-    <div className="mobile-bottom-navbar">
-      <Link to="/dashboard" className={`mobile-nav-item ${location.pathname === '/dashboard' ? 'active' : ''}`}>
-        <LayoutDashboard size={22} />
-        <span>Home</span>
-      </Link>
-      <Link to="/log-transaction" className={`mobile-nav-item ${location.pathname === '/log-transaction' ? 'active' : ''}`}>
-        <ArrowRightLeft size={22} />
-        <span>Log</span>
-      </Link>
-      <Link to="/history" className={`mobile-nav-item ${location.pathname === '/history' ? 'active' : ''}`}>
-        <HistoryIcon size={22} />
-        <span>History</span>
-      </Link>
-      <Link to="/budgets" className={`mobile-nav-item ${location.pathname === '/budgets' ? 'active' : ''}`}>
-        <Target size={22} />
-        <span>Budgets</span>
-      </Link>
-      <Link to="/debts" className={`mobile-nav-item ${location.pathname === '/debts' ? 'active' : ''}`}>
-        <Users size={22} />
-        <span>Debts</span>
-      </Link>
-      <Link to="/chits" className={`mobile-nav-item ${location.pathname === '/chits' ? 'active' : ''}`}>
-        <PieChart size={22} />
-        <span>Chits</span>
-      </Link>
-    </div>
+      {/* --- MOBILE BOTTOM NAVIGATION --- */}
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 h-[68px] bg-background border-t border-border flex justify-around items-center px-2 z-50 pb-safe">
+        {navItems.map(item => {
+          const isActive = location.pathname === item.path;
+          return (
+            <Link 
+              key={item.path}
+              to={item.path} 
+              className={`flex flex-col items-center justify-center w-full h-full gap-1 transition-colors ${
+                isActive ? 'text-primary' : 'text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              <item.icon size={22} strokeWidth={isActive ? 2.5 : 2} />
+              <span className={`text-[10px] font-medium ${isActive ? 'font-bold' : ''}`}>{item.name === 'Transactions' ? 'Log' : item.name}</span>
+            </Link>
+          )
+        })}
+      </nav>
     </>
   );
 };
