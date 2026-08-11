@@ -576,7 +576,7 @@ class ParseBankStatementView(APIView):
             line = line.strip()
             if not line:
                 continue
-            if re.match(r'^\d{2}-\d{2}-\d{4}', line):
+            if re.match(r'^\s*\d{2}-\d{2}-\d{4}', line):
                 if current_txn:
                     transactions.append(current_txn)
                 current_txn = line
@@ -589,18 +589,17 @@ class ParseBankStatementView(APIView):
         last_balance = 0.0
 
         for txn in transactions:
-            match = re.search(r'^(\d{2}-\d{2}-\d{4})\s+(.+?)\s+([\d\.]+)\s+([\d\.]+)\s+(Cr|Dr)$', txn)
+            match = re.search(r'(\d{2}-\d{2}-\d{4})\s+(.+?)\s+([\d,\.]+)\s+([\d,\.]+)\s*(Cr|Dr|CR|DR)', txn, re.IGNORECASE)
             if match:
                 date_str = match.group(1)
-                # Convert DD-MM-YYYY to YYYY-MM-DD
                 try:
                     iso_date = datetime.strptime(date_str, '%d-%m-%Y').strftime('%Y-%m-%d')
                 except ValueError:
                     iso_date = date_str
                     
                 narration = match.group(2).strip()
-                amount = float(match.group(3))
-                balance = float(match.group(4))
+                amount = float(match.group(3).replace(',', ''))
+                balance = float(match.group(4).replace(',', ''))
                 
                 if "Opening Balance" in narration:
                     last_balance = balance
@@ -612,6 +611,14 @@ class ParseBankStatementView(APIView):
                 # Auto-categorization basic logic
                 category_key = "other"
                 narration_lower = narration.lower()
+                
+                if 'upi' in narration_lower:
+                    # Simplify description for UPI transactions to make it cleaner
+                    parts = narration.split('/')
+                    if len(parts) > 3:
+                        narration = f"UPI - {parts[-2] if len(parts) > 2 else 'Transfer'}"
+                    else:
+                        narration = "UPI Transfer"
                 
                 if is_deposit:
                     source_key = 'other'
