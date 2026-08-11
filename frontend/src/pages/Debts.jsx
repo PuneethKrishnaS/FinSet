@@ -146,10 +146,7 @@ const Debts = () => {
 
   return (
     <div className="flex flex-col w-full h-full pb-10">
-      <header className="mb-6 md:mb-8">
-        <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-foreground mb-1">Lending & Borrowing</h1>
-        <p className="text-sm md:text-base text-muted-foreground font-medium">Track money you owe and money owed to you</p>
-      </header>
+
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-6 md:mb-8">

@@ -144,11 +144,7 @@ const Notifications = () => {
 
   return (
     <div className="flex flex-col w-full h-full pb-10">
-      <header className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 md:mb-8">
-        <div>
-          <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-foreground mb-1">Notifications</h1>
-          <p className="text-sm md:text-base text-muted-foreground font-medium">Stay updated with your financial alerts</p>
-        </div>
+      <div className="flex justify-end mb-6">
         {notifications.length > 0 && (
           <div className="flex gap-4 items-center">
             <button 
@@ -165,7 +161,7 @@ const Notifications = () => {
             </button>
           </div>
         )}
-      </header>
+      </div>
 
       {!isPushEnabled && (
         <div className="bg-card border border-border rounded-2xl p-5 flex flex-wrap justify-between items-center gap-4 mb-6 shadow-sm">

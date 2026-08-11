@@ -104,18 +104,16 @@ const ChitFunds = () => {
   return (
     <div className="flex flex-col w-full h-full pb-10">
       
-      <header className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 md:mb-8">
-        <div>
-          <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-foreground mb-1">Chit Funds (Cheeti)</h1>
-          <p className="text-sm md:text-base text-muted-foreground font-medium">Track your community savings & contributions</p>
+      <div className="flex flex-col gap-4 mb-6 relative z-10">
+        <div className="flex justify-end">
+          <button 
+            onClick={() => setShowCreateForm(!showCreateForm)}
+            className="bg-primary hover:bg-primary/90 text-primary-foreground text-sm font-bold py-2 px-4 rounded-xl transition-colors shadow-sm active:scale-[0.98] flex items-center gap-2"
+          >
+            {showCreateForm ? 'Cancel' : <><Plus size={16} /> New Chit Fund</>}
+          </button>
         </div>
-        <button 
-          onClick={() => setShowCreateForm(!showCreateForm)}
-          className="bg-primary hover:bg-primary/90 text-primary-foreground text-sm font-bold py-2 px-4 rounded-xl transition-colors shadow-sm active:scale-[0.98] flex items-center gap-2 w-fit"
-        >
-          {showCreateForm ? 'Cancel' : <><Plus size={18} /> New Chit Fund</>}
-        </button>
-      </header>
+      </div>
 
       {/* Create Form */}
       {showCreateForm && (

@@ -121,18 +121,16 @@ const History = () => {
   return (
     <div className="flex flex-col w-full h-full pb-10">
       
-      <header className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 md:mb-8">
-        <div>
-          <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-foreground mb-1">History</h1>
-          <p className="text-sm md:text-base text-muted-foreground font-medium">View, search, and export your past transactions</p>
+      <div className="flex flex-col gap-4 mb-6 relative z-10">
+        <div className="flex justify-end">
+          <button 
+            onClick={handleExportCSV} 
+            className="bg-secondary hover:bg-secondary/80 text-secondary-foreground text-sm font-bold py-2 px-4 rounded-xl transition-colors shadow-sm active:scale-[0.98] flex items-center gap-2 border border-border"
+          >
+            <Download size={16} /> Export CSV
+          </button>
         </div>
-        <button 
-          onClick={handleExportCSV} 
-          className="bg-secondary hover:bg-secondary/80 text-secondary-foreground text-sm font-bold py-2 px-4 rounded-xl transition-colors shadow-sm active:scale-[0.98] flex items-center gap-2 w-fit border border-border"
-        >
-          <Download size={16} /> Export CSV
-        </button>
-      </header>
+      </div>
 
       {/* Dynamic Filter Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-6 md:mb-8">

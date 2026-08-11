@@ -113,10 +113,7 @@ const Settings = () => {
 
   return (
     <div className="flex flex-col w-full h-full pb-10">
-      <header className="mb-6 md:mb-8">
-        <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-foreground mb-1">Application Settings</h1>
-        <p className="text-sm md:text-base text-muted-foreground font-medium">Customize your FinSet experience</p>
-      </header>
+
 
       <div className="max-w-4xl w-full mx-auto flex flex-col gap-6">
 

@@ -93,10 +93,7 @@ const LogTransaction = () => {
   return (
     <div className="flex flex-col w-full h-full pb-10">
       
-      <header className="mb-6 md:mb-8">
-        <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-foreground mb-1">Log Transaction</h1>
-        <p className="text-sm md:text-base text-muted-foreground font-medium">Record a new expense or income to your ledger</p>
-      </header>
+
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
 

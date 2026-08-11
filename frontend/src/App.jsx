@@ -22,6 +22,7 @@ import { Capacitor } from '@capacitor/core';
 import { parseBankSMS } from './utils/smsParser';
 import api from './services/api';
 import toast from 'react-hot-toast';
+import Navbar from './components/Navbar';
 
 const ProtectedRoute = ({ children }) => {
   const token = localStorage.getItem('access_token');
@@ -129,11 +130,14 @@ const AppLayout = ({ children }) => {
     <div className="flex h-[100dvh] w-full overflow-hidden bg-background text-foreground">
       <div className="flex flex-col md:flex-row h-full w-full">
         <Sidebar />
-        <main className="flex-1 h-full overflow-y-auto relative pb-[80px] md:pb-0">
-          <div className="p-4 md:p-8 max-w-7xl mx-auto">
-            {children}
-          </div>
-        </main>
+        <div className="flex-1 flex flex-col h-full overflow-hidden">
+          <Navbar />
+          <main className="flex-1 h-full overflow-y-auto relative pb-[80px] md:pb-0">
+            <div className="p-4 md:p-8 max-w-7xl mx-auto">
+              {children}
+            </div>
+          </main>
+        </div>
       </div>
     </div>
   );

@@ -117,24 +117,21 @@ const Profile = () => {
 
   if (loading) return (
     <div className="flex flex-col w-full h-full pb-10">
-      <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-foreground mb-6">My Profile</h1>
+
       <div className="p-8 text-center text-muted-foreground bg-card rounded-xl border border-border">Loading profile...</div>
     </div>
   );
   
   if (!profileData) return (
     <div className="flex flex-col w-full h-full pb-10">
-      <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-foreground mb-6">My Profile</h1>
+
       <div className="p-8 text-center text-destructive bg-card rounded-xl border border-destructive/20">Error loading profile.</div>
     </div>
   );
 
   return (
     <div className="flex flex-col w-full h-full pb-10">
-      <header className="mb-6 md:mb-8">
-        <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-foreground mb-1">My Profile</h1>
-        <p className="text-sm md:text-base text-muted-foreground font-medium">Manage your personal information and security</p>
-      </header>
+
 
       <div className="flex flex-col gap-6 md:gap-8 max-w-4xl mx-auto w-full">
         

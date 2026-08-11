@@ -211,27 +211,21 @@ const Dashboard = () => {
         formatCurrency={formatCurrency} 
       />
 
-      {/* Header Area */}
-      <header className="flex justify-between items-center mb-6 md:mb-8 pb-4 border-b border-border">
-        <div>
-          <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-foreground mb-1">Dashboard</h1>
-          <p className="text-sm md:text-base text-muted-foreground font-medium">Your financial overview</p>
-        </div>
-        <button 
-          onClick={() => setIsCalendarOpen(true)} 
-          className="bg-muted/50 p-3 rounded-full hover:bg-muted transition-colors flex items-center justify-center text-foreground group"
-        >
-          <CalendarIcon size={20} className="group-hover:text-primary transition-colors" />
-        </button>
-      </header>
-
       {/* Main Balance & Stats Unified Header */}
       <div className="mb-10 pb-10 border-b border-border flex flex-col xl:flex-row xl:items-end justify-between gap-8">
-        <div>
-          <div className="text-muted-foreground text-xs font-bold uppercase tracking-widest mb-3">Total Net Balance</div>
-          <div className="text-5xl md:text-7xl font-black text-foreground tracking-tighter leading-none">
-            {formatCurrency(dashboardData.balance)}
+        <div className="flex items-center justify-between xl:block">
+          <div>
+            <div className="text-muted-foreground text-xs font-bold uppercase tracking-widest mb-3">Total Net Balance</div>
+            <div className="text-5xl md:text-7xl font-black text-foreground tracking-tighter leading-none">
+              {formatCurrency(dashboardData.balance)}
+            </div>
           </div>
+          <button 
+            onClick={() => setIsCalendarOpen(true)} 
+            className="xl:ml-6 xl:mt-4 bg-muted/50 p-3 rounded-full hover:bg-muted transition-colors flex items-center justify-center text-foreground group shadow-sm"
+          >
+            <CalendarIcon size={20} className="group-hover:text-primary transition-colors" />
+          </button>
         </div>
         
         <div className="flex items-center gap-6 overflow-x-auto no-scrollbar pb-2 xl:pb-0">

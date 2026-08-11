@@ -129,10 +129,7 @@ const Budget = () => {
 
   return (
     <div className="flex flex-col w-full h-full pb-10">
-      <header className="mb-6 md:mb-8">
-        <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-foreground mb-1">Budgets</h1>
-        <p className="text-sm md:text-base text-muted-foreground font-medium">Track your spending against monthly goals</p>
-      </header>
+
 
       {/* Split Layout: 2/3 List, 1/3 Sidebar */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
