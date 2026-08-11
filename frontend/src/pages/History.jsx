@@ -125,7 +125,7 @@ const History = () => {
         <div className="flex justify-end">
           <button 
             onClick={handleExportCSV} 
-            className="bg-secondary hover:bg-secondary/80 text-secondary-foreground text-sm font-bold py-2 px-4 rounded-xl transition-colors  active:scale-[0.98] flex items-center gap-2 border border-border"
+            className="bg-secondary hover:bg-secondary/80 text-secondary-foreground text-sm font-bold py-2 px-4 rounded transition-colors  active:scale-[0.98] flex items-center gap-2 border border-border"
           >
             <Download size={16} /> Export CSV
           </button>
@@ -134,7 +134,7 @@ const History = () => {
 
       {/* Dynamic Filter Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-6 md:mb-8">
-        <div className="bg-card border border-border rounded-2xl p-5  flex items-center gap-4">
+        <div className="bg-card border border-border rounded p-5  flex items-center gap-4">
           <div className="w-12 h-12 rounded-full bg-emerald-500/10 text-emerald-500 flex items-center justify-center shrink-0">
             <TrendingUp size={24} />
           </div>
@@ -144,7 +144,7 @@ const History = () => {
           </div>
         </div>
 
-        <div className="bg-card border border-border rounded-2xl p-5  flex items-center gap-4">
+        <div className="bg-card border border-border rounded p-5  flex items-center gap-4">
           <div className="w-12 h-12 rounded-full bg-destructive/10 text-destructive flex items-center justify-center shrink-0">
             <TrendingDown size={24} />
           </div>
@@ -154,7 +154,7 @@ const History = () => {
           </div>
         </div>
 
-        <div className="bg-card border border-border rounded-2xl p-5  flex items-center gap-4">
+        <div className="bg-card border border-border rounded p-5  flex items-center gap-4">
           <div className={`w-12 h-12 rounded-full flex items-center justify-center shrink-0 ${filteredNet >= 0 ? 'bg-primary/10 text-primary' : 'bg-destructive/10 text-destructive'}`}>
             <Wallet size={24} />
           </div>
@@ -178,26 +178,26 @@ const History = () => {
               placeholder="Search descriptions..." 
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full bg-card border border-border rounded-xl pl-11 pr-4 py-3 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 "
+              className="w-full bg-card border border-border rounded pl-11 pr-4 py-3 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 "
             />
           </div>
           
-          <div className="flex bg-muted/40 p-1.5 rounded-xl border border-border/50 shrink-0 overflow-x-auto">
+          <div className="flex bg-muted/40 p-1.5 rounded border border-border/50 shrink-0 overflow-x-auto">
             <button 
               onClick={() => { setFilterType('all'); setFilterCategory('all'); }}
-              className={`px-4 py-2 text-sm font-bold rounded-lg transition-all whitespace-nowrap ${filterType === 'all' ? 'bg-background text-foreground ' : 'text-muted-foreground hover:text-foreground'}`}
+              className={`px-4 py-2 text-sm font-bold rounded transition-all whitespace-nowrap ${filterType === 'all' ? 'bg-background text-foreground ' : 'text-muted-foreground hover:text-foreground'}`}
             >
               All
             </button>
             <button 
               onClick={() => { setFilterType('income'); setFilterCategory('all'); }}
-              className={`px-4 py-2 text-sm font-bold rounded-lg transition-all whitespace-nowrap ${filterType === 'income' ? 'bg-background text-emerald-500 ' : 'text-muted-foreground hover:text-foreground'}`}
+              className={`px-4 py-2 text-sm font-bold rounded transition-all whitespace-nowrap ${filterType === 'income' ? 'bg-background text-emerald-500 ' : 'text-muted-foreground hover:text-foreground'}`}
             >
               Income
             </button>
             <button 
               onClick={() => { setFilterType('expense'); setFilterCategory('all'); }}
-              className={`px-4 py-2 text-sm font-bold rounded-lg transition-all whitespace-nowrap ${filterType === 'expense' ? 'bg-background text-destructive ' : 'text-muted-foreground hover:text-foreground'}`}
+              className={`px-4 py-2 text-sm font-bold rounded transition-all whitespace-nowrap ${filterType === 'expense' ? 'bg-background text-destructive ' : 'text-muted-foreground hover:text-foreground'}`}
             >
               Expenses
             </button>
@@ -208,7 +208,7 @@ const History = () => {
           <div className="flex gap-2 mb-6 overflow-x-auto pb-2 scrollbar-hide">
             <button
               onClick={() => setFilterCategory('all')}
-              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold whitespace-nowrap transition-colors ${filterCategory === 'all' ? 'bg-primary text-primary-foreground ' : 'bg-card border border-border text-muted-foreground hover:bg-muted/50'}`}
+              className={`flex items-center gap-2 px-4 py-2 rounded text-sm font-bold whitespace-nowrap transition-colors ${filterCategory === 'all' ? 'bg-primary text-primary-foreground ' : 'bg-card border border-border text-muted-foreground hover:bg-muted/50'}`}
             >
               All Categories
             </button>
@@ -218,7 +218,7 @@ const History = () => {
                 <button
                   key={c.id}
                   onClick={() => setFilterCategory(c.name.toLowerCase())}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold whitespace-nowrap transition-colors ${isSelected ? 'bg-primary text-primary-foreground ' : 'bg-card border border-border text-muted-foreground hover:bg-muted/50'}`}
+                  className={`flex items-center gap-2 px-4 py-2 rounded text-sm font-bold whitespace-nowrap transition-colors ${isSelected ? 'bg-primary text-primary-foreground ' : 'bg-card border border-border text-muted-foreground hover:bg-muted/50'}`}
                 >
                   {getIconForCategory(c, 16, isSelected ? '#fff' : 'currentColor')} {c.name}
                 </button>
@@ -247,7 +247,7 @@ const History = () => {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.98 }}
                     transition={{ duration: 0.2, delay: gIndex * 0.05 }}
-                    className="mb-6 md:mb-8 bg-card border border-border rounded-2xl overflow-hidden "
+                    className="mb-6 md:mb-8 bg-card border border-border rounded overflow-hidden "
                   >
                     {/* Month Header */}
                     <div className="sticky top-0 z-10 flex justify-between items-center bg-muted/80 backdrop-blur-md px-4 md:px-6 py-3 border-y border-border md:border-t-0 md:bg-muted/50">
@@ -300,7 +300,7 @@ const History = () => {
                               <div className="text-xs text-muted-foreground font-medium mb-1.5">
                                 {new Date(t.date).toLocaleDateString('en-US', { day: '2-digit', month: 'short' })}, {new Date(t.date).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
                               </div>
-                              <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md w-fit" style={{ background: `${bgColor}15` }}>
+                              <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded w-fit" style={{ background: `${bgColor}15` }}>
                                 <span style={{ color: bgColor }}>{React.cloneElement(iconElement, { size: 12 })}</span>
                                 <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: bgColor }}>{typeLabel}</span>
                               </div>

@@ -86,7 +86,7 @@ const Sidebar = () => {
           </button>
           
           {isOpen && (
-            <div className="absolute right-0 top-full mt-1 w-48 bg-popover border border-border rounded-xl  py-2 z-50">
+            <div className="absolute right-0 top-full mt-1 w-48 bg-popover border border-border rounded  py-2 z-50">
               <Link to="/profile" onClick={closeMenu} className="flex items-center gap-3 px-4 py-2 text-sm text-popover-foreground hover:bg-accent hover:text-accent-foreground transition-colors">
                 <User size={16} /> Profile
               </Link>
@@ -119,14 +119,14 @@ const Sidebar = () => {
           <span className="text-2xl font-bold text-sidebar-foreground tracking-tight">FinSet</span>
         </div>
 
-        <nav className="flex-1 px-4 py-6 flex flex-col gap-1 overflow-y-auto">
+        <nav className="flex-1  py-6 flex flex-col gap-1 overflow-y-auto">
           {navItems.map(item => {
             const isActive = location.pathname === item.path;
             return (
               <Link 
                 key={item.path}
                 to={item.path} 
-                className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
+                className={`flex items-center gap-3 px-4 py-3 rounded text-sm font-medium transition-colors ${
                   isActive 
                     ? 'bg-sidebar-primary text-sidebar-primary-foreground' 
                     : 'text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground'
@@ -139,11 +139,11 @@ const Sidebar = () => {
           })}
         </nav>
 
-        <div className="p-4 border-t border-sidebar-border flex flex-col gap-1 shrink-0">
-          <Link to="/profile" className={`flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors ${location.pathname === '/profile' ? 'bg-sidebar-primary text-sidebar-primary-foreground' : 'text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground'}`}>
+        <div className=" border-t border-sidebar-border flex flex-col gap-1 shrink-0">
+          <Link to="/profile" className={`flex items-center gap-3 px-4 py-2.5 rounded text-sm font-medium transition-colors ${location.pathname === '/profile' ? 'bg-sidebar-primary text-sidebar-primary-foreground' : 'text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground'}`}>
             <User size={18} /> Profile
           </Link>
-          <Link to="/notifications" className={`flex items-center justify-between px-4 py-2.5 rounded-lg text-sm font-medium transition-colors ${location.pathname === '/notifications' ? 'bg-sidebar-primary text-sidebar-primary-foreground' : 'text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground'}`}>
+          <Link to="/notifications" className={`flex items-center justify-between px-4 py-2.5 rounded text-sm font-medium transition-colors ${location.pathname === '/notifications' ? 'bg-sidebar-primary text-sidebar-primary-foreground' : 'text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground'}`}>
             <div className="flex items-center gap-3">
               <Bell size={18} /> Notifications
             </div>
@@ -153,10 +153,10 @@ const Sidebar = () => {
               </span>
             )}
           </Link>
-          <Link to="/settings" className={`flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors ${location.pathname === '/settings' ? 'bg-sidebar-primary text-sidebar-primary-foreground' : 'text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground'}`}>
+          <Link to="/settings" className={`flex items-center gap-3 px-4 py-2.5 rounded text-sm font-medium transition-colors ${location.pathname === '/settings' ? 'bg-sidebar-primary text-sidebar-primary-foreground' : 'text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground'}`}>
             <SettingsIcon size={18} /> Settings
           </Link>
-          <button onClick={handleLogout} className="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium text-sidebar-foreground hover:bg-destructive/10 hover:text-destructive transition-colors">
+          <button onClick={handleLogout} className="w-full flex items-center gap-3 px-4 py-2.5 rounded text-sm font-medium text-sidebar-foreground hover:bg-destructive/10 hover:text-destructive transition-colors">
             <LogOut size={18} /> Log out
           </button>
         </div>

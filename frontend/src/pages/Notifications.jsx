@@ -137,7 +137,7 @@ const Notifications = () => {
     return (
       <div className="flex flex-col w-full h-full pb-10">
         <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-foreground mb-6">Notifications</h1>
-        <div className="p-8 text-center text-muted-foreground bg-card rounded-xl border border-border">Loading...</div>
+        <div className="p-8 text-center text-muted-foreground bg-card rounded border border-border">Loading...</div>
       </div>
     );
   }
@@ -149,13 +149,13 @@ const Notifications = () => {
           <div className="flex gap-4 items-center">
             <button 
               onClick={markAllAsRead} 
-              className="bg-transparent border border-primary text-primary hover:bg-primary/10 text-xs font-bold py-2 px-4 rounded-xl transition-colors flex items-center gap-2"
+              className="bg-transparent border border-primary text-primary hover:bg-primary/10 text-xs font-bold py-2 px-4 rounded transition-colors flex items-center gap-2"
             >
               <Check size={16} /> Mark read
             </button>
             <button 
               onClick={clearAll} 
-              className="bg-transparent border border-destructive text-destructive hover:bg-destructive/10 text-xs font-bold py-2 px-4 rounded-xl transition-colors flex items-center gap-2"
+              className="bg-transparent border border-destructive text-destructive hover:bg-destructive/10 text-xs font-bold py-2 px-4 rounded transition-colors flex items-center gap-2"
             >
               <Trash2 size={16} /> Clear all
             </button>
@@ -164,7 +164,7 @@ const Notifications = () => {
       </div>
 
       {!isPushEnabled && (
-        <div className="bg-card border border-border rounded-2xl p-5 flex flex-wrap justify-between items-center gap-4 mb-6 ">
+        <div className="bg-card border border-border rounded p-5 flex flex-wrap justify-between items-center gap-4 mb-6 ">
           <div>
             <h4 className="flex items-center gap-2 text-foreground font-bold text-sm mb-1">
               <Smartphone size={18} className="text-primary" /> Enable Push Alerts
@@ -173,7 +173,7 @@ const Notifications = () => {
           </div>
           <button 
             onClick={subscribeToPush} 
-            className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-2 px-5 rounded-xl transition-colors text-sm whitespace-nowrap "
+            className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-2 px-5 rounded transition-colors text-sm whitespace-nowrap "
           >
             Enable
           </button>
@@ -182,7 +182,7 @@ const Notifications = () => {
 
       <div className="flex-1">
         {notifications.length === 0 ? (
-          <div className="bg-card border border-border rounded-2xl p-12 text-center flex flex-col items-center justify-center">
+          <div className="bg-card border border-border rounded p-12 text-center flex flex-col items-center justify-center">
             <div className="w-16 h-16 bg-muted/50 rounded-full flex items-center justify-center mb-4">
               <Bell size={32} className="text-muted-foreground/30" />
             </div>
@@ -194,7 +194,7 @@ const Notifications = () => {
             {notifications.map(notif => (
               <div
                 key={notif.id}
-                className={`flex justify-between items-start p-5 rounded-2xl border transition-all ${
+                className={`flex justify-between items-start p-5 rounded border transition-all ${
                   notif.is_read 
                     ? 'bg-card border-border hover:' 
                     : 'bg-primary/5 border-primary/20 '

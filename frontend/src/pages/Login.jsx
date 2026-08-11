@@ -32,7 +32,7 @@ const Login = () => {
   };
 
   return (
-    <div className="w-full flex-1 flex flex-col md:flex-row bg-background md:bg-card md:rounded-3xl md: overflow-hidden md:max-w-5xl md:min-h-[600px] border-border md:border relative z-10">
+    <div className="w-full flex-1 flex flex-col md:flex-row bg-background md:bg-card md:rounded md: overflow-hidden md:max-w-5xl md:min-h-[600px] border-border md:border relative z-10">
       
       {/* Left Abstract Illustration Panel (Desktop Only) */}
       <div className="hidden md:flex md:w-1/2 relative bg-primary items-center justify-center overflow-hidden">
@@ -75,7 +75,7 @@ const Login = () => {
         </div>
 
         {error && (
-          <div className="mb-6 p-3.5 bg-destructive/10 border border-destructive/20 text-destructive text-sm font-bold rounded-xl flex items-center gap-2">
+          <div className="mb-6 p-3.5 bg-destructive/10 border border-destructive/20 text-destructive text-sm font-bold rounded flex items-center gap-2">
             {error}
           </div>
         )}
@@ -91,7 +91,7 @@ const Login = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="w-full bg-background md:bg-muted/30 border border-border rounded-xl pl-11 pr-4 py-3 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 transition-shadow"
+                className="w-full bg-background md:bg-muted/30 border border-border rounded pl-11 pr-4 py-3 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 transition-shadow"
               />
             </div>
           </div>
@@ -109,12 +109,12 @@ const Login = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="w-full bg-background md:bg-muted/30 border border-border rounded-xl pl-11 pr-4 py-3 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 transition-shadow"
+                className="w-full bg-background md:bg-muted/30 border border-border rounded pl-11 pr-4 py-3 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 transition-shadow"
               />
             </div>
           </div>
 
-          <button type="submit" disabled={loading} className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-3.5 rounded-xl transition-all  active:scale-[0.98] flex items-center justify-center gap-2 mt-2">
+          <button type="submit" disabled={loading} className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-3.5 rounded transition-all  active:scale-[0.98] flex items-center justify-center gap-2 mt-2">
             {loading ? 'Authenticating...' : (
               <>Sign In <ArrowRight size={18} /></>
             )}

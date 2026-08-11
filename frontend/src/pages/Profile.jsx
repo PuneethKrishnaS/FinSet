@@ -118,14 +118,14 @@ const Profile = () => {
   if (loading) return (
     <div className="flex flex-col w-full h-full pb-10">
 
-      <div className="p-8 text-center text-muted-foreground bg-card rounded-xl border border-border">Loading profile...</div>
+      <div className="p-8 text-center text-muted-foreground bg-card rounded border border-border">Loading profile...</div>
     </div>
   );
   
   if (!profileData) return (
     <div className="flex flex-col w-full h-full pb-10">
 
-      <div className="p-8 text-center text-destructive bg-card rounded-xl border border-destructive/20">Error loading profile.</div>
+      <div className="p-8 text-center text-destructive bg-card rounded border border-destructive/20">Error loading profile.</div>
     </div>
   );
 
@@ -136,7 +136,7 @@ const Profile = () => {
       <div className="flex flex-col gap-6 md:gap-8 max-w-4xl mx-auto w-full">
         
         {/* Personal Details Card */}
-        <div className="bg-card border border-border rounded-2xl p-6 md:p-8 ">
+        <div className="bg-card border border-border rounded p-6 md:p-8 ">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
             <div className="flex items-center gap-5">
               <div className="w-20 h-20 rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 text-white flex items-center justify-center text-3xl font-bold  shadow-purple-500/20 shrink-0">
@@ -154,7 +154,7 @@ const Profile = () => {
             {!isEditing && (
               <button 
                 onClick={() => setIsEditing(true)}
-                className="bg-transparent border border-border hover:bg-muted text-foreground text-sm font-bold py-2.5 px-5 rounded-xl transition-colors flex items-center gap-2 "
+                className="bg-transparent border border-border hover:bg-muted text-foreground text-sm font-bold py-2.5 px-5 rounded transition-colors flex items-center gap-2 "
               >
                 <Edit2 size={16} /> Edit Profile
               </button>
@@ -162,7 +162,7 @@ const Profile = () => {
           </div>
 
           {isEditing && (
-            <form onSubmit={handleEditSubmit} className="mt-8 bg-muted/30 p-6 rounded-xl border border-border/50">
+            <form onSubmit={handleEditSubmit} className="mt-8 bg-muted/30 p-6 rounded border border-border/50">
               <h3 className="text-base font-bold text-foreground mb-5">Update Information</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
                 <div>
@@ -171,7 +171,7 @@ const Profile = () => {
                     type="text" 
                     value={editForm.first_name}
                     onChange={(e) => setEditForm({...editForm, first_name: e.target.value})}
-                    className="w-full bg-background border border-border rounded-xl px-4 py-2.5 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 "
+                    className="w-full bg-background border border-border rounded px-4 py-2.5 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 "
                   />
                 </div>
                 <div>
@@ -180,7 +180,7 @@ const Profile = () => {
                     type="text" 
                     value={editForm.last_name}
                     onChange={(e) => setEditForm({...editForm, last_name: e.target.value})}
-                    className="w-full bg-background border border-border rounded-xl px-4 py-2.5 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 "
+                    className="w-full bg-background border border-border rounded px-4 py-2.5 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 "
                   />
                 </div>
               </div>
@@ -188,14 +188,14 @@ const Profile = () => {
                 <button 
                   type="button" 
                   onClick={() => setIsEditing(false)} 
-                  className="bg-transparent border border-border hover:bg-background text-foreground text-sm font-bold py-2.5 px-6 rounded-xl transition-colors"
+                  className="bg-transparent border border-border hover:bg-background text-foreground text-sm font-bold py-2.5 px-6 rounded transition-colors"
                 >
                   Cancel
                 </button>
                 <button 
                   type="submit" 
                   disabled={editLoading}
-                  className="bg-primary hover:bg-primary/90 text-primary-foreground text-sm font-bold py-2.5 px-6 rounded-xl transition-colors "
+                  className="bg-primary hover:bg-primary/90 text-primary-foreground text-sm font-bold py-2.5 px-6 rounded transition-colors "
                 >
                   {editLoading ? 'Saving...' : 'Save Changes'}
                 </button>
@@ -205,17 +205,17 @@ const Profile = () => {
         </div>
 
         {/* Security & Password Card */}
-        <div className="bg-card border border-border rounded-2xl p-6 md:p-8 ">
+        <div className="bg-card border border-border rounded p-6 md:p-8 ">
           <div className="mb-8">
             <h3 className="flex items-center gap-3 text-xl font-bold text-foreground mb-2">
-              <div className="p-2 bg-primary/10 text-primary rounded-xl"><Lock size={20} /></div>
+              <div className="p-2 bg-primary/10 text-primary rounded"><Lock size={20} /></div>
               Security & Password
             </h3>
             <p className="text-muted-foreground font-medium text-sm">Keep your account secure by updating your password regularly.</p>
           </div>
           
           {passwordMessage.text && (
-            <div className={`flex items-center gap-3 p-4 rounded-xl mb-6 font-bold text-sm border ${
+            <div className={`flex items-center gap-3 p-4 rounded mb-6 font-bold text-sm border ${
               passwordMessage.type === 'success' 
                 ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20' 
                 : 'bg-destructive/10 text-destructive border-destructive/20'
@@ -234,7 +234,7 @@ const Profile = () => {
                 required
                 value={passwordForm.old_password}
                 onChange={(e) => setPasswordForm({...passwordForm, old_password: e.target.value})}
-                className="w-full bg-background border border-border rounded-xl px-4 py-2.5 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 "
+                className="w-full bg-background border border-border rounded px-4 py-2.5 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 "
               />
             </div>
             
@@ -247,7 +247,7 @@ const Profile = () => {
                   required
                   value={passwordForm.new_password}
                   onChange={(e) => setPasswordForm({...passwordForm, new_password: e.target.value})}
-                  className="w-full bg-background border border-border rounded-xl px-4 py-2.5 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 "
+                  className="w-full bg-background border border-border rounded px-4 py-2.5 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 "
                 />
               </div>
               <div>
@@ -258,7 +258,7 @@ const Profile = () => {
                   required
                   value={passwordForm.confirm_password}
                   onChange={(e) => setPasswordForm({...passwordForm, confirm_password: e.target.value})}
-                  className="w-full bg-background border border-border rounded-xl px-4 py-2.5 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 "
+                  className="w-full bg-background border border-border rounded px-4 py-2.5 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 "
                 />
               </div>
             </div>
@@ -266,7 +266,7 @@ const Profile = () => {
             <button 
               type="submit" 
               disabled={passwordLoading}
-              className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-2.5 px-6 rounded-xl transition-colors  text-sm"
+              className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-2.5 px-6 rounded transition-colors  text-sm"
             >
               {passwordLoading ? 'Updating Password...' : 'Update Password'}
             </button>
@@ -274,12 +274,12 @@ const Profile = () => {
         </div>
 
         {/* Data & Privacy Card */}
-        <div className="bg-card border border-border rounded-2xl p-6 md:p-8 ">
+        <div className="bg-card border border-border rounded p-6 md:p-8 ">
           <h3 className="text-xl font-bold text-foreground mb-6">
             Data & Privacy
           </h3>
           
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 p-6 bg-background rounded-xl border border-border mb-4">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 p-6 bg-background rounded border border-border mb-4">
             <div>
               <p className="font-bold text-foreground text-base mb-1">Export Financial Data</p>
               <p className="text-muted-foreground text-sm font-medium leading-relaxed max-w-xl">
@@ -289,13 +289,13 @@ const Profile = () => {
             <button 
               onClick={handleExportData}
               disabled={exportLoading}
-              className="bg-secondary hover:bg-secondary/80 text-secondary-foreground border border-border font-bold py-2.5 px-5 rounded-xl transition-colors  text-sm flex items-center gap-2 whitespace-nowrap shrink-0"
+              className="bg-secondary hover:bg-secondary/80 text-secondary-foreground border border-border font-bold py-2.5 px-5 rounded transition-colors  text-sm flex items-center gap-2 whitespace-nowrap shrink-0"
             >
               <Download size={18} /> {exportLoading ? 'Exporting...' : 'Export Data'}
             </button>
           </div>
 
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 p-6 bg-destructive/5 rounded-xl border border-destructive/20">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 p-6 bg-destructive/5 rounded border border-destructive/20">
             <div>
               <p className="font-bold text-destructive text-base mb-1">Delete Account</p>
               <p className="text-destructive/80 text-sm font-medium leading-relaxed max-w-xl">
@@ -304,7 +304,7 @@ const Profile = () => {
             </div>
             <button 
               onClick={() => setShowDeleteConfirm(true)}
-              className="bg-destructive hover:bg-destructive/90 text-destructive-foreground font-bold py-2.5 px-5 rounded-xl transition-colors  text-sm flex items-center gap-2 whitespace-nowrap shrink-0"
+              className="bg-destructive hover:bg-destructive/90 text-destructive-foreground font-bold py-2.5 px-5 rounded transition-colors  text-sm flex items-center gap-2 whitespace-nowrap shrink-0"
             >
               <Trash2 size={18} /> Delete Account
             </button>
@@ -316,10 +316,10 @@ const Profile = () => {
       {/* Delete Confirmation Modal */}
       {showDeleteConfirm && (
         <div className="fixed inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-card p-8 rounded-3xl max-w-md w-full  border border-border relative">
+          <div className="bg-card p-8 rounded max-w-md w-full  border border-border relative">
             <div className="flex justify-between items-start mb-6">
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-xl bg-destructive/10 text-destructive flex items-center justify-center">
+                <div className="w-12 h-12 rounded bg-destructive/10 text-destructive flex items-center justify-center">
                   <AlertTriangle size={24} />
                 </div>
                 <h2 className="text-xl font-bold text-foreground">Delete Account?</h2>
@@ -340,14 +340,14 @@ const Profile = () => {
               <button 
                 onClick={() => setShowDeleteConfirm(false)}
                 disabled={deleteLoading}
-                className="bg-transparent border border-border hover:bg-muted text-foreground text-sm font-bold py-3 rounded-xl transition-colors"
+                className="bg-transparent border border-border hover:bg-muted text-foreground text-sm font-bold py-3 rounded transition-colors"
               >
                 Cancel
               </button>
               <button 
                 onClick={handleDeleteAccount}
                 disabled={deleteLoading}
-                className="bg-destructive hover:bg-destructive/90 text-destructive-foreground text-sm font-bold py-3 rounded-xl transition-colors  shadow-destructive/20"
+                className="bg-destructive hover:bg-destructive/90 text-destructive-foreground text-sm font-bold py-3 rounded transition-colors  shadow-destructive/20"
               >
                 {deleteLoading ? 'Deleting...' : 'Yes, Delete'}
               </button>

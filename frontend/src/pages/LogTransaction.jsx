@@ -98,7 +98,7 @@ const LogTransaction = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
 
         {/* Left Column: Log Form */}
-        <div className="lg:col-span-2 bg-card rounded-2xl border border-border  overflow-hidden">
+        <div className="lg:col-span-2 bg-card rounded border border-border  overflow-hidden">
           
           {/* Header Toggle */}
           <div className="flex border-b border-border bg-muted/30">
@@ -163,7 +163,7 @@ const LogTransaction = () => {
                   value={date}
                   onChange={(e) => setDate(e.target.value)}
                   required
-                  className="w-full bg-background border border-border rounded-xl px-4 py-3 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
+                  className="w-full bg-background border border-border rounded px-4 py-3 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
                 />
               </div>
 
@@ -177,7 +177,7 @@ const LogTransaction = () => {
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   required={type === 'expense' && category === 'other'}
-                  className="w-full bg-background border border-border rounded-xl px-4 py-3 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
+                  className="w-full bg-background border border-border rounded px-4 py-3 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
                 />
               </div>
             </div>
@@ -198,7 +198,7 @@ const LogTransaction = () => {
                       <div
                         key={c.id}
                         onClick={() => setCategory(c.name)}
-                        className={`flex flex-col items-center justify-center p-3 rounded-xl cursor-pointer transition-all border-2 select-none ${
+                        className={`flex flex-col items-center justify-center p-3 rounded cursor-pointer transition-all border-2 select-none ${
                           isSelected ? 'bg-primary/5 border-primary ' : 'bg-muted/30 border-transparent hover:bg-muted/60'
                         }`}
                       >
@@ -228,7 +228,7 @@ const LogTransaction = () => {
                       <div
                         key={c.value}
                         onClick={() => setIncomeSource(c.value)}
-                        className={`flex flex-col items-center justify-center p-3 rounded-xl cursor-pointer transition-all border-2 select-none ${
+                        className={`flex flex-col items-center justify-center p-3 rounded cursor-pointer transition-all border-2 select-none ${
                           isSelected ? 'bg-emerald-500/5 border-emerald-500 ' : 'bg-muted/30 border-transparent hover:bg-muted/60'
                         }`}
                       >
@@ -253,8 +253,8 @@ const LogTransaction = () => {
             </div>
 
             {/* Recurring Toggle */}
-            <label className="flex items-center gap-3 p-4 bg-muted/40 rounded-xl cursor-pointer hover:bg-muted/60 transition-colors border border-border/50">
-              <div className={`w-5 h-5 rounded-md flex items-center justify-center transition-colors border ${isRecurring ? 'bg-primary border-primary' : 'bg-background border-input'}`}>
+            <label className="flex items-center gap-3 p-4 bg-muted/40 rounded cursor-pointer hover:bg-muted/60 transition-colors border border-border/50">
+              <div className={`w-5 h-5 rounded flex items-center justify-center transition-colors border ${isRecurring ? 'bg-primary border-primary' : 'bg-background border-input'}`}>
                 {isRecurring && <Check size={14} className="text-primary-foreground" />}
               </div>
               <input
@@ -272,7 +272,7 @@ const LogTransaction = () => {
             <button
               type="submit"
               disabled={submitting || !isFormValid}
-              className={`w-full flex items-center justify-center gap-2 py-4 rounded-xl text-base font-bold text-white transition-all  active:scale-[0.98] ${
+              className={`w-full flex items-center justify-center gap-2 py-4 rounded text-base font-bold text-white transition-all  active:scale-[0.98] ${
                 !isFormValid || submitting 
                   ? 'bg-muted-foreground/40 cursor-not-allowed shadow-none'
                   : type === 'expense' 
@@ -289,7 +289,7 @@ const LogTransaction = () => {
 
         {/* Right Column: Mini History Feed */}
         <div className="lg:sticky lg:top-6">
-          <div className="bg-card rounded-2xl border border-border p-5 md:p-6 ">
+          <div className="bg-card rounded border border-border p-5 md:p-6 ">
             <div className="flex justify-between items-center mb-6">
               <h3 className="text-base font-bold text-foreground flex items-center gap-2">
                 <History size={18} className="text-primary" /> Recent Activity
@@ -304,7 +304,7 @@ const LogTransaction = () => {
 
             <div className="space-y-4">
               {recentTransactions.length === 0 ? (
-                <div className="py-8 text-center text-sm font-medium text-muted-foreground bg-muted/20 rounded-xl">
+                <div className="py-8 text-center text-sm font-medium text-muted-foreground bg-muted/20 rounded">
                   No recent transactions found.
                 </div>
               ) : (

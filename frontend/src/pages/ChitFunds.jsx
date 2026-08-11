@@ -108,7 +108,7 @@ const ChitFunds = () => {
         <div className="flex justify-end">
           <button 
             onClick={() => setShowCreateForm(!showCreateForm)}
-            className="bg-primary hover:bg-primary/90 text-primary-foreground text-sm font-bold py-2 px-4 rounded-xl transition-colors  active:scale-[0.98] flex items-center gap-2"
+            className="bg-primary hover:bg-primary/90 text-primary-foreground text-sm font-bold py-2 px-4 rounded transition-colors  active:scale-[0.98] flex items-center gap-2"
           >
             {showCreateForm ? 'Cancel' : <><Plus size={16} /> New Chit Fund</>}
           </button>
@@ -117,7 +117,7 @@ const ChitFunds = () => {
 
       {/* Create Form */}
       {showCreateForm && (
-        <div className="bg-card border border-border rounded-2xl p-6  mb-6 relative overflow-hidden">
+        <div className="bg-card border border-border rounded p-6  mb-6 relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-50"></div>
           <div className="relative z-10">
             <h3 className="text-lg font-bold text-foreground mb-5 flex items-center gap-2">
@@ -131,7 +131,7 @@ const ChitFunds = () => {
                   required
                   value={newChit.name} 
                   onChange={e => setNewChit({...newChit, name: e.target.value})} 
-                  className="w-full bg-background border border-border rounded-xl px-4 py-2.5 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50"
+                  className="w-full bg-background border border-border rounded px-4 py-2.5 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50"
                 />
               </div>
               <div>
@@ -143,7 +143,7 @@ const ChitFunds = () => {
                     step="0.01"
                     value={newChit.target_amount} 
                     onChange={e => setNewChit({...newChit, target_amount: e.target.value})} 
-                    className="w-full bg-background border border-border rounded-xl pl-8 pr-4 py-2.5 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50"
+                    className="w-full bg-background border border-border rounded pl-8 pr-4 py-2.5 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50"
                   />
                 </div>
               </div>
@@ -154,7 +154,7 @@ const ChitFunds = () => {
                   required
                   value={newChit.start_date} 
                   onChange={e => setNewChit({...newChit, start_date: e.target.value})} 
-                  className="w-full bg-background border border-border rounded-xl px-4 py-2.5 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50"
+                  className="w-full bg-background border border-border rounded px-4 py-2.5 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50"
                 />
               </div>
               <div>
@@ -164,11 +164,11 @@ const ChitFunds = () => {
                   required
                   value={newChit.duration_months} 
                   onChange={e => setNewChit({...newChit, duration_months: parseInt(e.target.value)})} 
-                  className="w-full bg-background border border-border rounded-xl px-4 py-2.5 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50"
+                  className="w-full bg-background border border-border rounded px-4 py-2.5 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50"
                 />
               </div>
               <div className="lg:col-span-5 flex justify-end mt-2">
-                <button type="submit" className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-2.5 px-6 rounded-xl transition-colors ">
+                <button type="submit" className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-2.5 px-6 rounded transition-colors ">
                   Create
                 </button>
               </div>
@@ -180,9 +180,9 @@ const ChitFunds = () => {
       {/* Chit Funds List */}
       <div className="flex flex-col gap-6">
         {!chitFundsLoaded ? (
-          <div className="text-center p-8 text-muted-foreground bg-card border border-border rounded-2xl">Loading...</div>
+          <div className="text-center p-8 text-muted-foreground bg-card border border-border rounded">Loading...</div>
         ) : chits.length === 0 ? (
-          <div className="bg-card border border-border rounded-2xl p-12 text-center flex flex-col items-center justify-center">
+          <div className="bg-card border border-border rounded p-12 text-center flex flex-col items-center justify-center">
             <div className="w-16 h-16 bg-muted/50 rounded-full flex items-center justify-center mb-4">
               <PieChart size={32} className="text-muted-foreground/50" />
             </div>
@@ -197,7 +197,7 @@ const ChitFunds = () => {
             const targetStr = chit.target_amount ? formatCurrency(chit.target_amount) : 'Flexible';
             
             return (
-              <div key={chit.id} className="bg-card border border-border rounded-2xl overflow-hidden hover: transition-shadow">
+              <div key={chit.id} className="bg-card border border-border rounded overflow-hidden hover: transition-shadow">
                 <div 
                   onClick={() => setExpandedChitId(expandedChitId === chit.id ? null : chit.id)}
                   className="p-5 md:p-6 flex flex-wrap gap-6 justify-between items-center cursor-pointer group hover:bg-muted/10 transition-colors"
@@ -213,7 +213,7 @@ const ChitFunds = () => {
                       <span className="flex items-center gap-1.5">
                         <Calendar size={14} /> Started {chit.start_date}
                       </span>
-                      <span className="flex items-center gap-1.5 bg-muted/50 px-2 py-0.5 rounded-md">
+                      <span className="flex items-center gap-1.5 bg-muted/50 px-2 py-0.5 rounded">
                         <Target size={14} /> Target: <strong className="text-foreground">{targetStr}</strong>
                       </span>
                     </div>
@@ -257,27 +257,27 @@ const ChitFunds = () => {
                 <div className="bg-background border-t border-border p-5 md:p-6">
                   
                   {selectedChitId === chit.id ? (
-                    <div className="bg-card border border-border p-5 rounded-xl mb-6">
+                    <div className="bg-card border border-border p-5 rounded mb-6">
                       <h4 className="text-sm font-bold mb-4">Log New Contribution</h4>
                       <form onSubmit={(e) => handleAddContribution(e, chit.id)} className="flex flex-wrap gap-4 items-end">
                         <div>
                           <label className="block text-xs font-semibold text-foreground mb-1.5">Month Num</label>
-                          <input type="number" min="1" max={chit.duration_months} required value={contribution.month_number} onChange={e => setContribution({...contribution, month_number: e.target.value})} className="w-20 bg-background border border-border rounded-xl px-3 py-2.5 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50" />
+                          <input type="number" min="1" max={chit.duration_months} required value={contribution.month_number} onChange={e => setContribution({...contribution, month_number: e.target.value})} className="w-20 bg-background border border-border rounded px-3 py-2.5 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50" />
                         </div>
                         <div>
                           <label className="block text-xs font-semibold text-foreground mb-1.5">Amount Paid</label>
                           <div className="relative flex items-center">
                             <span className="absolute left-3 text-muted-foreground font-bold">{currencySymbol}</span>
-                            <input type="number" step="0.01" required value={contribution.amount} onChange={e => setContribution({...contribution, amount: e.target.value})} className="w-32 bg-background border border-border rounded-xl pl-8 pr-3 py-2.5 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50" />
+                            <input type="number" step="0.01" required value={contribution.amount} onChange={e => setContribution({...contribution, amount: e.target.value})} className="w-32 bg-background border border-border rounded pl-8 pr-3 py-2.5 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50" />
                           </div>
                         </div>
                         <div>
                           <label className="block text-xs font-semibold text-foreground mb-1.5">Payment Date</label>
-                          <input type="date" required value={contribution.date} onChange={e => setContribution({...contribution, date: e.target.value})} className="w-40 bg-background border border-border rounded-xl px-3 py-2.5 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50" />
+                          <input type="date" required value={contribution.date} onChange={e => setContribution({...contribution, date: e.target.value})} className="w-40 bg-background border border-border rounded px-3 py-2.5 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50" />
                         </div>
                         <div className="flex gap-2">
-                          <button type="submit" className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-2.5 px-5 rounded-xl transition-colors text-sm">Save</button>
-                          <button type="button" onClick={() => setSelectedChitId(null)} className="bg-muted hover:bg-muted/80 text-foreground font-bold py-2.5 px-5 rounded-xl transition-colors text-sm">Cancel</button>
+                          <button type="submit" className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-2.5 px-5 rounded transition-colors text-sm">Save</button>
+                          <button type="button" onClick={() => setSelectedChitId(null)} className="bg-muted hover:bg-muted/80 text-foreground font-bold py-2.5 px-5 rounded transition-colors text-sm">Cancel</button>
                         </div>
                       </form>
                     </div>
@@ -288,12 +288,12 @@ const ChitFunds = () => {
                         <button onClick={() => {
                           setSelectedChitId(chit.id);
                           setContribution({ ...contribution, month_number: monthsPaid + 1 });
-                        }} className="bg-primary/10 hover:bg-primary/20 text-primary text-xs font-bold py-1.5 px-3 rounded-lg transition-colors flex items-center gap-1.5">
+                        }} className="bg-primary/10 hover:bg-primary/20 text-primary text-xs font-bold py-1.5 px-3 rounded transition-colors flex items-center gap-1.5">
                           <Plus size={14} /> Log Payment
                         </button>
                       </div>
                       
-                      <div className="overflow-x-auto rounded-xl border border-border">
+                      <div className="overflow-x-auto rounded border border-border">
                         {chit.contributions.length === 0 ? (
                           <div className="flex items-center justify-center gap-2 py-8 text-sm text-muted-foreground bg-muted/20">
                             <Info size={16} /> No contributions logged yet.
@@ -323,15 +323,15 @@ const ChitFunds = () => {
                                   <tr key={`edit-${c.id}`} className="bg-primary/5">
                                     <td colSpan={7} className="p-3">
                                       <form onSubmit={(e) => handleEditContributionSubmit(e, c.id)} className="flex gap-2 items-center">
-                                        <input type="number" min="1" max={chit.duration_months} required value={editingContributionData.month_number} onChange={e => setEditingContributionData({...editingContributionData, month_number: e.target.value})} className="w-16 bg-background border border-border rounded-lg px-2 py-1.5 text-xs text-foreground font-medium" />
-                                        <input type="date" required value={editingContributionData.date} onChange={e => setEditingContributionData({...editingContributionData, date: e.target.value})} className="w-32 bg-background border border-border rounded-lg px-2 py-1.5 text-xs text-foreground font-medium" />
+                                        <input type="number" min="1" max={chit.duration_months} required value={editingContributionData.month_number} onChange={e => setEditingContributionData({...editingContributionData, month_number: e.target.value})} className="w-16 bg-background border border-border rounded px-2 py-1.5 text-xs text-foreground font-medium" />
+                                        <input type="date" required value={editingContributionData.date} onChange={e => setEditingContributionData({...editingContributionData, date: e.target.value})} className="w-32 bg-background border border-border rounded px-2 py-1.5 text-xs text-foreground font-medium" />
                                         <div className="relative flex items-center">
                                           <span className="absolute left-2 text-muted-foreground font-bold text-xs">{currencySymbol}</span>
-                                          <input type="number" step="0.01" required value={editingContributionData.amount} onChange={e => setEditingContributionData({...editingContributionData, amount: e.target.value})} className="w-24 bg-background border border-border rounded-lg pl-6 pr-2 py-1.5 text-xs text-foreground font-medium" />
+                                          <input type="number" step="0.01" required value={editingContributionData.amount} onChange={e => setEditingContributionData({...editingContributionData, amount: e.target.value})} className="w-24 bg-background border border-border rounded pl-6 pr-2 py-1.5 text-xs text-foreground font-medium" />
                                         </div>
                                         <div className="flex gap-1 ml-auto">
-                                          <button type="submit" className="bg-primary text-primary-foreground text-xs font-bold py-1.5 px-3 rounded-lg">Save</button>
-                                          <button type="button" onClick={() => setEditingContributionId(null)} className="bg-muted text-foreground text-xs font-bold py-1.5 px-3 rounded-lg">Cancel</button>
+                                          <button type="submit" className="bg-primary text-primary-foreground text-xs font-bold py-1.5 px-3 rounded">Save</button>
+                                          <button type="button" onClick={() => setEditingContributionId(null)} className="bg-muted text-foreground text-xs font-bold py-1.5 px-3 rounded">Cancel</button>
                                         </div>
                                       </form>
                                     </td>

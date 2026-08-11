@@ -44,7 +44,7 @@ const CalendarOverlay = ({ isOpen, onClose, transactions, formatCurrency }) => {
         {/* Calendar Header */}
         <div className="flex justify-between items-center p-4 border-b border-border bg-muted/30">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
+            <div className="w-10 h-10 rounded bg-primary/10 text-primary flex items-center justify-center">
               <CalendarIcon size={20} />
             </div>
             <h2 className="text-xl font-bold text-foreground m-0">Transaction Calendar</h2>
@@ -217,7 +217,7 @@ const Dashboard = () => {
         <div className="lg:col-span-8 flex flex-col gap-6">
           
           {/* The Consolidated Passbook */}
-          <section className="bg-card rounded-2xl  border border-border p-6 md:p-8">
+          <section className="bg-card rounded  border border-border p-6 md:p-8">
             <div className="flex justify-between items-start mb-6">
               <div>
                 <div className="text-muted-foreground text-xs md:text-sm font-bold uppercase tracking-widest mb-2">Total Net Balance</div>
@@ -261,10 +261,10 @@ const Dashboard = () => {
           </section>
 
           {/* Quick-Action Grid */}
-          <section className="bg-card rounded-2xl  border border-border p-6">
+          <section className="bg-card rounded  border border-border p-6">
             <div className="grid grid-cols-4 gap-4 md:gap-6">
               <button onClick={() => navigate('/log?type=expense')} className="flex flex-col items-center justify-center gap-3 group">
-                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-red-100 to-red-50 dark:from-red-900/30 dark:to-red-900/10 flex items-center justify-center  group-active:scale-95 transition-transform relative overflow-hidden">
+                <div className="w-14 h-14 rounded bg-gradient-to-br from-red-100 to-red-50 dark:from-red-900/30 dark:to-red-900/10 flex items-center justify-center  group-active:scale-95 transition-transform relative overflow-hidden">
                   <MinusCircle size={28} className="text-red-500 relative z-10" />
                   <div className="absolute inset-0 bg-white/20 dark:bg-white/5" />
                 </div>
@@ -272,7 +272,7 @@ const Dashboard = () => {
               </button>
               
               <button onClick={() => navigate('/log?type=income')} className="flex flex-col items-center justify-center gap-3 group">
-                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-100 to-emerald-50 dark:from-emerald-900/30 dark:to-emerald-900/10 flex items-center justify-center  group-active:scale-95 transition-transform relative overflow-hidden">
+                <div className="w-14 h-14 rounded bg-gradient-to-br from-emerald-100 to-emerald-50 dark:from-emerald-900/30 dark:to-emerald-900/10 flex items-center justify-center  group-active:scale-95 transition-transform relative overflow-hidden">
                   <PlusCircle size={28} className="text-emerald-500 relative z-10" />
                   <div className="absolute inset-0 bg-white/20 dark:bg-white/5" />
                 </div>
@@ -280,7 +280,7 @@ const Dashboard = () => {
               </button>
               
               <button onClick={() => navigate('/budgets')} className="flex flex-col items-center justify-center gap-3 group">
-                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-100 to-blue-50 dark:from-blue-900/30 dark:to-blue-900/10 flex items-center justify-center  group-active:scale-95 transition-transform relative overflow-hidden">
+                <div className="w-14 h-14 rounded bg-gradient-to-br from-blue-100 to-blue-50 dark:from-blue-900/30 dark:to-blue-900/10 flex items-center justify-center  group-active:scale-95 transition-transform relative overflow-hidden">
                   <Target size={28} className="text-blue-500 relative z-10" />
                   <div className="absolute inset-0 bg-white/20 dark:bg-white/5" />
                 </div>
@@ -288,7 +288,7 @@ const Dashboard = () => {
               </button>
               
               <button onClick={() => navigate('/history')} className="flex flex-col items-center justify-center gap-3 group">
-                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-slate-100 to-slate-50 dark:from-slate-800/50 dark:to-slate-800/20 flex items-center justify-center  group-active:scale-95 transition-transform relative overflow-hidden">
+                <div className="w-14 h-14 rounded bg-gradient-to-br from-slate-100 to-slate-50 dark:from-slate-800/50 dark:to-slate-800/20 flex items-center justify-center  group-active:scale-95 transition-transform relative overflow-hidden">
                   <History size={28} className="text-slate-600 dark:text-slate-300 relative z-10" />
                   <div className="absolute inset-0 bg-white/20 dark:bg-white/5" />
                 </div>
@@ -298,7 +298,7 @@ const Dashboard = () => {
           </section>
 
           {/* Cash Flow Chart */}
-          <section className="bg-card rounded-2xl  border border-border p-6">
+          <section className="bg-card rounded  border border-border p-6">
             <h3 className="text-lg md:text-xl font-bold text-foreground mb-6">Cash Flow</h3>
             <div className="h-[260px] w-full -ml-4">
               {processedData.cashFlowData.length > 0 ? (
@@ -329,7 +329,7 @@ const Dashboard = () => {
           </section>
 
           {/* Category Breakdown */}
-          <section className="bg-card rounded-2xl  border border-border p-6">
+          <section className="bg-card rounded  border border-border p-6">
             <h3 className="text-lg md:text-xl font-bold text-foreground mb-6">Where your money goes</h3>
             
             {processedData.pieData.length > 0 ? (
@@ -354,7 +354,7 @@ const Dashboard = () => {
                     const icon = cat ? getIconForCategory(cat, 18) : <MoreHorizontal size={18} />;
                     const percentage = ((cat.value / dashboardData.total_expense) * 100).toFixed(0);
                     return (
-                      <div key={i} className="flex items-center justify-between py-3 border-b border-border/50 last:border-0 hover:bg-muted/30 transition-colors px-2 rounded-lg cursor-default">
+                      <div key={i} className="flex items-center justify-between py-3 border-b border-border/50 last:border-0 hover:bg-muted/30 transition-colors px-2 rounded cursor-default">
                         <div className="flex items-center gap-4">
                           <div className="w-10 h-10 rounded-full flex items-center justify-center shrink-0" style={{ backgroundColor: `${COLORS[i % COLORS.length]}15`, color: COLORS[i % COLORS.length] }}>
                             {icon}
@@ -381,7 +381,7 @@ const Dashboard = () => {
         <div className="lg:col-span-4 flex flex-col gap-6">
           
           {/* Recent Activity */}
-          <section className="bg-card rounded-2xl  border border-border p-6 flex flex-col h-full min-h-[400px]">
+          <section className="bg-card rounded  border border-border p-6 flex flex-col h-full min-h-[400px]">
             <div className="flex justify-between items-center mb-6">
               <h3 className="text-lg md:text-xl font-bold text-foreground m-0">Recent Activity</h3>
               <button onClick={() => navigate('/history')} className="text-primary text-sm font-bold hover:text-primary/80 transition-colors">View All</button>
@@ -403,7 +403,7 @@ const Dashboard = () => {
                   }
 
                   return (
-                    <div key={i} className="flex items-center gap-3 py-3 border-b border-border/50 last:border-0 hover:bg-muted/30 transition-colors px-1 rounded-lg cursor-pointer">
+                    <div key={i} className="flex items-center gap-3 py-3 border-b border-border/50 last:border-0 hover:bg-muted/30 transition-colors px-1 rounded cursor-pointer">
                       <div className="w-10 h-10 rounded-full flex items-center justify-center shrink-0" style={{ backgroundColor: `${bgColor}15`, color: bgColor }}>
                         {isInc ? <ArrowDownRight size={18} /> : getIconForCategory({ name: typeLabel, color: bgColor }, 18)}
                       </div>

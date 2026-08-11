@@ -26,7 +26,7 @@ const ForgotPassword = () => {
   };
 
   return (
-    <div className="w-full flex-1 flex flex-col md:flex-row bg-background md:bg-card md:rounded-3xl md: overflow-hidden md:max-w-5xl md:min-h-[600px] border-border md:border relative z-10">
+    <div className="w-full flex-1 flex flex-col md:flex-row bg-background md:bg-card md:rounded md: overflow-hidden md:max-w-5xl md:min-h-[600px] border-border md:border relative z-10">
       
       {/* Left Abstract Illustration Panel (Desktop Only) */}
       <div className="hidden md:flex md:w-1/2 relative bg-primary items-center justify-center overflow-hidden">
@@ -69,7 +69,7 @@ const ForgotPassword = () => {
         </div>
 
         {error && (
-          <div className="mb-6 p-3.5 bg-destructive/10 border border-destructive/20 text-destructive text-sm font-bold rounded-xl flex items-center gap-2">
+          <div className="mb-6 p-3.5 bg-destructive/10 border border-destructive/20 text-destructive text-sm font-bold rounded flex items-center gap-2">
             {error}
           </div>
         )}
@@ -81,7 +81,7 @@ const ForgotPassword = () => {
             <p className="text-sm font-medium text-muted-foreground mb-8">
               We've sent a password reset link to <strong className="text-foreground">{email}</strong>. Please check your inbox (and terminal in dev mode).
             </p>
-            <Link to="/login" className="inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-3 px-6 rounded-xl transition-all  active:scale-[0.98]">
+            <Link to="/login" className="inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-3 px-6 rounded transition-all  active:scale-[0.98]">
               <ArrowLeft size={16} /> Back to Login
             </Link>
           </div>
@@ -97,12 +97,12 @@ const ForgotPassword = () => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="w-full bg-background md:bg-muted/30 border border-border rounded-xl pl-11 pr-4 py-3 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 transition-shadow"
+                  className="w-full bg-background md:bg-muted/30 border border-border rounded pl-11 pr-4 py-3 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 transition-shadow"
                 />
               </div>
             </div>
 
-            <button type="submit" disabled={loading} className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-3.5 rounded-xl transition-all  active:scale-[0.98] flex items-center justify-center gap-2 mt-2">
+            <button type="submit" disabled={loading} className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-3.5 rounded transition-all  active:scale-[0.98] flex items-center justify-center gap-2 mt-2">
               {loading ? 'Sending link...' : (
                 <>Send Reset Link <ArrowRight size={18} /></>
               )}

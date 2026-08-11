@@ -137,9 +137,9 @@ const Budget = () => {
         {/* Left Side: Budget List */}
         <div className="lg:col-span-2 flex flex-col gap-4">
           {loading ? (
-            <div className="p-8 text-center text-muted-foreground bg-card rounded-xl border border-border">Loading...</div>
+            <div className="p-8 text-center text-muted-foreground bg-card rounded border border-border">Loading...</div>
           ) : budgets.length === 0 ? (
-            <div className="bg-card border border-border rounded-2xl p-12 text-center flex flex-col items-center justify-center">
+            <div className="bg-card border border-border rounded p-12 text-center flex flex-col items-center justify-center">
               <div className="w-16 h-16 bg-muted/50 rounded-full flex items-center justify-center mb-4">
                 <Target size={32} className="text-muted-foreground/50" />
               </div>
@@ -158,7 +158,7 @@ const Budget = () => {
               const icon = catObj ? getIconForCategory(catObj, 20) : <Target size={20} />;
 
               return (
-                <div key={b.id} className="bg-card border border-border rounded-2xl p-5 flex items-center gap-5 hover: transition-shadow group">
+                <div key={b.id} className="bg-card border border-border rounded p-5 flex items-center gap-5 hover: transition-shadow group">
                   
                   {/* Circular Gauge */}
                   <div className="shrink-0">
@@ -168,7 +168,7 @@ const Budget = () => {
                   {/* Details */}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
-                      <div className="text-muted-foreground bg-muted/30 p-1.5 rounded-md">{icon}</div>
+                      <div className="text-muted-foreground bg-muted/30 p-1.5 rounded">{icon}</div>
                       <span className="font-bold text-base text-foreground truncate">{catLabel}</span>
                       {isOver && <AlertCircle size={16} className="text-destructive shrink-0" />}
                     </div>
@@ -204,12 +204,12 @@ const Budget = () => {
         <div className="lg:sticky lg:top-6 flex flex-col gap-6">
           
           {/* Overview Panel */}
-          <div className="bg-card border border-border rounded-2xl p-6 relative overflow-hidden group">
+          <div className="bg-card border border-border rounded p-6 relative overflow-hidden group">
             <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-50"></div>
             <div className="relative z-10">
               <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-4 flex justify-between items-center">
                 Month Overview
-                <span className="flex items-center gap-1.5 text-primary bg-primary/10 px-2 py-1 rounded-md normal-case text-[11px]">
+                <span className="flex items-center gap-1.5 text-primary bg-primary/10 px-2 py-1 rounded normal-case text-[11px]">
                   <Calendar size={14} /> {daysLeft} days left
                 </span>
               </h3>
@@ -235,7 +235,7 @@ const Budget = () => {
           </div>
 
           {/* Create Form Panel */}
-          <div className="bg-card border border-border rounded-2xl p-6 ">
+          <div className="bg-card border border-border rounded p-6 ">
             <h3 className="text-base font-bold text-foreground mb-5 flex items-center gap-2">
               <Plus size={18} className="text-primary" /> Create Budget
             </h3>
@@ -245,7 +245,7 @@ const Budget = () => {
                 <select 
                   value={category} 
                   onChange={(e) => setCategory(e.target.value)}
-                  className="w-full bg-background border border-border rounded-xl px-4 py-2.5 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50"
+                  className="w-full bg-background border border-border rounded px-4 py-2.5 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50"
                 >
                   {categories.map(c => (
                     <option key={c.id} value={c.name}>{c.name}</option>
@@ -263,13 +263,13 @@ const Budget = () => {
                     placeholder="0.00"
                     value={amount}
                     onChange={(e) => setAmount(e.target.value)}
-                    className="w-full bg-background border border-border rounded-xl pl-10 pr-4 py-2.5 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50"
+                    className="w-full bg-background border border-border rounded pl-10 pr-4 py-2.5 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50"
                   />
                 </div>
               </div>
               <button 
                 type="submit" 
-                className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-3 rounded-xl transition-colors  active:scale-[0.98]"
+                className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-3 rounded transition-colors  active:scale-[0.98]"
               >
                 Save Budget
               </button>
