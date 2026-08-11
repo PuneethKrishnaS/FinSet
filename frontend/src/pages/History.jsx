@@ -6,8 +6,9 @@ import {
   Download, Search, Trash2, Filter,
   Home, Coffee, Car, Zap, 
   Film, ShoppingBag, HeartPulse, MoreHorizontal,
-  Briefcase, TrendingUp, TrendingDown, Wallet
+  Briefcase, TrendingUp, TrendingDown, Wallet, ChevronRight
 } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import useFinanceStore from '../store/useFinanceStore';
 import { getCategoryIcon, getIconForCategory } from '../utils/CategoryIcons';
 import ConfirmDialog from '../components/ConfirmDialog';
@@ -97,6 +98,25 @@ const History = () => {
   const filteredIncome = filteredTransactions.filter(t => t.type === 'income').reduce((acc, t) => acc + parseFloat(t.amount), 0);
   const filteredExpense = filteredTransactions.filter(t => t.type === 'expense').reduce((acc, t) => acc + parseFloat(t.amount), 0);
   const filteredNet = filteredIncome - filteredExpense;
+
+  // Group transactions by month
+  const groupedTransactions = React.useMemo(() => {
+    const groups = [];
+    filteredTransactions.forEach(t => {
+      const dateObj = new Date(t.date);
+      const monthYear = dateObj.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+      let group = groups.find(g => g.label === monthYear);
+      if (!group) {
+        group = { label: monthYear, totalSpent: 0, transactions: [] };
+        groups.push(group);
+      }
+      if (t.type === 'expense') {
+        group.totalSpent += parseFloat(t.amount);
+      }
+      group.transactions.push(t);
+    });
+    return groups;
+  }, [filteredTransactions]);
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100%', fontSize: '0.85rem', width: '100%' }}>
@@ -212,63 +232,104 @@ const History = () => {
               <div style={{ fontSize: '0.85rem', marginTop: '0.25rem' }}>Try adjusting your search or filters.</div>
             </div>
           ) : (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-              {filteredTransactions.map(t => {
-                const isInc = t.type === 'income';
-                let iconElement = <MoreHorizontal size={18} />;
-                let bgColor = '#64748b';
-                let typeLabel = 'Other';
-                
-                if (isInc) {
-                  const sourceObj = INCOME_SOURCES.find(s => s.value === t.categoryKey) || INCOME_SOURCES.find(s => s.label.toLowerCase() === t.categoryKey);
-                  if (sourceObj) { iconElement = <sourceObj.icon size={18} />; bgColor = sourceObj.color; typeLabel = sourceObj.label; }
-                  else { typeLabel = t.displayTitle; }
-                } else {
-                  const catObj = categories.find(c => c.name.toLowerCase() === t.categoryKey);
-                  typeLabel = catObj ? catObj.name : t.category;
-                  iconElement = catObj ? getIconForCategory(catObj, 18) : <MoreHorizontal size={18} />;
-                  bgColor = catObj ? (catObj.color || '#64748b') : '#64748b';
-                }
-
-                return (
-                  <div key={`${t.type}-${t.id}`} className="transaction-item" style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '1rem 0', borderBottom: '1px solid var(--border-color)' }}>
-                    
-                    {/* Icon */}
-                    <div className="transaction-item-icon" style={{ width: '42px', height: '42px', borderRadius: '50%', background: `${bgColor}15`, color: bgColor, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      {iconElement}
-                    </div>
-                    
-                    {/* Details */}
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                      <div className="transaction-item-details-title" style={{ fontWeight: 700, fontSize: '0.95rem', color: 'var(--text-main)', marginBottom: '0.2rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                        {t.displayTitle}
-                      </div>
-                      <div className="transaction-item-details-subtitle" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-                        <span style={{ fontWeight: 600, color: bgColor }}>{typeLabel}</span>
-                        <span>•</span>
-                        <span>{new Date(t.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+              <AnimatePresence>
+                {groupedTransactions.map((group, gIndex) => (
+                  <motion.div 
+                    key={group.label}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    transition={{ duration: 0.3, delay: gIndex * 0.05 }}
+                    style={{ marginBottom: '1.5rem' }}
+                  >
+                    {/* Month Header row */}
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'var(--bg-panel)', padding: '0.75rem 1.25rem', borderTop: '1px solid var(--border-color)', borderBottom: '1px solid var(--border-color)', position: 'sticky', top: 0, zIndex: 10 }}>
+                      <span style={{ fontWeight: 700, fontSize: '0.95rem', color: 'var(--text-main)' }}>{group.label}</span>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                        <div style={{ textAlign: 'right' }}>
+                          <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>Total Spent</div>
+                          <div style={{ fontWeight: 700, fontSize: '0.9rem', color: 'var(--text-main)' }}>{formatCurrency(group.totalSpent)}</div>
+                        </div>
+                        <ChevronRight size={18} color="var(--primary-color)" />
                       </div>
                     </div>
 
-                    {/* Amount & Actions */}
-                    <div className="transaction-item-actions" style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
-                      <div className="transaction-item-amount" style={{ textAlign: 'right', fontWeight: 800, fontSize: '1.1rem', color: isInc ? 'var(--success)' : 'var(--text-main)' }}>
-                        {isInc ? '+' : '-'}{formatCurrency(t.amount)}
-                      </div>
-                      <button 
-                        onClick={() => confirmDelete(t.id, t.type)} 
-                        style={{ background: 'var(--bg-main)', border: 'none', color: 'var(--text-light)', padding: '0.5rem', borderRadius: '50%', cursor: 'pointer', transition: 'all 0.2s', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                        onMouseOver={(e) => { e.currentTarget.style.color = 'var(--danger)'; e.currentTarget.style.background = 'var(--danger-light)'; }}
-                        onMouseOut={(e) => { e.currentTarget.style.color = 'var(--text-light)'; e.currentTarget.style.background = 'var(--bg-main)'; }}
-                        title="Delete Transaction"
-                      >
-                        <Trash2 size={16} />
-                      </button>
-                    </div>
+                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                      {group.transactions.map((t, tIndex) => {
+                        const isInc = t.type === 'income';
+                        let iconElement = <MoreHorizontal size={18} />;
+                        let bgColor = '#64748b';
+                        let typeLabel = 'Other';
+                        
+                        if (isInc) {
+                          const sourceObj = INCOME_SOURCES.find(s => s.value === t.categoryKey) || INCOME_SOURCES.find(s => s.label.toLowerCase() === t.categoryKey);
+                          if (sourceObj) { iconElement = <sourceObj.icon size={18} />; bgColor = sourceObj.color; typeLabel = sourceObj.label; }
+                          else { typeLabel = t.displayTitle; }
+                        } else {
+                          const catObj = categories.find(c => c.name.toLowerCase() === t.categoryKey);
+                          typeLabel = catObj ? catObj.name : t.category;
+                          iconElement = catObj ? getIconForCategory(catObj, 18) : <MoreHorizontal size={18} />;
+                          bgColor = catObj ? (catObj.color || '#64748b') : '#64748b';
+                        }
 
-                  </div>
-                );
-              })}
+                        return (
+                          <motion.div 
+                            key={`${t.type}-${t.id}`} 
+                            initial={{ opacity: 0, x: -10 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ duration: 0.2, delay: (gIndex * 0.1) + (tIndex * 0.05) }}
+                            className="transaction-item" 
+                            style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '1rem 1.25rem', borderBottom: '1px solid var(--border-color)', position: 'relative' }}
+                          >
+                            
+                            {/* Left: Icon */}
+                            <div className="transaction-item-icon" style={{ width: '48px', height: '48px', borderRadius: '50%', background: `${bgColor}15`, color: bgColor, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                              {iconElement}
+                            </div>
+                            
+                            {/* Middle: Details & Badge */}
+                            <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                              <div className="transaction-item-details-title" style={{ fontWeight: 600, fontSize: '0.95rem', color: 'var(--text-main)', marginBottom: '0.15rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                {t.displayTitle}
+                              </div>
+                              <div className="transaction-item-details-subtitle" style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: '0.4rem' }}>
+                                Paid on {new Date(t.date).toLocaleDateString('en-US', { day: '2-digit', month: 'short' })}, {new Date(t.date).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
+                              </div>
+                              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.3rem', padding: '0.2rem 0.5rem', borderRadius: '1rem', border: `1px solid ${bgColor}40`, width: 'fit-content', background: `${bgColor}05` }}>
+                                <span style={{ color: bgColor, display: 'flex', alignItems: 'center' }}>
+                                  {React.cloneElement(iconElement, { size: 10 })}
+                                </span>
+                                <span style={{ fontSize: '0.65rem', fontWeight: 600, color: bgColor }}>{typeLabel}</span>
+                              </div>
+                            </div>
+
+                            {/* Right: Amount & Delete Action */}
+                            <div className="transaction-item-actions" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', justifyContent: 'center', gap: '0.25rem' }}>
+                              <div className="transaction-item-amount" style={{ fontWeight: 700, fontSize: '1rem', color: 'var(--text-main)' }}>
+                                {isInc ? '+' : '-'} {formatCurrency(t.amount)}
+                              </div>
+                              <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '0.2rem' }}>
+                                From <Wallet size={10} color="var(--primary-color)" />
+                              </div>
+                              <button 
+                                onClick={() => confirmDelete(t.id, t.type)} 
+                                style={{ background: 'transparent', border: 'none', color: 'var(--danger)', padding: '0.25rem', marginTop: '0.25rem', borderRadius: '50%', cursor: 'pointer', opacity: 0.5, transition: 'all 0.2s', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                                onMouseOver={(e) => { e.currentTarget.style.opacity = 1; }}
+                                onMouseOut={(e) => { e.currentTarget.style.opacity = 0.5; }}
+                                title="Delete Transaction"
+                              >
+                                <Trash2 size={14} />
+                              </button>
+                            </div>
+
+                          </motion.div>
+                        );
+                      })}
+                    </div>
+                  </motion.div>
+                ))}
+              </AnimatePresence>
             </div>
           )}
         </div>
