@@ -203,7 +203,7 @@ const LogTransaction = () => {
               </label>
 
               {type === 'expense' ? (
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.5rem' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: '0.5rem', width: '100%' }}>
                   {categories.map((c, index) => {
                     const COLORS = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8C8', '#F7DC6F', '#BB8FCE', '#F1948A', '#A9DFBF', '#F5B041'];
                     const color = COLORS[index % COLORS.length];
@@ -215,6 +215,7 @@ const LogTransaction = () => {
                         style={{
                           display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.25rem',
                           padding: '0.75rem 0.25rem', borderRadius: 'var(--radius-md)', cursor: 'pointer',
+                          width: '100%', boxSizing: 'border-box', overflow: 'hidden',
                           background: isSelected ? `${color}1A` : 'var(--bg-main)',
                           border: `2px solid ${isSelected ? color : 'transparent'}`,
                           transition: 'all 0.2s',
@@ -230,7 +231,7 @@ const LogTransaction = () => {
                         }}>
                           {getIconForCategory(c, 16)}
                         </div>
-                        <span style={{ fontSize: '0.7rem', fontWeight: isSelected ? '700' : '500', color: isSelected ? 'var(--text-main)' : 'var(--text-muted)', textAlign: 'center', overflow: 'hidden', textOverflow: 'ellipsis', width: '100%' }}>
+                        <span style={{ fontSize: '0.7rem', fontWeight: isSelected ? '700' : '500', color: isSelected ? 'var(--text-main)' : 'var(--text-muted)', textAlign: 'center', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', width: '100%' }}>
                           {c.name}
                         </span>
                       </div>
@@ -238,7 +239,7 @@ const LogTransaction = () => {
                   })}
                 </div>
               ) : (
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.5rem' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: '0.5rem', width: '100%' }}>
                   {INCOME_SOURCES.map((c) => {
                     const Icon = c.icon;
                     const isSelected = incomeSource === c.value;
@@ -249,6 +250,7 @@ const LogTransaction = () => {
                         style={{
                           display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.25rem',
                           padding: '0.75rem 0.25rem', borderRadius: 'var(--radius-md)', cursor: 'pointer',
+                          width: '100%', boxSizing: 'border-box', overflow: 'hidden',
                           background: isSelected ? `${c.color}15` : 'var(--bg-main)',
                           border: `2px solid ${isSelected ? c.color : 'transparent'}`,
                           transition: 'all 0.2s',
@@ -264,7 +266,7 @@ const LogTransaction = () => {
                         }}>
                           <Icon size={16} />
                         </div>
-                        <span style={{ fontSize: '0.75rem', fontWeight: isSelected ? '700' : '500', color: isSelected ? 'var(--text-main)' : 'var(--text-muted)' }}>
+                        <span style={{ fontSize: '0.75rem', fontWeight: isSelected ? '700' : '500', color: isSelected ? 'var(--text-main)' : 'var(--text-muted)', textAlign: 'center', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', width: '100%' }}>
                           {c.label}
                         </span>
                       </div>
