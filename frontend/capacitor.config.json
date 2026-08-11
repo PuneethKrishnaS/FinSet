@@ -1,5 +1,12 @@
 {
   "appId": "com.finset.app",
   "appName": "FinSet",
-  "webDir": "dist"
+  "webDir": "dist",
+  "server": {
+    "url": "https://fin-set-frontend.vercel.app",
+    "allowNavigation": [
+      "fin-set-frontend.vercel.app",
+      "*.vercel.app"
+    ]
+  }
 }
