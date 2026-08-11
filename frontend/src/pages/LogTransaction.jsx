@@ -37,6 +37,7 @@ const LogTransaction = () => {
     fetchExpenses();
   }, [fetchCategories, fetchIncomes, fetchExpenses]);
 
+  // Default category selection
   useEffect(() => {
     if (categoriesLoaded && categories.length > 0 && !category) {
       setCategory(categories[0].name);
@@ -144,14 +145,15 @@ const LogTransaction = () => {
                   step="0.01"
                   min="0.01"
                   required
-                  placeholder="0.00"
+                  placeholder="0"
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
+                  className="amount-input"
                   style={{
                     fontSize: '2.5rem', fontWeight: '800', border: 'none', background: 'transparent',
-                    width: amount.length > 0 ? `${Math.max(4, amount.length)}ch` : '4ch',
+                    width: '150px',
                     color: type === 'expense' ? 'var(--text-main)' : 'var(--success)',
-                    outline: 'none', textAlign: 'center', padding: 0
+                    outline: 'none', textAlign: 'left', padding: 0
                   }}
                 />
               </div>

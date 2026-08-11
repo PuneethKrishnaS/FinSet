@@ -231,19 +231,19 @@ const History = () => {
                 }
 
                 return (
-                  <div key={`${t.type}-${t.id}`} className="card interactive-table" style={{ display: 'flex', alignItems: 'center', padding: '1rem 1.25rem', gap: '1rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)', boxShadow: 'none' }}>
+                  <div key={`${t.type}-${t.id}`} className="card transaction-item interactive-table">
                     
                     {/* Icon */}
-                    <div style={{ width: '42px', height: '42px', borderRadius: '50%', background: `${bgColor}15`, color: bgColor, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <div className="transaction-item-icon" style={{ width: '42px', height: '42px', borderRadius: '50%', background: `${bgColor}15`, color: bgColor, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                       {iconElement}
                     </div>
                     
                     {/* Details */}
                     <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ fontWeight: 700, fontSize: '0.95rem', color: 'var(--text-main)', marginBottom: '0.2rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                      <div className="transaction-item-details-title" style={{ fontWeight: 700, fontSize: '0.95rem', color: 'var(--text-main)', marginBottom: '0.2rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                         {t.displayTitle}
                       </div>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                      <div className="transaction-item-details-subtitle" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.75rem', color: 'var(--text-muted)' }}>
                         <span style={{ fontWeight: 600, color: bgColor }}>{typeLabel}</span>
                         <span>•</span>
                         <span>{new Date(t.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
@@ -251,8 +251,8 @@ const History = () => {
                     </div>
 
                     {/* Amount & Actions */}
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
-                      <div style={{ textAlign: 'right', fontWeight: 800, fontSize: '1.1rem', color: isInc ? 'var(--success)' : 'var(--text-main)' }}>
+                    <div className="transaction-item-actions" style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
+                      <div className="transaction-item-amount" style={{ textAlign: 'right', fontWeight: 800, fontSize: '1.1rem', color: isInc ? 'var(--success)' : 'var(--text-main)' }}>
                         {isInc ? '+' : '-'}{formatCurrency(t.amount)}
                       </div>
                       <button 
