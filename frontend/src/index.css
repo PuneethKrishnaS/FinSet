@@ -962,3 +962,12 @@ body {
     align-items: flex-start;
   }
 }
+ @ m e d i a   ( m a x - w i d t h :   7 6 8 p x )   { 
+     . e d g e - t o - e d g e - l i s t   { 
+         m a r g i n - l e f t :   - 1 r e m ; 
+         m a r g i n - r i g h t :   - 1 r e m ; 
+         p a d d i n g - l e f t :   1 r e m ; 
+         p a d d i n g - r i g h t :   1 r e m ; 
+     } 
+ }  
+ 

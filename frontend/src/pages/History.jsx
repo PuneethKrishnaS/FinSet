@@ -146,7 +146,7 @@ const History = () => {
         </div>
       </div>
 
-      <div className="card" style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', flex: 1, overflow: 'hidden' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', flex: 1, overflow: 'hidden' }}>
         
         {/* Modern Filters Bar */}
         <div style={{ display: 'flex', gap: '1rem', marginBottom: '1.5rem', flexWrap: 'wrap', alignItems: 'center' }}>
@@ -202,7 +202,7 @@ const History = () => {
         )}
 
         {/* Transaction List */}
-        <div style={{ overflowY: 'auto', flex: 1, paddingRight: '0.5rem' }}>
+        <div className="edge-to-edge-list" style={{ overflowY: 'auto', flex: 1, paddingRight: '0.5rem' }}>
           {loading ? (
             <div style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-muted)' }}>Loading history...</div>
           ) : filteredTransactions.length === 0 ? (
@@ -231,7 +231,7 @@ const History = () => {
                 }
 
                 return (
-                  <div key={`${t.type}-${t.id}`} className="card transaction-item interactive-table">
+                  <div key={`${t.type}-${t.id}`} className="transaction-item" style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '1rem 0', borderBottom: '1px solid var(--border-color)' }}>
                     
                     {/* Icon */}
                     <div className="transaction-item-icon" style={{ width: '42px', height: '42px', borderRadius: '50%', background: `${bgColor}15`, color: bgColor, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
