@@ -18,6 +18,10 @@ import Profile from './pages/Profile';
 import ChitFunds from './pages/ChitFunds';
 import Notifications from './pages/Notifications';
 import useFinanceStore from './store/useFinanceStore';
+import { Capacitor } from '@capacitor/core';
+import { parseBankSMS } from './utils/smsParser';
+import api from './services/api';
+import toast from 'react-hot-toast';
 
 const ProtectedRoute = ({ children }) => {
   const token = localStorage.getItem('access_token');
@@ -48,6 +52,62 @@ const AppLayout = ({ children }) => {
       fetchAll();
     }
   }, [location.pathname, isAuthPage, isLandingPage, fetchAll]);
+
+  // --- NATIVE SMS LISTENER ---
+  React.useEffect(() => {
+    if (!Capacitor.isNativePlatform()) return;
+    const token = localStorage.getItem('access_token');
+    if (!token) return;
+
+    const startSMSWatch = () => {
+      if (window.SMSReceive) {
+        window.SMSReceive.startWatch(
+          () => console.log("SMS Watch started"),
+          (err) => console.log("SMS Watch failed", err)
+        );
+      }
+    };
+
+    // Request permissions on Android
+    document.addEventListener('deviceready', startSMSWatch);
+
+    const onSMSArrive = async (e) => {
+      const sms = e.data;
+      const parsed = parseBankSMS(sms.body);
+      if (parsed) {
+        try {
+          if (parsed.type === 'income') {
+            await api.post('/incomes/', {
+              amount: parsed.amount,
+              source: 'other',
+              date: parsed.date,
+            });
+          } else {
+            await api.post('/expenses/', {
+              amount: parsed.amount,
+              description: parsed.merchant,
+              category: 'other',
+              date: parsed.date,
+            });
+          }
+          toast.success(`Auto-logged ${parsed.type}: ${parsed.amount} INR`);
+          fetchAll(); // Refresh dashboard
+        } catch (err) {
+          console.error("Failed to log SMS transaction", err);
+        }
+      }
+    };
+
+    document.addEventListener('onSMSArrive', onSMSArrive);
+
+    return () => {
+      document.removeEventListener('deviceready', startSMSWatch);
+      document.removeEventListener('onSMSArrive', onSMSArrive);
+      if (window.SMSReceive) {
+        window.SMSReceive.stopWatch(() => {}, () => {});
+      }
+    };
+  }, []);
 
   if (isLandingPage) {
     return children;
