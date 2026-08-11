@@ -89,7 +89,7 @@ const LogTransaction = () => {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100%', margin: '0 auto', maxWidth: '100%', boxSizing: 'border-box', padding: '0 0.5rem' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100%', fontSize: '0.85rem', width: '100%' }}>
       <header className="responsive-header" style={{ marginBottom: '2rem' }}>
         <div>
           <h1 className="header-title">Transactions</h1>
