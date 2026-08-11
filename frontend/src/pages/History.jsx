@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import useFinanceStore from '../store/useFinanceStore';
 import { getCategoryIcon, getIconForCategory } from '../utils/CategoryIcons';
+import ConfirmDialog from '../components/ConfirmDialog';
 
 const INCOME_SOURCES = [
   { value: 'salary', label: 'Salary', icon: Briefcase, color: '#10b981' },
@@ -20,6 +21,8 @@ const INCOME_SOURCES = [
 const History = () => {
   const { formatCurrency } = useSettings();
   const { incomes, incomesLoaded, fetchIncomes, expenses, expensesLoaded, fetchExpenses, categories, fetchCategories, dataVersion, markDataDirty } = useFinanceStore();
+  
+  const [deleteConfirmInfo, setDeleteConfirmInfo] = useState({ isOpen: false, id: null, type: null });
   
   // Filters
   const [searchTerm, setSearchTerm] = useState('');
@@ -41,8 +44,12 @@ const History = () => {
 
   const loading = !incomesLoaded || !expensesLoaded;
 
-  const handleDelete = async (id, type) => {
-    if (!window.confirm('Are you sure you want to delete this transaction?')) return;
+  const confirmDelete = (id, type) => {
+    setDeleteConfirmInfo({ isOpen: true, id, type });
+  };
+
+  const handleDelete = async () => {
+    const { id, type } = deleteConfirmInfo;
     try {
       if (type === 'income') {
         await api.delete(`/incomes/${id}/`);
@@ -51,8 +58,10 @@ const History = () => {
       }
       markDataDirty();
       toast.success('Transaction deleted');
+      setDeleteConfirmInfo({ isOpen: false, id: null, type: null });
     } catch (err) {
       toast.error('Failed to delete transaction');
+      setDeleteConfirmInfo({ isOpen: false, id: null, type: null });
     }
   };
 
@@ -247,7 +256,7 @@ const History = () => {
                         {isInc ? '+' : '-'}{formatCurrency(t.amount)}
                       </div>
                       <button 
-                        onClick={() => handleDelete(t.id, t.type)} 
+                        onClick={() => confirmDelete(t.id, t.type)} 
                         style={{ background: 'var(--bg-main)', border: 'none', color: 'var(--text-light)', padding: '0.5rem', borderRadius: '50%', cursor: 'pointer', transition: 'all 0.2s', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                         onMouseOver={(e) => { e.currentTarget.style.color = 'var(--danger)'; e.currentTarget.style.background = 'var(--danger-light)'; }}
                         onMouseOut={(e) => { e.currentTarget.style.color = 'var(--text-light)'; e.currentTarget.style.background = 'var(--bg-main)'; }}
@@ -265,6 +274,13 @@ const History = () => {
         </div>
 
       </div>
+      <ConfirmDialog 
+        isOpen={deleteConfirmInfo.isOpen}
+        onClose={() => setDeleteConfirmInfo({ isOpen: false, id: null, type: null })}
+        onConfirm={handleDelete}
+        title="Delete Transaction"
+        message="Are you sure you want to delete this transaction? This action cannot be undone."
+      />
     </div>
   );
 };

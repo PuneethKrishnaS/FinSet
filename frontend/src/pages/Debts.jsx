@@ -4,6 +4,7 @@ import api from '../services/api';
 import toast from 'react-hot-toast';
 import { Users, Plus, CheckCircle, Trash2, ArrowUpRight, ArrowDownRight, TrendingUp, ChevronDown, ChevronUp, History } from 'lucide-react';
 import useFinanceStore from '../store/useFinanceStore';
+import ConfirmDialog from '../components/ConfirmDialog';
 
 const Debts = () => {
   const { currency, formatCurrency } = useSettings();
@@ -23,6 +24,8 @@ const Debts = () => {
   const [paymentDate, setPaymentDate] = useState(new Date().toISOString().split('T')[0]);
   const [paymentNote, setPaymentNote] = useState('');
   const [paymentLoading, setPaymentLoading] = useState(false);
+
+  const [deleteConfirmInfo, setDeleteConfirmInfo] = useState({ isOpen: false, id: null, type: null });
 
   const currencySymbol = new Intl.NumberFormat('en-US', { style: 'currency', currency: currency }).formatToParts(1).find(x => x.type === 'currency').value;
 
@@ -63,14 +66,25 @@ const Debts = () => {
     }
   };
 
-  const handleDelete = async (id) => {
-    if (!window.confirm('Are you sure you want to delete this record?')) return;
+  const confirmDelete = (id, type) => {
+    setDeleteConfirmInfo({ isOpen: true, id, type });
+  };
+
+  const executeDelete = async () => {
+    const { id, type } = deleteConfirmInfo;
     try {
-      await api.delete(`/debts/${id}/`);
-      toast.success('Record deleted');
+      if (type === 'debt') {
+        await api.delete(`/debts/${id}/`);
+        toast.success('Record deleted');
+      } else {
+        await api.delete(`/debt-payments/${id}/`);
+        toast.success('Payment deleted');
+      }
       markDataDirty();
+      setDeleteConfirmInfo({ isOpen: false, id: null, type: null });
     } catch (err) {
-      toast.error('Failed to delete record');
+      toast.error('Failed to delete');
+      setDeleteConfirmInfo({ isOpen: false, id: null, type: null });
     }
   };
 
@@ -92,17 +106,6 @@ const Debts = () => {
       toast.error('Failed to log payment.');
     } finally {
       setPaymentLoading(false);
-    }
-  };
-
-  const handleDeletePayment = async (paymentId) => {
-    if (!window.confirm('Delete this payment log?')) return;
-    try {
-      await api.delete(`/debt-payments/${paymentId}/`);
-      toast.success('Payment deleted');
-      markDataDirty();
-    } catch (err) {
-      toast.error('Failed to delete payment');
     }
   };
 
@@ -392,7 +395,7 @@ const Debts = () => {
                                 <CheckCircle size={16} /> Settle Debt
                               </button>
                             )}
-                            <button onClick={() => handleDelete(d.id)} className="btn-secondary" style={{ flex: 1, color: 'var(--danger)', borderColor: 'var(--danger)' }}>
+                            <button onClick={() => confirmDelete(d.id, 'debt')} className="btn-secondary" style={{ flex: 1, color: 'var(--danger)', borderColor: 'var(--danger)' }}>
                               <Trash2 size={16} /> Delete
                             </button>
                           </div>
@@ -426,7 +429,7 @@ const Debts = () => {
                                     {formatCurrency(p.amount)}
                                   </td>
                                   <td style={{ textAlign: 'right' }}>
-                                    <button onClick={() => handleDeletePayment(p.id)} style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: 'var(--danger)' }}>
+                                    <button onClick={() => confirmDelete(p.id, 'payment')} style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: 'var(--danger)' }}>
                                       <Trash2 size={14} />
                                     </button>
                                   </td>
@@ -444,6 +447,14 @@ const Debts = () => {
           )}
         </div>
       </div>
+      
+      <ConfirmDialog 
+        isOpen={deleteConfirmInfo.isOpen}
+        onClose={() => setDeleteConfirmInfo({ isOpen: false, id: null, type: null })}
+        onConfirm={executeDelete}
+        title={deleteConfirmInfo.type === 'debt' ? "Delete Debt Record" : "Delete Payment"}
+        message={deleteConfirmInfo.type === 'debt' ? "Are you sure you want to delete this debt record? All associated payments will also be deleted." : "Are you sure you want to delete this payment log?"}
+      />
     </div>
   );
 };

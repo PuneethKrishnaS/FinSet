@@ -5,6 +5,7 @@ import toast from 'react-hot-toast';
 import { Target, Plus, Save, Trash2, Calendar, AlertCircle } from 'lucide-react';
 import useFinanceStore from '../store/useFinanceStore';
 import { getCategoryIcon, getIconForCategory } from '../utils/CategoryIcons';
+import ConfirmDialog from '../components/ConfirmDialog';
 
 // Circular Progress Component
 const CircularProgress = ({ percentage, isOver, isWarning, size = 60, strokeWidth = 6 }) => {
@@ -55,6 +56,7 @@ const Budget = () => {
 
   const [category, setCategory] = useState('');
   const [amount, setAmount] = useState('');
+  const [deleteConfirmId, setDeleteConfirmId] = useState(null);
 
   const currencySymbol = new Intl.NumberFormat('en-US', { style: 'currency', currency: currency }).formatToParts(1).find(x => x.type === 'currency').value;
 
@@ -97,14 +99,20 @@ const Budget = () => {
     }
   };
 
-  const handleDeleteBudget = async (id) => {
-    if (!window.confirm('Delete this budget rule?')) return;
+  const confirmDeleteBudget = (id) => {
+    setDeleteConfirmId(id);
+  };
+
+  const handleDeleteBudget = async () => {
+    if (!deleteConfirmId) return;
     try {
-      await api.delete(`/budgets/${id}/`);
+      await api.delete(`/budgets/${deleteConfirmId}/`);
       toast.success('Budget removed.');
       markDataDirty();
+      setDeleteConfirmId(null);
     } catch (err) {
       toast.error('Failed to delete.');
+      setDeleteConfirmId(null);
     }
   };
 
@@ -170,7 +178,7 @@ const Budget = () => {
                   {/* Right Actions */}
                   <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '0.5rem' }}>
                     <button 
-                      onClick={() => handleDeleteBudget(b.id)}
+                      onClick={() => confirmDeleteBudget(b.id)}
                       style={{ background: 'var(--bg-main)', color: 'var(--text-light)', border: 'none', padding: '0.4rem', borderRadius: '50%', cursor: 'pointer', transition: 'all 0.2s' }}
                       onMouseOver={(e) => { e.currentTarget.style.color = 'var(--danger)'; e.currentTarget.style.background = 'var(--danger-light)'; }}
                       onMouseOut={(e) => { e.currentTarget.style.color = 'var(--text-light)'; e.currentTarget.style.background = 'var(--bg-main)'; }}
@@ -261,6 +269,14 @@ const Budget = () => {
 
         </div>
       </div>
+
+      <ConfirmDialog 
+        isOpen={deleteConfirmId !== null}
+        onClose={() => setDeleteConfirmId(null)}
+        onConfirm={handleDeleteBudget}
+        title="Delete Budget"
+        message="Are you sure you want to delete this budget rule?"
+      />
     </div>
   );
 };
