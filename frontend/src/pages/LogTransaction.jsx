@@ -145,7 +145,7 @@ const LogTransaction = () => {
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
                   className={`bg-transparent border-none outline-none text-center p-0 ml-1 appearance-none ${type === 'expense' ? 'text-foreground' : 'text-emerald-500'}`}
-                  style={{ width: amount ? `calc(${amount.length}ch + 0.5ch)` : '1.5ch' }}
+                  style={{ width: amount ? `calc(${amount.length}ch + 0.5ch)` : '1.5ch', maxWidth: '100%' }}
                 />
               </div>
               
