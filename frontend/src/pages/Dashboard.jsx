@@ -225,65 +225,44 @@ const Dashboard = () => {
         </button>
       </header>
 
-      {/* Main Balance */}
-      <div className="mb-8">
-        <div className="text-muted-foreground text-sm font-bold uppercase tracking-wider mb-2">Total Net Balance</div>
-        <div className="text-4xl md:text-6xl font-black text-foreground tracking-tight">{formatCurrency(dashboardData.balance)}</div>
-      </div>
-
-      {/* Overview Stats (Flat UI) */}
-      <div className="flex flex-row gap-8 overflow-x-auto pb-6 mb-4 md:grid md:grid-cols-3 no-scrollbar border-b border-border">
-        <div className="min-w-[140px] flex-1">
-          <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-500 mb-2">
-            <TrendingUp size={16} />
-            <span className="text-xs font-bold uppercase tracking-wider">Income</span>
+      {/* Main Balance & Stats Unified Header */}
+      <div className="mb-10 pb-10 border-b border-border flex flex-col xl:flex-row xl:items-end justify-between gap-8">
+        <div>
+          <div className="text-muted-foreground text-xs font-bold uppercase tracking-widest mb-3">Total Net Balance</div>
+          <div className="text-5xl md:text-7xl font-black text-foreground tracking-tighter leading-none">
+            {formatCurrency(dashboardData.balance)}
           </div>
-          <div className="text-2xl font-black text-foreground">{formatCurrency(dashboardData.total_income)}</div>
         </div>
         
-        <div className="min-w-[140px] flex-1">
-          <div className="flex items-center gap-2 text-destructive mb-2">
-            <TrendingDown size={16} />
-            <span className="text-xs font-bold uppercase tracking-wider">Spent</span>
+        <div className="flex items-center gap-6 overflow-x-auto no-scrollbar pb-2 xl:pb-0">
+          <div className="flex flex-col min-w-[110px]">
+            <div className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-500 mb-1.5">
+              <TrendingUp size={16} strokeWidth={2.5} />
+              <span className="text-[10px] font-bold uppercase tracking-widest">Income</span>
+            </div>
+            <div className="text-xl font-bold text-foreground">{formatCurrency(dashboardData.total_income)}</div>
           </div>
-          <div className="text-2xl font-black text-foreground">{formatCurrency(dashboardData.total_expense)}</div>
-        </div>
 
-        <div className="min-w-[140px] flex-1">
-          <div className="flex items-center gap-2 text-primary mb-2">
-            <Wallet size={16} />
-            <span className="text-xs font-bold uppercase tracking-wider">Savings</span>
+          <div className="w-[1px] h-10 bg-border shrink-0"></div>
+          
+          <div className="flex flex-col min-w-[110px]">
+            <div className="flex items-center gap-1.5 text-destructive mb-1.5">
+              <TrendingDown size={16} strokeWidth={2.5} />
+              <span className="text-[10px] font-bold uppercase tracking-widest">Spent</span>
+            </div>
+            <div className="text-xl font-bold text-foreground">{formatCurrency(dashboardData.total_expense)}</div>
           </div>
-          <div className="text-2xl font-black text-foreground">{formatCurrency(netSavings)}</div>
-        </div>
-      </div>
 
-      {/* Quick Actions */}
-      <div className="grid grid-cols-4 gap-4 mb-10 pb-10 border-b border-border">
-        <button onClick={() => navigate('/log-transaction')} className="group flex flex-col items-center justify-center gap-3">
-          <div className="w-12 h-12 rounded-full bg-muted group-hover:bg-destructive/10 text-destructive flex items-center justify-center transition-colors">
-            <MinusCircle size={22} />
+          <div className="w-[1px] h-10 bg-border shrink-0"></div>
+
+          <div className="flex flex-col min-w-[110px]">
+            <div className="flex items-center gap-1.5 text-primary mb-1.5">
+              <Wallet size={16} strokeWidth={2.5} />
+              <span className="text-[10px] font-bold uppercase tracking-widest">Savings</span>
+            </div>
+            <div className="text-xl font-bold text-foreground">{formatCurrency(netSavings)}</div>
           </div>
-          <span className="text-xs font-bold text-foreground">Expense</span>
-        </button>
-        <button onClick={() => navigate('/log-transaction')} className="group flex flex-col items-center justify-center gap-3">
-          <div className="w-12 h-12 rounded-full bg-muted group-hover:bg-emerald-500/10 text-emerald-500 flex items-center justify-center transition-colors">
-            <PlusCircle size={22} />
-          </div>
-          <span className="text-xs font-bold text-foreground">Income</span>
-        </button>
-        <button onClick={() => navigate('/budgets')} className="group flex flex-col items-center justify-center gap-3">
-          <div className="w-12 h-12 rounded-full bg-muted group-hover:bg-amber-500/10 text-amber-500 flex items-center justify-center transition-colors">
-            <Target size={22} />
-          </div>
-          <span className="text-xs font-bold text-foreground">Budgets</span>
-        </button>
-        <button onClick={() => navigate('/history')} className="group flex flex-col items-center justify-center gap-3">
-          <div className="w-12 h-12 rounded-full bg-muted group-hover:bg-sky-500/10 text-sky-500 flex items-center justify-center transition-colors">
-            <History size={22} />
-          </div>
-          <span className="text-xs font-bold text-foreground">History</span>
-        </button>
+        </div>
       </div>
 
       {/* Cash Flow Chart */}
