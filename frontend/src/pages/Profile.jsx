@@ -115,59 +115,41 @@ const Profile = () => {
     }
   };
 
-  if (loading) return <div className="loading-state">Loading profile...</div>;
-  if (!profileData) return <div className="loading-state">Error loading profile.</div>;
-
-  const btnOutlineStyle = {
-    background: 'transparent',
-    border: '1px solid var(--border-color)',
-    color: 'var(--text-main)',
-    padding: '0.6rem 1.2rem',
-    borderRadius: 'var(--radius-md)',
-    cursor: 'pointer',
-    fontWeight: '600',
-    display: 'inline-flex',
-    alignItems: 'center',
-    gap: '0.5rem',
-    transition: 'all 0.2s',
-  };
-
-  const labelStyle = {
-    display: 'block',
-    fontWeight: '600',
-    color: 'var(--text-main)',
-    marginBottom: '0.5rem',
-    fontSize: '0.9rem'
-  };
+  if (loading) return (
+    <div className="flex flex-col w-full h-full pb-10">
+      <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-foreground mb-6">My Profile</h1>
+      <div className="p-8 text-center text-muted-foreground bg-card rounded-xl border border-border">Loading profile...</div>
+    </div>
+  );
+  
+  if (!profileData) return (
+    <div className="flex flex-col w-full h-full pb-10">
+      <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-foreground mb-6">My Profile</h1>
+      <div className="p-8 text-center text-destructive bg-card rounded-xl border border-destructive/20">Error loading profile.</div>
+    </div>
+  );
 
   return (
-    <div className="page-container">
-      <div className="page-header" style={{ marginBottom: '2rem' }}>
-        <div>
-          <h1 className="header-title">My Profile</h1>
-          <p className="header-subtitle">Manage your personal information and security</p>
-        </div>
-      </div>
+    <div className="flex flex-col w-full h-full pb-10">
+      <header className="mb-6 md:mb-8">
+        <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-foreground mb-1">My Profile</h1>
+        <p className="text-sm md:text-base text-muted-foreground font-medium">Manage your personal information and security</p>
+      </header>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', maxWidth: '800px', margin: '0 auto' }}>
+      <div className="flex flex-col gap-6 md:gap-8 max-w-4xl mx-auto w-full">
         
         {/* Personal Details Card */}
-        <div className="card" style={{ padding: '2rem' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', flexWrap: 'wrap' }}>
-              <div style={{ 
-                width: '80px', height: '80px', borderRadius: '50%', 
-                background: 'linear-gradient(135deg, #6366f1, #a855f7)', 
-                color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', 
-                fontSize: '2rem', fontWeight: 'bold', boxShadow: '0 10px 25px -5px rgba(168, 85, 247, 0.4)' 
-              }}>
+        <div className="bg-card border border-border rounded-2xl p-6 md:p-8 shadow-sm">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+            <div className="flex items-center gap-5">
+              <div className="w-20 h-20 rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 text-white flex items-center justify-center text-3xl font-bold shadow-lg shadow-purple-500/20 shrink-0">
                 {profileData.first_name ? profileData.first_name[0].toUpperCase() : <User size={36} />}
               </div>
               <div>
-                <h2 style={{ fontSize: '1.75rem', fontWeight: '700', color: 'var(--text-main)', marginBottom: '0.25rem' }}>
+                <h2 className="text-2xl font-bold text-foreground mb-1">
                   {(profileData.first_name || profileData.last_name) ? `${profileData.first_name} ${profileData.last_name}` : 'FinSet User'}
                 </h2>
-                <p style={{ color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.95rem' }}>
+                <p className="text-muted-foreground flex items-center gap-2 font-medium">
                   <Mail size={16} /> {profileData.email}
                 </p>
               </div>
@@ -175,9 +157,7 @@ const Profile = () => {
             {!isEditing && (
               <button 
                 onClick={() => setIsEditing(true)}
-                style={btnOutlineStyle}
-                onMouseOver={(e) => e.currentTarget.style.background = 'var(--bg-main)'}
-                onMouseOut={(e) => e.currentTarget.style.background = 'transparent'}
+                className="bg-transparent border border-border hover:bg-muted text-foreground text-sm font-bold py-2.5 px-5 rounded-xl transition-colors flex items-center gap-2 shadow-sm"
               >
                 <Edit2 size={16} /> Edit Profile
               </button>
@@ -185,35 +165,41 @@ const Profile = () => {
           </div>
 
           {isEditing && (
-            <form onSubmit={handleEditSubmit} style={{ marginTop: '2.5rem', background: 'var(--bg-main)', padding: '1.5rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)' }}>
-              <h3 style={{ fontSize: '1.1rem', marginBottom: '1.5rem', color: 'var(--text-main)' }}>Update Information</h3>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '1.5rem' }}>
+            <form onSubmit={handleEditSubmit} className="mt-8 bg-muted/30 p-6 rounded-xl border border-border/50">
+              <h3 className="text-base font-bold text-foreground mb-5">Update Information</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
                 <div>
-                  <label style={labelStyle}>First Name</label>
+                  <label className="block text-xs font-semibold text-foreground mb-1.5">First Name</label>
                   <input 
                     type="text" 
-                    className="input-field" 
-                    style={{ marginBottom: 0 }}
                     value={editForm.first_name}
                     onChange={(e) => setEditForm({...editForm, first_name: e.target.value})}
+                    className="w-full bg-background border border-border rounded-xl px-4 py-2.5 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 shadow-sm"
                   />
                 </div>
                 <div>
-                  <label style={labelStyle}>Last Name</label>
+                  <label className="block text-xs font-semibold text-foreground mb-1.5">Last Name</label>
                   <input 
                     type="text" 
-                    className="input-field" 
-                    style={{ marginBottom: 0 }}
                     value={editForm.last_name}
                     onChange={(e) => setEditForm({...editForm, last_name: e.target.value})}
+                    className="w-full bg-background border border-border rounded-xl px-4 py-2.5 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 shadow-sm"
                   />
                 </div>
               </div>
-              <div style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-end' }}>
-                <button type="button" onClick={() => setIsEditing(false)} style={btnOutlineStyle}>
+              <div className="flex gap-3 justify-end">
+                <button 
+                  type="button" 
+                  onClick={() => setIsEditing(false)} 
+                  className="bg-transparent border border-border hover:bg-background text-foreground text-sm font-bold py-2.5 px-6 rounded-xl transition-colors"
+                >
                   Cancel
                 </button>
-                <button type="submit" className="btn" disabled={editLoading}>
+                <button 
+                  type="submit" 
+                  disabled={editLoading}
+                  className="bg-primary hover:bg-primary/90 text-primary-foreground text-sm font-bold py-2.5 px-6 rounded-xl transition-colors shadow-sm"
+                >
                   {editLoading ? 'Saving...' : 'Save Changes'}
                 </button>
               </div>
@@ -222,111 +208,106 @@ const Profile = () => {
         </div>
 
         {/* Security & Password Card */}
-        <div className="card" style={{ padding: '2rem' }}>
-          <div style={{ marginBottom: '2rem' }}>
-            <h3 style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', fontSize: '1.25rem', color: 'var(--text-main)', marginBottom: '0.5rem' }}>
-              <div style={{ padding: '0.5rem', background: 'var(--primary-light)', color: 'var(--primary-color)', borderRadius: '10px' }}><Lock size={20} /></div>
+        <div className="bg-card border border-border rounded-2xl p-6 md:p-8 shadow-sm">
+          <div className="mb-8">
+            <h3 className="flex items-center gap-3 text-xl font-bold text-foreground mb-2">
+              <div className="p-2 bg-primary/10 text-primary rounded-xl"><Lock size={20} /></div>
               Security & Password
             </h3>
-            <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem' }}>Keep your account secure by updating your password regularly.</p>
+            <p className="text-muted-foreground font-medium text-sm">Keep your account secure by updating your password regularly.</p>
           </div>
           
           {passwordMessage.text && (
-            <div style={{ 
-              padding: '1rem 1.25rem', 
-              borderRadius: 'var(--radius-md)', 
-              marginBottom: '1.5rem',
-              display: 'flex', alignItems: 'center', gap: '0.75rem', fontWeight: '500',
-              background: passwordMessage.type === 'success' ? 'var(--success-light)' : 'var(--danger-light)',
-              color: passwordMessage.type === 'success' ? 'var(--success)' : 'var(--danger)',
-              border: `1px solid ${passwordMessage.type === 'success' ? '#bbf7d0' : '#fecaca'}`
-            }}>
+            <div className={`flex items-center gap-3 p-4 rounded-xl mb-6 font-bold text-sm border ${
+              passwordMessage.type === 'success' 
+                ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20' 
+                : 'bg-destructive/10 text-destructive border-destructive/20'
+            }`}>
               {passwordMessage.type === 'success' ? <CheckCircle2 size={20} /> : <AlertTriangle size={20} />}
               {passwordMessage.text}
             </div>
           )}
 
-          <form onSubmit={handlePasswordSubmit} style={{ maxWidth: '100%' }}>
-            <div style={{ marginBottom: '1.5rem', maxWidth: '50%' }}>
-              <label style={labelStyle}>Current Password</label>
+          <form onSubmit={handlePasswordSubmit} className="max-w-2xl">
+            <div className="mb-6 md:w-1/2">
+              <label className="block text-xs font-semibold text-foreground mb-1.5">Current Password</label>
               <input 
                 type="password" 
-                className="input-field" 
-                style={{ marginBottom: 0 }}
                 placeholder="••••••••"
                 required
                 value={passwordForm.old_password}
                 onChange={(e) => setPasswordForm({...passwordForm, old_password: e.target.value})}
+                className="w-full bg-background border border-border rounded-xl px-4 py-2.5 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 shadow-sm"
               />
             </div>
             
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '2rem' }}>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-8">
               <div>
-                <label style={labelStyle}>New Password</label>
+                <label className="block text-xs font-semibold text-foreground mb-1.5">New Password</label>
                 <input 
                   type="password" 
-                  className="input-field" 
-                  style={{ marginBottom: 0 }}
                   placeholder="••••••••"
                   required
                   value={passwordForm.new_password}
                   onChange={(e) => setPasswordForm({...passwordForm, new_password: e.target.value})}
+                  className="w-full bg-background border border-border rounded-xl px-4 py-2.5 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 shadow-sm"
                 />
               </div>
               <div>
-                <label style={labelStyle}>Confirm New Password</label>
+                <label className="block text-xs font-semibold text-foreground mb-1.5">Confirm New Password</label>
                 <input 
                   type="password" 
-                  className="input-field" 
-                  style={{ marginBottom: 0 }}
                   placeholder="••••••••"
                   required
                   value={passwordForm.confirm_password}
                   onChange={(e) => setPasswordForm({...passwordForm, confirm_password: e.target.value})}
+                  className="w-full bg-background border border-border rounded-xl px-4 py-2.5 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 shadow-sm"
                 />
               </div>
             </div>
             
-            <button type="submit" className="btn" disabled={passwordLoading}>
+            <button 
+              type="submit" 
+              disabled={passwordLoading}
+              className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-2.5 px-6 rounded-xl transition-colors shadow-sm text-sm"
+            >
               {passwordLoading ? 'Updating Password...' : 'Update Password'}
             </button>
           </form>
         </div>
 
         {/* Data & Privacy Card */}
-        <div className="card" style={{ padding: '2rem' }}>
-          <h3 style={{ fontSize: '1.25rem', color: 'var(--text-main)', marginBottom: '2rem' }}>
+        <div className="bg-card border border-border rounded-2xl p-6 md:p-8 shadow-sm">
+          <h3 className="text-xl font-bold text-foreground mb-6">
             Data & Privacy
           </h3>
           
-          <div className="profile-action-card">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 p-6 bg-background rounded-xl border border-border mb-4">
             <div>
-              <p style={{ fontWeight: '600', color: 'var(--text-main)', fontSize: '1.05rem', margin: '0 0 0.5rem 0' }}>Export Financial Data</p>
-              <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', margin: 0, lineHeight: '1.5' }}>
+              <p className="font-bold text-foreground text-base mb-1">Export Financial Data</p>
+              <p className="text-muted-foreground text-sm font-medium leading-relaxed max-w-xl">
                 Download all your incomes, expenses, budgets, and chit fund data in a clean JSON format for your own records.
               </p>
             </div>
             <button 
-              className="btn" 
               onClick={handleExportData}
               disabled={exportLoading}
-              style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', whiteSpace: 'nowrap' }}
+              className="bg-secondary hover:bg-secondary/80 text-secondary-foreground border border-border font-bold py-2.5 px-5 rounded-xl transition-colors shadow-sm text-sm flex items-center gap-2 whitespace-nowrap shrink-0"
             >
               <Download size={18} /> {exportLoading ? 'Exporting...' : 'Export Data'}
             </button>
           </div>
 
-          <div className="profile-action-card danger">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 p-6 bg-destructive/5 rounded-xl border border-destructive/20">
             <div>
-              <p style={{ fontWeight: '600', color: 'var(--danger)', fontSize: '1.05rem', margin: '0 0 0.5rem 0' }}>Delete Account</p>
-              <p style={{ color: 'var(--danger)', opacity: 0.8, fontSize: '0.9rem', margin: 0, lineHeight: '1.5' }}>
+              <p className="font-bold text-destructive text-base mb-1">Delete Account</p>
+              <p className="text-destructive/80 text-sm font-medium leading-relaxed max-w-xl">
                 Permanently delete your account and all associated financial data. This action is irreversible.
               </p>
             </div>
             <button 
-              className="btn" 
               onClick={() => setShowDeleteConfirm(true)}
-              style={{ background: 'var(--danger)', display: 'flex', alignItems: 'center', gap: '0.5rem', whiteSpace: 'nowrap', boxShadow: '0 4px 14px 0 rgba(239, 68, 68, 0.39)' }}
+              className="bg-destructive hover:bg-destructive/90 text-destructive-foreground font-bold py-2.5 px-5 rounded-xl transition-colors shadow-sm text-sm flex items-center gap-2 whitespace-nowrap shrink-0"
             >
               <Trash2 size={18} /> Delete Account
             </button>
@@ -337,37 +318,39 @@ const Profile = () => {
 
       {/* Delete Confirmation Modal */}
       {showDeleteConfirm && (
-        <div className="modal-overlay" style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
-          <div className="modal" style={{ background: 'var(--bg-panel)', padding: '2.5rem', borderRadius: '24px', maxWidth: '450px', width: '90%', boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.5rem' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'var(--danger-light)', color: 'var(--danger)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div className="fixed inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-card p-8 rounded-3xl max-w-md w-full shadow-2xl border border-border relative">
+            <div className="flex justify-between items-start mb-6">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-xl bg-destructive/10 text-destructive flex items-center justify-center">
                   <AlertTriangle size={24} />
                 </div>
-                <h2 style={{ fontSize: '1.25rem', fontWeight: '700', color: 'var(--text-main)', margin: 0 }}>Delete Account?</h2>
+                <h2 className="text-xl font-bold text-foreground">Delete Account?</h2>
               </div>
-              <button onClick={() => setShowDeleteConfirm(false)} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer' }}>
+              <button 
+                onClick={() => setShowDeleteConfirm(false)} 
+                className="text-muted-foreground hover:text-foreground transition-colors p-1"
+              >
                 <X size={24} />
               </button>
             </div>
             
-            <p style={{ color: 'var(--text-muted)', lineHeight: '1.6', marginBottom: '2rem' }}>
-              Are you absolutely sure you want to delete your account? All your transactions, budgets, and settings will be permanently destroyed. <strong style={{ color: 'var(--danger)' }}>This cannot be reversed.</strong>
+            <p className="text-muted-foreground text-sm font-medium leading-relaxed mb-8">
+              Are you absolutely sure you want to delete your account? All your transactions, budgets, and settings will be permanently destroyed. <strong className="text-destructive font-bold">This cannot be reversed.</strong>
             </p>
             
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+            <div className="grid grid-cols-2 gap-3">
               <button 
-                style={{ ...btnOutlineStyle, justifyContent: 'center', width: '100%' }}
                 onClick={() => setShowDeleteConfirm(false)}
                 disabled={deleteLoading}
+                className="bg-transparent border border-border hover:bg-muted text-foreground text-sm font-bold py-3 rounded-xl transition-colors"
               >
                 Cancel
               </button>
               <button 
-                className="btn" 
-                style={{ background: 'var(--danger)', width: '100%', justifyContent: 'center' }}
                 onClick={handleDeleteAccount}
                 disabled={deleteLoading}
+                className="bg-destructive hover:bg-destructive/90 text-destructive-foreground text-sm font-bold py-3 rounded-xl transition-colors shadow-sm shadow-destructive/20"
               >
                 {deleteLoading ? 'Deleting...' : 'Yes, Delete'}
               </button>

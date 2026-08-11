@@ -29,8 +29,6 @@ const Settings = () => {
   // UI State
   const [activeTab, setActiveTab] = useState('general');
 
-
-
   React.useEffect(() => {
     setSelectedCurrency(currency);
   }, [currency]);
@@ -102,97 +100,86 @@ const Settings = () => {
     }
   };
 
-  // Styles
-  const tabBtnStyle = (isActive) => ({
-    padding: '0.75rem 1.5rem',
-    background: isActive ? 'var(--bg-panel)' : 'transparent',
-    border: 'none',
-    color: isActive ? 'var(--primary-color)' : 'var(--text-muted)',
-    fontWeight: isActive ? '700' : '600',
-    cursor: 'pointer',
-    borderBottom: isActive ? '3px solid var(--primary-color)' : '3px solid transparent',
-    display: 'flex',
-    alignItems: 'center',
-    gap: '0.5rem',
-    transition: 'all 0.2s ease',
-    fontSize: '0.95rem'
-  });
-
   const ToggleSwitch = ({ checked, onChange }) => (
     <div
       onClick={onChange}
-      style={{
-        width: '44px', height: '24px', borderRadius: '12px',
-        background: checked ? 'var(--primary-color)' : 'var(--border-color)',
-        position: 'relative', cursor: 'pointer', transition: 'background 0.3s'
-      }}
+      className={`w-11 h-6 rounded-full relative cursor-pointer transition-colors shadow-inner ${checked ? 'bg-primary' : 'bg-muted-foreground/30'}`}
     >
-      <div style={{
-        width: '20px', height: '20px', borderRadius: '50%', background: 'white',
-        position: 'absolute', top: '2px', left: checked ? '22px' : '2px',
-        transition: 'left 0.3s', boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
-      }} />
+      <div 
+        className={`w-5 h-5 rounded-full bg-white absolute top-0.5 shadow-md transition-all ${checked ? 'left-[22px]' : 'left-0.5'}`}
+      />
     </div>
   );
 
   return (
-    <div className="page-container">
-      <div className="page-header" style={{ marginBottom: '2rem' }}>
-        <div>
-          <h1 className="header-title">Application Settings</h1>
-          <p className="header-subtitle">Customize your FinSet experience</p>
-        </div>
-      </div>
+    <div className="flex flex-col w-full h-full pb-10">
+      <header className="mb-6 md:mb-8">
+        <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-foreground mb-1">Application Settings</h1>
+        <p className="text-sm md:text-base text-muted-foreground font-medium">Customize your FinSet experience</p>
+      </header>
 
-      <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+      <div className="max-w-4xl w-full mx-auto flex flex-col gap-6">
 
         {/* Tabs */}
-        <div style={{ display: 'flex', gap: '1rem', borderBottom: '1px solid var(--border-color)', marginBottom: '2rem' }}>
-          <button style={tabBtnStyle(activeTab === 'general')} onClick={() => setActiveTab('general')}>
-            <SettingsIcon size={18} /> General
+        <div className="flex gap-4 border-b border-border mb-2 overflow-x-auto">
+          <button 
+            className={`py-3 px-6 text-sm flex items-center gap-2 whitespace-nowrap transition-all border-b-2 font-bold ${
+              activeTab === 'general' 
+                ? 'border-primary text-primary bg-primary/5 rounded-t-xl' 
+                : 'border-transparent text-muted-foreground hover:text-foreground hover:bg-muted/30 rounded-t-xl'
+            }`} 
+            onClick={() => setActiveTab('general')}
+          >
+            <SettingsIcon size={16} /> General
           </button>
-          <button style={tabBtnStyle(activeTab === 'categories')} onClick={() => setActiveTab('categories')}>
-            <Layout size={18} /> Categories
+          <button 
+            className={`py-3 px-6 text-sm flex items-center gap-2 whitespace-nowrap transition-all border-b-2 font-bold ${
+              activeTab === 'categories' 
+                ? 'border-primary text-primary bg-primary/5 rounded-t-xl' 
+                : 'border-transparent text-muted-foreground hover:text-foreground hover:bg-muted/30 rounded-t-xl'
+            }`} 
+            onClick={() => setActiveTab('categories')}
+          >
+            <Layout size={16} /> Categories
           </button>
         </div>
 
         {/* General Tab */}
         {activeTab === 'general' && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+          <div className="flex flex-col gap-6 md:gap-8">
 
-            <div className="card" style={{ padding: '2rem' }}>
-              <h3 style={{ fontSize: '1.25rem', marginBottom: '1.5rem', color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                <div style={{ padding: '0.5rem', background: 'var(--primary-light)', color: 'var(--primary-color)', borderRadius: '10px' }}><Sun size={20} /></div>
+            <div className="bg-card border border-border rounded-2xl p-6 md:p-8 shadow-sm">
+              <h3 className="flex items-center gap-3 text-xl font-bold text-foreground mb-6">
+                <div className="p-2 bg-primary/10 text-primary rounded-xl"><Sun size={20} /></div>
                 Appearance
               </h3>
 
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1.5rem', background: 'var(--bg-main)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)' }}>
+              <div className="flex justify-between items-center p-5 bg-background rounded-xl border border-border shadow-sm">
                 <div>
-                  <p style={{ fontWeight: '600', color: 'var(--text-main)', margin: '0 0 0.25rem 0', fontSize: '1.05rem' }}>Theme Mode</p>
-                  <p style={{ color: 'var(--text-muted)', margin: 0, fontSize: '0.9rem' }}>Choose between light and dark modes.</p>
+                  <p className="font-bold text-foreground text-base mb-1">Theme Mode</p>
+                  <p className="text-muted-foreground text-sm font-medium">Choose between light and dark modes.</p>
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                  <span style={{ fontSize: '0.9rem', color: 'var(--text-muted)', fontWeight: 600 }}>{theme === 'light' ? 'Light Mode' : 'Dark Mode'}</span>
+                <div className="flex items-center gap-4">
+                  <span className="text-sm font-bold text-muted-foreground uppercase tracking-wider">{theme === 'light' ? 'Light Mode' : 'Dark Mode'}</span>
                   <ToggleSwitch checked={theme === 'dark'} onChange={toggleTheme} />
                 </div>
               </div>
             </div>
 
-            <div className="card" style={{ padding: '2rem' }}>
-              <h3 style={{ fontSize: '1.25rem', marginBottom: '1.5rem', color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                <div style={{ padding: '0.5rem', background: 'var(--primary-light)', color: 'var(--primary-color)', borderRadius: '10px' }}><Globe size={20} /></div>
+            <div className="bg-card border border-border rounded-2xl p-6 md:p-8 shadow-sm">
+              <h3 className="flex items-center gap-3 text-xl font-bold text-foreground mb-6">
+                <div className="p-2 bg-primary/10 text-primary rounded-xl"><Globe size={20} /></div>
                 Regional Preferences
               </h3>
 
-              <div style={{ padding: '1.5rem', background: 'var(--bg-main)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)' }}>
-                <label style={{ display: 'block', fontWeight: '600', color: 'var(--text-main)', marginBottom: '0.5rem' }}>Base Currency</label>
-                <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)', marginBottom: '1.5rem' }}>This currency is used globally across your dashboard and transaction history.</p>
+              <div className="p-5 bg-background rounded-xl border border-border shadow-sm">
+                <label className="block font-bold text-foreground mb-1">Base Currency</label>
+                <p className="text-sm text-muted-foreground font-medium mb-4">This currency is used globally across your dashboard and transaction history.</p>
 
                 <select
                   value={selectedCurrency}
                   onChange={(e) => setSelectedCurrency(e.target.value)}
-                  className="input-field"
-                  style={{ marginBottom: '0', maxWidth: '300px' }}
+                  className="w-full max-w-sm bg-card border border-border rounded-xl px-4 py-2.5 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 shadow-sm"
                 >
                   {CURRENCIES.map(c => (
                     <option key={c.code} value={c.code}>{c.label}</option>
@@ -201,12 +188,11 @@ const Settings = () => {
               </div>
             </div>
 
-            <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '1rem' }}>
+            <div className="flex justify-end mt-2">
               <button
-                className="btn"
                 onClick={handleSave}
                 disabled={saving || selectedCurrency === currency}
-                style={{ padding: '0.75rem 2rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}
+                className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-3 px-8 rounded-xl transition-colors shadow-sm text-sm flex items-center gap-2"
               >
                 <Save size={18} /> {saving ? 'Saving...' : 'Save Preferences'}
               </button>
@@ -216,21 +202,19 @@ const Settings = () => {
 
         {/* Categories Tab */}
         {activeTab === 'categories' && (
-          <div className="card" style={{ padding: '2rem' }}>
-            <div style={{ marginBottom: '2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-              <div>
-                <h3 style={{ fontSize: '1.25rem', color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.5rem' }}>
-                  <div style={{ padding: '0.5rem', background: 'var(--primary-light)', color: 'var(--primary-color)', borderRadius: '10px' }}><Layout size={20} /></div>
-                  Manage Categories
-                </h3>
-                <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem' }}>Organize your transactions with custom categories.</p>
-              </div>
+          <div className="bg-card border border-border rounded-2xl p-6 md:p-8 shadow-sm">
+            <div className="mb-8">
+              <h3 className="flex items-center gap-3 text-xl font-bold text-foreground mb-2">
+                <div className="p-2 bg-primary/10 text-primary rounded-xl"><Layout size={20} /></div>
+                Manage Categories
+              </h3>
+              <p className="text-muted-foreground font-medium text-sm">Organize your transactions with custom categories.</p>
             </div>
 
             {/* Predefined Categories Grid */}
-            <div style={{ marginBottom: '2rem' }}>
-              <h4 style={{ fontSize: '0.95rem', color: 'var(--text-muted)', marginBottom: '1rem' }}>Quick Add Predefined Categories</h4>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem' }}>
+            <div className="mb-8">
+              <h4 className="text-sm font-bold text-muted-foreground uppercase tracking-wider mb-4">Quick Add Predefined Categories</h4>
+              <div className="flex flex-wrap gap-3">
                 {PREDEFINED_CATEGORIES.map(predef => {
                   const alreadyAdded = categories.some(c => c.name.toLowerCase() === predef.name.toLowerCase());
                   return (
@@ -238,14 +222,11 @@ const Settings = () => {
                       key={predef.name}
                       onClick={() => handleAddPredefined(predef)}
                       disabled={alreadyAdded}
-                      style={{
-                        display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem 1rem',
-                        background: alreadyAdded ? 'var(--bg-main)' : 'var(--primary-light)',
-                        border: '1px solid', borderColor: alreadyAdded ? 'var(--border-color)' : 'var(--primary-color)',
-                        borderRadius: 'var(--radius-md)', cursor: alreadyAdded ? 'not-allowed' : 'pointer',
-                        color: alreadyAdded ? 'var(--text-muted)' : 'var(--primary-color)',
-                        opacity: alreadyAdded ? 0.6 : 1, fontSize: '0.9rem', fontWeight: 600, transition: 'all 0.2s'
-                      }}
+                      className={`flex items-center gap-2 py-2 px-4 rounded-xl text-sm font-bold transition-all ${
+                        alreadyAdded 
+                          ? 'bg-muted/30 border border-border text-muted-foreground cursor-not-allowed opacity-60' 
+                          : 'bg-primary/5 border border-primary/20 text-primary hover:bg-primary/10 hover:border-primary/40 shadow-sm'
+                      }`}
                     >
                       {getCategoryIcon(predef.icon, 16, 'currentColor')}
                       {predef.name}
@@ -255,20 +236,16 @@ const Settings = () => {
               </div>
             </div>
 
-            <hr style={{ border: 'none', borderTop: '1px solid var(--border-color)', margin: '2rem 0' }} />
+            <hr className="border-border my-8" />
 
-            <h4 style={{ fontSize: '0.95rem', color: 'var(--text-muted)', marginBottom: '1rem' }}>Add Custom Category</h4>
-            <form onSubmit={handleAddCategory} style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '2rem', background: 'var(--bg-main)', padding: '1.5rem', borderRadius: 'var(--radius-md)', border: '1px dashed var(--border-color)' }}>
+            <h4 className="text-sm font-bold text-muted-foreground uppercase tracking-wider mb-4">Add Custom Category</h4>
+            <form onSubmit={handleAddCategory} className="flex flex-col gap-4 mb-8 bg-background p-6 rounded-2xl border border-border shadow-sm">
 
-              <div style={{ display: 'flex', gap: '1rem' }}>
+              <div className="flex flex-col md:flex-row gap-4">
                 <button
                   type="button"
                   onClick={() => setShowIconPicker(!showIconPicker)}
-                  style={{
-                    display: 'flex', alignItems: 'center', justifyContent: 'center', width: '45px', height: '45px',
-                    background: 'var(--bg-panel)', border: '1px solid var(--border-color)', borderRadius: 'var(--radius-md)',
-                    cursor: 'pointer', color: 'var(--primary-color)'
-                  }}
+                  className="w-12 h-12 flex items-center justify-center bg-card border border-border rounded-xl text-primary hover:bg-muted/50 transition-colors shadow-sm shrink-0"
                   title="Choose Icon"
                 >
                   {getCategoryIcon(newCategoryIcon, 20)}
@@ -278,33 +255,29 @@ const Settings = () => {
                   value={newCategoryName}
                   onChange={e => setNewCategoryName(e.target.value)}
                   placeholder="Enter custom category name..."
-                  className="input-field"
-                  style={{ marginBottom: 0, flex: 1 }}
+                  className="flex-1 bg-card border border-border rounded-xl px-4 py-3 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 shadow-sm"
                   required
                 />
                 <button
                   type="submit"
-                  className="btn"
-                  style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', whiteSpace: 'nowrap' }}
+                  className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-3 px-6 rounded-xl transition-colors shadow-sm text-sm flex items-center justify-center gap-2 shrink-0"
                 >
                   <Plus size={18} /> Add
                 </button>
               </div>
 
               {showIconPicker && (
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', padding: '1rem', background: 'var(--bg-panel)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)' }}>
+                <div className="flex flex-wrap gap-2 p-4 bg-card rounded-xl border border-border mt-2 shadow-sm">
                   {Object.keys(ICON_MAP).map(iconName => (
                     <button
                       key={iconName}
                       type="button"
                       onClick={() => { setNewCategoryIcon(iconName); setShowIconPicker(false); }}
-                      style={{
-                        padding: '0.5rem', borderRadius: 'var(--radius-sm)', border: '1px solid',
-                        borderColor: newCategoryIcon === iconName ? 'var(--primary-color)' : 'transparent',
-                        background: newCategoryIcon === iconName ? 'var(--primary-light)' : 'transparent',
-                        cursor: 'pointer', color: newCategoryIcon === iconName ? 'var(--primary-color)' : 'var(--text-muted)',
-                        transition: 'all 0.2s'
-                      }}
+                      className={`p-2.5 rounded-lg border transition-all ${
+                        newCategoryIcon === iconName 
+                          ? 'border-primary bg-primary/10 text-primary' 
+                          : 'border-transparent text-muted-foreground hover:bg-muted/50 hover:text-foreground'
+                      }`}
                     >
                       {getCategoryIcon(iconName, 20)}
                     </button>
@@ -313,32 +286,27 @@ const Settings = () => {
               )}
             </form>
 
-            <h4 style={{ fontSize: '0.95rem', color: 'var(--text-main)', marginBottom: '1rem' }}>Your Categories</h4>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '1rem' }}>
+            <h4 className="text-sm font-bold text-muted-foreground uppercase tracking-wider mb-4">Your Categories</h4>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {categories.map(cat => (
-                <div key={cat.id} style={{
-                  display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-                  padding: '1rem 1.25rem', background: 'var(--bg-main)', borderRadius: 'var(--radius-md)',
-                  border: '1px solid var(--border-color)'
-                }}>
-                  <span style={{ fontWeight: '600', color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '32px', height: '32px', background: 'var(--primary-light)', color: 'var(--primary-color)', borderRadius: '8px' }}>
-                      {getIconForCategory(cat, 16)}
+                <div key={cat.id} className="flex justify-between items-center p-4 bg-background rounded-xl border border-border shadow-sm group">
+                  <span className="font-bold text-sm text-foreground flex items-center gap-3">
+                    <div className="w-10 h-10 flex items-center justify-center bg-primary/10 text-primary rounded-lg">
+                      {getIconForCategory(cat, 18)}
                     </div>
-                    {cat.name}
+                    <span className="truncate">{cat.name}</span>
                   </span>
                   <button
                     onClick={() => handleDeleteCategory(cat.id)}
-                    style={{ background: 'none', border: 'none', color: 'var(--danger)', cursor: 'pointer', opacity: 0.7, padding: '0.25rem' }}
-                    onMouseOver={(e) => e.currentTarget.style.opacity = 1}
-                    onMouseOut={(e) => e.currentTarget.style.opacity = 0.7}
+                    className="text-muted-foreground hover:text-destructive hover:bg-destructive/10 p-2 rounded-lg transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100"
+                    title="Delete Category"
                   >
-                    <Trash2 size={18} />
+                    <Trash2 size={16} />
                   </button>
                 </div>
               ))}
               {categories.length === 0 && (
-                <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '3rem', color: 'var(--text-muted)', background: 'var(--bg-main)', borderRadius: 'var(--radius-md)' }}>
+                <div className="col-span-full text-center p-12 text-muted-foreground bg-background rounded-xl border border-border">
                   No categories yet. Add one above!
                 </div>
               )}

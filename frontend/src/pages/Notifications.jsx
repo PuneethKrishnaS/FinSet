@@ -135,89 +135,93 @@ const Notifications = () => {
 
   if (loading) {
     return (
-      <div className="page-container">
-        <h1 className="page-title">Notifications</h1>
-        <div style={{ padding: '2rem', textAlign: 'center' }}>Loading...</div>
+      <div className="flex flex-col w-full h-full pb-10">
+        <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-foreground mb-6">Notifications</h1>
+        <div className="p-8 text-center text-muted-foreground bg-card rounded-xl border border-border">Loading...</div>
       </div>
     );
   }
 
   return (
-    <div className="page-container">
-      <div className="page-header" style={{ marginBottom: '2rem' }}>
+    <div className="flex flex-col w-full h-full pb-10">
+      <header className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 md:mb-8">
         <div>
-          <h1 className="header-title">Notifications</h1>
-          <p className="header-subtitle">Stay updated with your financial alerts</p>
+          <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-foreground mb-1">Notifications</h1>
+          <p className="text-sm md:text-base text-muted-foreground font-medium">Stay updated with your financial alerts</p>
         </div>
         {notifications.length > 0 && (
-          <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-            <button onClick={markAllAsRead} className="btn" style={{ background: 'transparent', border: '1px solid var(--primary-color)', color: 'var(--primary-color)', fontSize: '0.85rem', padding: '0.4rem 0.8rem', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
+          <div className="flex gap-4 items-center">
+            <button 
+              onClick={markAllAsRead} 
+              className="bg-transparent border border-primary text-primary hover:bg-primary/10 text-xs font-bold py-2 px-4 rounded-xl transition-colors flex items-center gap-2"
+            >
               <Check size={16} /> Mark read
             </button>
-            <button onClick={clearAll} className="btn" style={{ background: 'transparent', border: '1px solid var(--danger)', color: 'var(--danger)', fontSize: '0.85rem', padding: '0.4rem 0.8rem', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
+            <button 
+              onClick={clearAll} 
+              className="bg-transparent border border-destructive text-destructive hover:bg-destructive/10 text-xs font-bold py-2 px-4 rounded-xl transition-colors flex items-center gap-2"
+            >
               <Trash2 size={16} /> Clear all
             </button>
           </div>
         )}
-      </div>
+      </header>
 
       {!isPushEnabled && (
-        <div style={{ background: 'var(--bg-main)', border: '1px solid var(--border-color)', borderRadius: 'var(--radius-md)', padding: '1.25rem 1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
+        <div className="bg-card border border-border rounded-2xl p-5 flex flex-wrap justify-between items-center gap-4 mb-6 shadow-sm">
           <div>
-            <h4 style={{ margin: '0 0 0.25rem 0', color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '1rem' }}>
-              <Smartphone size={18} color="var(--primary-color)" /> Enable Push Alerts
+            <h4 className="flex items-center gap-2 text-foreground font-bold text-sm mb-1">
+              <Smartphone size={18} className="text-primary" /> Enable Push Alerts
             </h4>
-            <p style={{ margin: 0, fontSize: '0.85rem', color: 'var(--text-muted)' }}>Get instant alerts on this device when important updates happen.</p>
+            <p className="text-xs font-medium text-muted-foreground">Get instant alerts on this device when important updates happen.</p>
           </div>
-          <button onClick={subscribeToPush} className="btn" style={{ padding: '0.5rem 1.25rem', fontSize: '0.9rem', whiteSpace: 'nowrap' }}>
+          <button 
+            onClick={subscribeToPush} 
+            className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-2 px-5 rounded-xl transition-colors text-sm whitespace-nowrap shadow-sm"
+          >
             Enable
           </button>
         </div>
       )}
 
-      <div style={{ padding: '0' }}>
+      <div className="flex-1">
         {notifications.length === 0 ? (
-          <div className="card" style={{ padding: '3rem', textAlign: 'center', color: 'var(--text-muted)' }}>
-            <Bell size={48} style={{ opacity: 0.2, marginBottom: '1rem' }} />
-            <p>You have no notifications right now.</p>
+          <div className="bg-card border border-border rounded-2xl p-12 text-center flex flex-col items-center justify-center">
+            <div className="w-16 h-16 bg-muted/50 rounded-full flex items-center justify-center mb-4">
+              <Bell size={32} className="text-muted-foreground/30" />
+            </div>
+            <p className="font-bold text-lg text-foreground mb-2">You're all caught up!</p>
+            <p className="text-sm text-muted-foreground">You have no notifications right now.</p>
           </div>
         ) : (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+          <div className="flex flex-col gap-4">
             {notifications.map(notif => (
               <div
                 key={notif.id}
-                style={{
-                  padding: '1.25rem',
-                  borderRadius: 'var(--radius-md)',
-                  border: '1px solid var(--border-color)',
-                  background: notif.is_read ? 'var(--bg-main)' : 'var(--primary-light)',
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center'
-                }}
+                className={`flex justify-between items-start p-5 rounded-2xl border transition-all ${
+                  notif.is_read 
+                    ? 'bg-card border-border hover:shadow-sm' 
+                    : 'bg-primary/5 border-primary/20 shadow-sm'
+                }`}
               >
-                <div>
-                  <h4 style={{ margin: '0 0 0.5rem 0', display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-main)' }}>
-                    {!notif.is_read && <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--primary-color)' }}></span>}
+                <div className="flex-1 pr-4">
+                  <h4 className="flex items-center gap-2 font-bold text-sm text-foreground mb-1.5">
+                    {!notif.is_read && <span className="w-2 h-2 rounded-full bg-primary shrink-0"></span>}
                     {notif.title}
                   </h4>
-                  <p style={{ margin: 0, color: 'var(--text-muted)' }}>{notif.message}</p>
-                  <small style={{ color: 'var(--text-muted)', fontSize: '0.8rem', marginTop: '0.5rem', display: 'block' }}>
-                    {new Date(notif.created_at).toLocaleString()}
-                  </small>
+                  <p className="text-sm font-medium text-muted-foreground leading-relaxed mb-2">
+                    {notif.message}
+                  </p>
+                  <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">
+                    {new Date(notif.created_at).toLocaleString('en-US', { 
+                      month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' 
+                    })}
+                  </span>
                 </div>
                 {!notif.is_read && (
                   <button
                     onClick={() => markAsRead(notif.id)}
-                    style={{
-                      padding: '0.4rem 0.6rem',
-                      fontSize: '0.75rem',
-                      background: 'transparent',
-                      color: 'var(--primary-color)',
-                      border: 'none',
-                      cursor: 'pointer',
-                      fontWeight: '600'
-                    }}
+                    className="text-primary hover:text-primary/80 text-xs font-bold whitespace-nowrap py-1 px-2 transition-colors shrink-0"
                   >
                     Mark read
                   </button>

@@ -119,90 +119,98 @@ const History = () => {
   }, [filteredTransactions]);
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100%', fontSize: '0.85rem', width: '100%' }}>
+    <div className="flex flex-col w-full h-full pb-10">
       
-      <header className="responsive-header" style={{ marginBottom: '1.5rem' }}>
+      <header className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 md:mb-8">
         <div>
-          <h1 className="header-title">History</h1>
-          <p className="header-subtitle">View, search, and export your past transactions</p>
+          <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-foreground mb-1">History</h1>
+          <p className="text-sm md:text-base text-muted-foreground font-medium">View, search, and export your past transactions</p>
         </div>
-        <button onClick={handleExportCSV} className="btn btn-secondary" style={{ padding: '0.5rem 1rem', fontSize: '0.85rem' }}>
+        <button 
+          onClick={handleExportCSV} 
+          className="bg-secondary hover:bg-secondary/80 text-secondary-foreground text-sm font-bold py-2 px-4 rounded-xl transition-colors shadow-sm active:scale-[0.98] flex items-center gap-2 w-fit border border-border"
+        >
           <Download size={16} /> Export CSV
         </button>
       </header>
 
       {/* Dynamic Filter Stats */}
-      <div className="responsive-grid-3" style={{ marginBottom: '1.5rem' }}>
-        <div className="card" style={{ padding: '1.25rem', display: 'flex', alignItems: 'center', gap: '1rem' }}>
-          <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'var(--success-light)', color: 'var(--success)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <TrendingUp size={20} />
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-6 md:mb-8">
+        <div className="bg-card border border-border rounded-2xl p-5 shadow-sm flex items-center gap-4">
+          <div className="w-12 h-12 rounded-full bg-emerald-500/10 text-emerald-500 flex items-center justify-center shrink-0">
+            <TrendingUp size={24} />
           </div>
           <div>
-            <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: 600, textTransform: 'uppercase' }}>Filtered Income</div>
-            <div style={{ fontSize: '1.2rem', fontWeight: 800, color: 'var(--text-main)' }}>{formatCurrency(filteredIncome)}</div>
+            <div className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-0.5">Filtered Income</div>
+            <div className="text-xl font-black text-foreground">{formatCurrency(filteredIncome)}</div>
           </div>
         </div>
 
-        <div className="card" style={{ padding: '1.25rem', display: 'flex', alignItems: 'center', gap: '1rem' }}>
-          <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'var(--danger-light)', color: 'var(--danger)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <TrendingDown size={20} />
+        <div className="bg-card border border-border rounded-2xl p-5 shadow-sm flex items-center gap-4">
+          <div className="w-12 h-12 rounded-full bg-destructive/10 text-destructive flex items-center justify-center shrink-0">
+            <TrendingDown size={24} />
           </div>
           <div>
-            <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: 600, textTransform: 'uppercase' }}>Filtered Expenses</div>
-            <div style={{ fontSize: '1.2rem', fontWeight: 800, color: 'var(--text-main)' }}>{formatCurrency(filteredExpense)}</div>
+            <div className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-0.5">Filtered Expenses</div>
+            <div className="text-xl font-black text-foreground">{formatCurrency(filteredExpense)}</div>
           </div>
         </div>
 
-        <div className="card" style={{ padding: '1.25rem', display: 'flex', alignItems: 'center', gap: '1rem' }}>
-          <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'var(--bg-main)', color: filteredNet >= 0 ? 'var(--primary-color)' : 'var(--danger)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <Wallet size={20} />
+        <div className="bg-card border border-border rounded-2xl p-5 shadow-sm flex items-center gap-4">
+          <div className={`w-12 h-12 rounded-full flex items-center justify-center shrink-0 ${filteredNet >= 0 ? 'bg-primary/10 text-primary' : 'bg-destructive/10 text-destructive'}`}>
+            <Wallet size={24} />
           </div>
           <div>
-            <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: 600, textTransform: 'uppercase' }}>Net Flow</div>
-            <div style={{ fontSize: '1.2rem', fontWeight: 800, color: filteredNet >= 0 ? 'var(--primary-color)' : 'var(--danger)' }}>
+            <div className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-0.5">Net Flow</div>
+            <div className={`text-xl font-black ${filteredNet >= 0 ? 'text-primary' : 'text-destructive'}`}>
               {filteredNet > 0 ? '+' : ''}{formatCurrency(filteredNet)}
             </div>
           </div>
         </div>
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', flex: 1, overflow: 'hidden' }}>
+      <div className="flex flex-col flex-1">
         
         {/* Modern Filters Bar */}
-        <div style={{ display: 'flex', gap: '1rem', marginBottom: '1.5rem', flexWrap: 'wrap', alignItems: 'center' }}>
-          <div style={{ position: 'relative', flex: 1, minWidth: '250px' }}>
-            <Search size={16} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-light)' }} />
+        <div className="flex flex-col sm:flex-row gap-4 mb-6">
+          <div className="relative flex-1">
+            <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground" />
             <input 
               type="text" 
               placeholder="Search descriptions..." 
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="input-field"
-              style={{ marginBottom: 0, paddingLeft: '2.5rem', paddingRight: '1rem', background: 'var(--bg-main)', border: 'none' }}
+              className="w-full bg-card border border-border rounded-xl pl-11 pr-4 py-3 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 shadow-sm"
             />
           </div>
           
-          <div style={{ display: 'flex', background: 'var(--bg-main)', padding: '0.25rem', borderRadius: 'var(--radius-md)' }}>
+          <div className="flex bg-muted/40 p-1.5 rounded-xl border border-border/50 shrink-0 overflow-x-auto">
             <button 
               onClick={() => { setFilterType('all'); setFilterCategory('all'); }}
-              style={{ padding: '0.5rem 1rem', fontSize: '0.8rem', fontWeight: 600, border: 'none', background: filterType === 'all' ? 'var(--bg-panel)' : 'transparent', color: filterType === 'all' ? 'var(--text-main)' : 'var(--text-muted)', borderRadius: 'var(--radius-sm)', cursor: 'pointer', boxShadow: filterType === 'all' ? 'var(--shadow-sm)' : 'none', transition: 'all 0.2s' }}
-            >All</button>
+              className={`px-4 py-2 text-sm font-bold rounded-lg transition-all whitespace-nowrap ${filterType === 'all' ? 'bg-background text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
+            >
+              All
+            </button>
             <button 
               onClick={() => { setFilterType('income'); setFilterCategory('all'); }}
-              style={{ padding: '0.5rem 1rem', fontSize: '0.8rem', fontWeight: 600, border: 'none', background: filterType === 'income' ? 'var(--bg-panel)' : 'transparent', color: filterType === 'income' ? 'var(--success)' : 'var(--text-muted)', borderRadius: 'var(--radius-sm)', cursor: 'pointer', boxShadow: filterType === 'income' ? 'var(--shadow-sm)' : 'none', transition: 'all 0.2s' }}
-            >Income</button>
+              className={`px-4 py-2 text-sm font-bold rounded-lg transition-all whitespace-nowrap ${filterType === 'income' ? 'bg-background text-emerald-500 shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
+            >
+              Income
+            </button>
             <button 
               onClick={() => { setFilterType('expense'); setFilterCategory('all'); }}
-              style={{ padding: '0.5rem 1rem', fontSize: '0.8rem', fontWeight: 600, border: 'none', background: filterType === 'expense' ? 'var(--bg-panel)' : 'transparent', color: filterType === 'expense' ? 'var(--danger)' : 'var(--text-muted)', borderRadius: 'var(--radius-sm)', cursor: 'pointer', boxShadow: filterType === 'expense' ? 'var(--shadow-sm)' : 'none', transition: 'all 0.2s' }}
-            >Expenses</button>
+              className={`px-4 py-2 text-sm font-bold rounded-lg transition-all whitespace-nowrap ${filterType === 'expense' ? 'bg-background text-destructive shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
+            >
+              Expenses
+            </button>
           </div>
         </div>
 
         {filterType === 'expense' && (
-          <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.5rem', overflowX: 'auto', paddingBottom: '0.5rem' }}>
+          <div className="flex gap-2 mb-6 overflow-x-auto pb-2 scrollbar-hide">
             <button
               onClick={() => setFilterCategory('all')}
-              style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', padding: '0.4rem 0.8rem', border: 'none', borderRadius: 'var(--radius-md)', cursor: 'pointer', whiteSpace: 'nowrap', fontWeight: 600, fontSize: '0.75rem', background: filterCategory === 'all' ? 'var(--primary-color)' : 'var(--bg-main)', color: filterCategory === 'all' ? '#fff' : 'var(--text-muted)', transition: 'all 0.2s' }}
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold whitespace-nowrap transition-colors ${filterCategory === 'all' ? 'bg-primary text-primary-foreground shadow-sm' : 'bg-card border border-border text-muted-foreground hover:bg-muted/50'}`}
             >
               All Categories
             </button>
@@ -212,64 +220,63 @@ const History = () => {
                 <button
                   key={c.id}
                   onClick={() => setFilterCategory(c.name.toLowerCase())}
-                  style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', padding: '0.4rem 0.8rem', border: 'none', borderRadius: 'var(--radius-md)', cursor: 'pointer', whiteSpace: 'nowrap', fontWeight: 600, fontSize: '0.75rem', background: isSelected ? 'var(--primary-color)' : 'var(--bg-main)', color: isSelected ? '#fff' : 'var(--text-muted)', transition: 'all 0.2s' }}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold whitespace-nowrap transition-colors ${isSelected ? 'bg-primary text-primary-foreground shadow-sm' : 'bg-card border border-border text-muted-foreground hover:bg-muted/50'}`}
                 >
-                  {getIconForCategory(c, 14, isSelected ? '#fff' : 'currentColor')} {c.name}
+                  {getIconForCategory(c, 16, isSelected ? '#fff' : 'currentColor')} {c.name}
                 </button>
               );
             })}
           </div>
         )}
 
-        {/* Transaction List */}
-        <div className="edge-to-edge-list" style={{ overflowY: 'auto', flex: 1, paddingRight: '0.5rem' }}>
+        {/* Transaction List (Edge-to-Edge on Mobile) */}
+        <div className="-mx-4 md:mx-0 flex-1">
           {loading ? (
-            <div style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-muted)' }}>Loading history...</div>
+            <div className="text-center p-12 text-muted-foreground">Loading history...</div>
           ) : filteredTransactions.length === 0 ? (
-            <div style={{ textAlign: 'center', padding: '4rem 2rem', color: 'var(--text-muted)' }}>
-              <Filter size={32} style={{ margin: '0 auto 1rem auto', opacity: 0.3 }} />
-              <div style={{ fontWeight: 600, fontSize: '1rem', color: 'var(--text-main)' }}>No transactions found</div>
-              <div style={{ fontSize: '0.85rem', marginTop: '0.25rem' }}>Try adjusting your search or filters.</div>
+            <div className="text-center p-16">
+              <Filter size={48} className="mx-auto mb-4 text-muted-foreground/30" />
+              <div className="font-bold text-lg text-foreground mb-1">No transactions found</div>
+              <div className="text-sm text-muted-foreground">Try adjusting your search or filters.</div>
             </div>
           ) : (
-            <div style={{ display: 'flex', flexDirection: 'column' }}>
+            <div className="flex flex-col">
               <AnimatePresence>
                 {groupedTransactions.map((group, gIndex) => (
                   <motion.div 
                     key={group.label}
-                    initial={{ opacity: 0, y: 20 }}
+                    initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, scale: 0.95 }}
-                    transition={{ duration: 0.3, delay: gIndex * 0.05 }}
-                    style={{ marginBottom: '1.5rem' }}
+                    exit={{ opacity: 0, scale: 0.98 }}
+                    transition={{ duration: 0.2, delay: gIndex * 0.05 }}
+                    className="mb-6 md:mb-8 md:bg-card md:border md:border-border md:rounded-2xl md:overflow-hidden md:shadow-sm"
                   >
-                    {/* Month Header row */}
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'var(--bg-panel)', padding: '0.75rem 1.25rem', borderTop: '1px solid var(--border-color)', borderBottom: '1px solid var(--border-color)', position: 'sticky', top: 0, zIndex: 10 }}>
-                      <span style={{ fontWeight: 700, fontSize: '0.95rem', color: 'var(--text-main)' }}>{group.label}</span>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                        <div style={{ textAlign: 'right' }}>
-                          <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>Total Spent</div>
-                          <div style={{ fontWeight: 700, fontSize: '0.9rem', color: 'var(--text-main)' }}>{formatCurrency(group.totalSpent)}</div>
+                    {/* Month Header */}
+                    <div className="sticky top-0 z-10 flex justify-between items-center bg-muted/80 backdrop-blur-md px-4 md:px-6 py-3 border-y border-border md:border-t-0 md:bg-muted/50">
+                      <span className="font-bold text-sm text-foreground uppercase tracking-wider">{group.label}</span>
+                      <div className="flex items-center gap-3">
+                        <div className="text-right">
+                          <div className="text-[10px] font-bold text-muted-foreground uppercase">Total Spent</div>
+                          <div className="font-bold text-sm text-foreground">{formatCurrency(group.totalSpent)}</div>
                         </div>
-                        <ChevronRight size={18} color="var(--primary-color)" />
                       </div>
                     </div>
 
-                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                    <div className="flex flex-col divide-y divide-border bg-background md:bg-transparent">
                       {group.transactions.map((t, tIndex) => {
                         const isInc = t.type === 'income';
-                        let iconElement = <MoreHorizontal size={18} />;
+                        let iconElement = <MoreHorizontal size={20} />;
                         let bgColor = '#64748b';
                         let typeLabel = 'Other';
                         
                         if (isInc) {
                           const sourceObj = INCOME_SOURCES.find(s => s.value === t.categoryKey) || INCOME_SOURCES.find(s => s.label.toLowerCase() === t.categoryKey);
-                          if (sourceObj) { iconElement = <sourceObj.icon size={18} />; bgColor = sourceObj.color; typeLabel = sourceObj.label; }
+                          if (sourceObj) { iconElement = <sourceObj.icon size={20} />; bgColor = sourceObj.color; typeLabel = sourceObj.label; }
                           else { typeLabel = t.displayTitle; }
                         } else {
                           const catObj = categories.find(c => c.name.toLowerCase() === t.categoryKey);
                           typeLabel = catObj ? catObj.name : t.category;
-                          iconElement = catObj ? getIconForCategory(catObj, 18) : <MoreHorizontal size={18} />;
+                          iconElement = catObj ? getIconForCategory(catObj, 20) : <MoreHorizontal size={20} />;
                           bgColor = catObj ? (catObj.color || '#64748b') : '#64748b';
                         }
 
@@ -278,48 +285,40 @@ const History = () => {
                             key={`${t.type}-${t.id}`} 
                             initial={{ opacity: 0, x: -10 }}
                             animate={{ opacity: 1, x: 0 }}
-                            transition={{ duration: 0.2, delay: (gIndex * 0.1) + (tIndex * 0.05) }}
-                            className="transaction-item" 
-                            style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '1rem 1.25rem', borderBottom: '1px solid var(--border-color)', position: 'relative' }}
+                            transition={{ duration: 0.2, delay: (gIndex * 0.1) + (tIndex * 0.03) }}
+                            className="flex items-center gap-4 px-4 md:px-6 py-4 hover:bg-muted/20 transition-colors group relative"
                           >
                             
-                            {/* Left: Icon */}
-                            <div className="transaction-item-icon" style={{ width: '48px', height: '48px', borderRadius: '50%', background: `${bgColor}15`, color: bgColor, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                            {/* Icon */}
+                            <div className="w-12 h-12 rounded-full flex items-center justify-center shrink-0" style={{ background: `${bgColor}15`, color: bgColor }}>
                               {iconElement}
                             </div>
                             
-                            {/* Middle: Details & Badge */}
-                            <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                              <div className="transaction-item-details-title" style={{ fontWeight: 600, fontSize: '0.95rem', color: 'var(--text-main)', marginBottom: '0.15rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                            {/* Details */}
+                            <div className="flex-1 min-w-0 flex flex-col justify-center">
+                              <div className="font-bold text-base text-foreground mb-0.5 truncate">
                                 {t.displayTitle}
                               </div>
-                              <div className="transaction-item-details-subtitle" style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: '0.4rem' }}>
-                                Paid on {new Date(t.date).toLocaleDateString('en-US', { day: '2-digit', month: 'short' })}, {new Date(t.date).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
+                              <div className="text-xs text-muted-foreground font-medium mb-1.5">
+                                {new Date(t.date).toLocaleDateString('en-US', { day: '2-digit', month: 'short' })}, {new Date(t.date).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
                               </div>
-                              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.3rem', padding: '0.2rem 0.5rem', borderRadius: '1rem', border: `1px solid ${bgColor}40`, width: 'fit-content', background: `${bgColor}05` }}>
-                                <span style={{ color: bgColor, display: 'flex', alignItems: 'center' }}>
-                                  {React.cloneElement(iconElement, { size: 10 })}
-                                </span>
-                                <span style={{ fontSize: '0.65rem', fontWeight: 600, color: bgColor }}>{typeLabel}</span>
+                              <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md w-fit" style={{ background: `${bgColor}15` }}>
+                                <span style={{ color: bgColor }}>{React.cloneElement(iconElement, { size: 12 })}</span>
+                                <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: bgColor }}>{typeLabel}</span>
                               </div>
                             </div>
 
-                            {/* Right: Amount & Delete Action */}
-                            <div className="transaction-item-actions" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', justifyContent: 'center', gap: '0.25rem' }}>
-                              <div className="transaction-item-amount" style={{ fontWeight: 700, fontSize: '1rem', color: 'var(--text-main)' }}>
+                            {/* Amount & Actions */}
+                            <div className="flex flex-col items-end justify-center gap-1 shrink-0">
+                              <div className={`font-black text-lg ${isInc ? 'text-emerald-500' : 'text-foreground'}`}>
                                 {isInc ? '+' : '-'} {formatCurrency(t.amount)}
-                              </div>
-                              <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '0.2rem' }}>
-                                From <Wallet size={10} color="var(--primary-color)" />
                               </div>
                               <button 
                                 onClick={() => confirmDelete(t.id, t.type)} 
-                                style={{ background: 'transparent', border: 'none', color: 'var(--danger)', padding: '0.25rem', marginTop: '0.25rem', borderRadius: '50%', cursor: 'pointer', opacity: 0.5, transition: 'all 0.2s', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                                onMouseOver={(e) => { e.currentTarget.style.opacity = 1; }}
-                                onMouseOut={(e) => { e.currentTarget.style.opacity = 0.5; }}
+                                className="p-2 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-full transition-colors opacity-0 md:group-hover:opacity-100 flex items-center justify-center focus:opacity-100"
                                 title="Delete Transaction"
                               >
-                                <Trash2 size={14} />
+                                <Trash2 size={16} />
                               </button>
                             </div>
 
