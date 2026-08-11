@@ -247,7 +247,7 @@ const History = () => {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.98 }}
                     transition={{ duration: 0.2, delay: gIndex * 0.05 }}
-                    className="mb-6 md:mb-8 md:bg-card md:border md:border-border md:rounded-2xl md:overflow-hidden md:shadow-sm"
+                    className="mb-6 md:mb-8 bg-card border border-border rounded-2xl overflow-hidden shadow-sm"
                   >
                     {/* Month Header */}
                     <div className="sticky top-0 z-10 flex justify-between items-center bg-muted/80 backdrop-blur-md px-4 md:px-6 py-3 border-y border-border md:border-t-0 md:bg-muted/50">
