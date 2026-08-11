@@ -8,6 +8,7 @@ import toast from 'react-hot-toast';
 import { useSettings } from '../context/SettingsContext';
 import useFinanceStore from '../store/useFinanceStore';
 import { getCategoryIcon, getIconForCategory } from '../utils/CategoryIcons';
+import { numberToWords } from '../utils/numberToWords';
 
 const INCOME_SOURCES = [
   { value: 'salary', label: 'Salary', icon: Briefcase, color: '#10b981' },
@@ -157,6 +158,13 @@ const LogTransaction = () => {
                   }}
                 />
               </div>
+              
+              {/* Number in words */}
+              {amount > 0 && (
+                <div style={{ textAlign: 'center', marginTop: '0.25rem', fontSize: '0.75rem', color: 'var(--text-muted)', fontStyle: 'italic', opacity: 0.8 }}>
+                  {numberToWords(parseFloat(amount), currency)}
+                </div>
+              )}
             </div>
 
             <div className="responsive-grid-2" style={{ marginBottom: '2rem' }}>
