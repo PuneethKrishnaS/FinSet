@@ -52,103 +52,112 @@ const ResetPassword = () => {
   };
 
   return (
-    <div className="auth-split-card">
-      <div className="auth-left">
-        <img src="/auth-bg.png" alt="Abstract Wealth" className="auth-bg-img" />
-        <div className="auth-left-content">
-          <div className="auth-logo" style={{ display: 'flex', alignItems: 'center' }}>
-            <img src="/FinSet_Logo.svg" alt="FinSet" style={{ height: '32px' }} />
+    <div className="w-full flex-1 flex flex-col md:flex-row bg-background md:bg-card md:rounded-3xl md:shadow-2xl overflow-hidden md:max-w-5xl md:min-h-[600px] border-border md:border relative z-10">
+      
+      {/* Left Abstract Illustration Panel (Desktop Only) */}
+      <div className="hidden md:flex md:w-1/2 relative bg-primary items-center justify-center overflow-hidden">
+        <img src="/auth-bg.png" alt="Abstract Wealth" className="absolute inset-0 w-full h-full object-cover opacity-20 mix-blend-overlay" />
+        <div className="relative z-10 p-12 flex flex-col justify-between h-full text-primary-foreground">
+          <div className="flex items-center">
+            <img src="/FinSet_Logo.svg" alt="FinSet" className="h-8 brightness-0 invert" />
           </div>
           
-          <div className="auth-quote-container">
-            <p className="auth-quote">"Security is paramount. We make sure you always have safe access to your financial data."</p>
-            <div className="auth-author">
-              <div style={{ width: '20px', height: '2px', backgroundColor: 'white', borderRadius: '2px' }}></div>
+          <div className="mt-auto">
+            <p className="text-xl font-bold leading-relaxed mb-4">"Security is paramount. We make sure you always have safe access to your financial data."</p>
+            <div className="flex items-center gap-3 text-sm font-semibold opacity-80">
+              <div className="w-5 h-0.5 bg-white rounded-full"></div>
               FinSet Team
             </div>
           </div>
         </div>
       </div>
 
-      <div className="auth-right" style={{ position: 'relative' }}>
+      {/* Right Form Panel (Full screen mobile, half screen desktop) */}
+      <div className="w-full md:w-1/2 flex flex-col justify-center px-6 py-12 md:px-16 md:py-12 relative min-h-screen md:min-h-0 bg-background md:bg-card">
+        
+        {/* Mobile Logo */}
+        <div className="md:hidden flex items-center mb-8">
+          <img src="/FinSet_Logo.svg" alt="FinSet" className="h-8" />
+        </div>
+
         <button 
           type="button"
           onClick={toggleTheme} 
-          style={{ position: 'absolute', top: '2rem', right: '2rem', background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', padding: '0.5rem' }}
+          className="absolute top-6 right-6 p-2 text-muted-foreground hover:text-foreground hover:bg-muted/50 rounded-full transition-colors"
           title="Toggle Theme"
         >
           {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
         </button>
         
-        <div className="auth-header">
-          <h2 className="auth-title">Create New Password</h2>
-          <p className="auth-subtitle">Your new password must be different from previous used passwords.</p>
+        <div className="mb-8">
+          <h2 className="text-2xl md:text-3xl font-black text-foreground mb-2">Create New Password</h2>
+          <p className="text-sm font-medium text-muted-foreground">Your new password must be different from previous used passwords.</p>
         </div>
 
         {error && (
-          <div style={{ padding: '0.8rem 1rem', background: 'var(--danger-light)', color: 'var(--danger)', borderRadius: 'var(--radius-md)', marginBottom: '1.5rem', fontSize: '0.9rem', fontWeight: '500', border: '1px solid #fecaca' }}>
+          <div className="mb-6 p-3.5 bg-destructive/10 border border-destructive/20 text-destructive text-sm font-bold rounded-xl flex items-center gap-2">
             {error}
           </div>
         )}
 
         {success ? (
-          <div style={{ textAlign: 'center', padding: '2rem 1rem' }}>
-            <CheckCircle2 size={48} className="text-success" style={{ margin: '0 auto 1rem auto' }} />
-            <h3 style={{ fontSize: '1.25rem', marginBottom: '0.5rem', color: 'var(--text-main)' }}>Password Reset Successful</h3>
-            <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginBottom: '2rem' }}>
+          <div className="text-center py-8 px-4">
+            <CheckCircle2 size={48} className="text-emerald-500 mx-auto mb-4" />
+            <h3 className="text-xl font-bold mb-2 text-foreground">Password Reset Successful</h3>
+            <p className="text-sm font-medium text-muted-foreground mb-8">
               Your password has been changed successfully. You can now log in with your new credentials.
             </p>
-            <Link to="/login" className="btn" style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
+            <Link to="/login" className="inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-3 px-6 rounded-xl transition-all shadow-md active:scale-[0.98]">
               <ArrowLeft size={16} /> Back to Login
             </Link>
           </div>
         ) : isChecking ? (
-          <div style={{ textAlign: 'center', padding: '2rem' }}>
-            <div className="spinner" style={{ margin: '0 auto' }}></div>
-            <p style={{ marginTop: '1rem', color: 'var(--text-muted)' }}>Validating link...</p>
+          <div className="text-center py-12">
+            <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto"></div>
+            <p className="mt-4 text-sm font-medium text-muted-foreground">Validating link...</p>
           </div>
         ) : isInvalidLink ? (
-          <div style={{ textAlign: 'center', padding: '1rem' }}>
-            <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', marginBottom: '1.5rem' }}>
+          <div className="text-center py-8 px-4">
+            <p className="text-sm font-medium text-muted-foreground mb-8">
               Please request a new password reset link if you still need to change your password.
             </p>
-            <Link to="/forgot-password" className="btn" style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
+            <Link to="/forgot-password" className="inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-3 px-6 rounded-xl transition-all shadow-md active:scale-[0.98]">
               Request New Link
             </Link>
           </div>
         ) : (
-          <form onSubmit={handleSubmit}>
-            <div className="auth-form-group">
-              <label className="auth-label">New Password</label>
-              <div className="auth-input-wrapper">
-                <Lock size={18} className="auth-input-icon" />
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <div className="space-y-1.5">
+              <label className="text-xs font-bold text-foreground uppercase tracking-wider">New Password</label>
+              <div className="relative">
+                <Lock size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground" />
                 <input 
                   type="password" 
-                  className="auth-input" 
                   placeholder="••••••••" 
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
                   required
+                  className="w-full bg-background md:bg-muted/30 border border-border rounded-xl pl-11 pr-4 py-3 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 transition-shadow"
                 />
               </div>
             </div>
 
-            <div className="auth-form-group">
-              <label className="auth-label">Confirm New Password</label>
-              <div className="auth-input-wrapper">
-                <Lock size={18} className="auth-input-icon" />
+            <div className="space-y-1.5">
+              <label className="text-xs font-bold text-foreground uppercase tracking-wider">Confirm New Password</label>
+              <div className="relative">
+                <Lock size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground" />
                 <input 
                   type="password" 
-                  className="auth-input" 
                   placeholder="••••••••" 
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   required
+                  className="w-full bg-background md:bg-muted/30 border border-border rounded-xl pl-11 pr-4 py-3 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 transition-shadow"
                 />
               </div>
             </div>
 
-            <button type="submit" className="auth-btn" disabled={loading}>
+            <button type="submit" disabled={loading} className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-3.5 rounded-xl transition-all shadow-md active:scale-[0.98] flex items-center justify-center gap-2 mt-2">
               {loading ? 'Resetting...' : (
                 <>Reset Password <ArrowRight size={18} /></>
               )}
