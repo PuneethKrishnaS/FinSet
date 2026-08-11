@@ -11,8 +11,7 @@ import {
   User,
   PieChart,
   Bell,
-  MoreVertical,
-  UploadCloud
+  MoreVertical
 } from 'lucide-react';
 import api from '../services/api';
 import useFinanceStore from '../store/useFinanceStore';
@@ -120,10 +119,6 @@ const Sidebar = () => {
           <Link to="/log-transaction" onClick={closeMenu} className={`nav-item ${location.pathname === '/log-transaction' ? 'active' : ''}`}>
             <ArrowRightLeft size={18} />
             Transactions
-          </Link>
-          <Link to="/import" onClick={closeMenu} className={`nav-item ${location.pathname === '/import' ? 'active' : ''}`}>
-            <UploadCloud size={18} />
-            Import CSV/PDF
           </Link>
           <Link to="/history" onClick={closeMenu} className={`nav-item ${location.pathname === '/history' ? 'active' : ''}`}>
             <HistoryIcon size={18} />
