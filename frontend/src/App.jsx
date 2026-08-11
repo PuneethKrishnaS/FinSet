@@ -65,11 +65,20 @@ const AppLayout = ({ children }) => {
           () => console.log("SMS Watch started"),
           (err) => console.log("SMS Watch failed", err)
         );
+      } else {
+        // Sometimes it takes a moment for the cordova object to attach to window
+        setTimeout(() => {
+          if (window.SMSReceive) {
+            window.SMSReceive.startWatch(
+              () => console.log("SMS Watch started"),
+              (err) => console.log("SMS Watch failed", err)
+            );
+          }
+        }, 1000);
       }
     };
 
-    // Request permissions on Android
-    document.addEventListener('deviceready', startSMSWatch);
+    startSMSWatch();
 
     const onSMSArrive = async (e) => {
       const sms = e.data;
@@ -101,7 +110,6 @@ const AppLayout = ({ children }) => {
     document.addEventListener('onSMSArrive', onSMSArrive);
 
     return () => {
-      document.removeEventListener('deviceready', startSMSWatch);
       document.removeEventListener('onSMSArrive', onSMSArrive);
       if (window.SMSReceive) {
         window.SMSReceive.stopWatch(() => {}, () => {});
