@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
 import {
-  Save, Briefcase, TrendingUp, History, ArrowRight, MoreHorizontal
+  Save, Briefcase, TrendingUp, History, ArrowRight, MoreHorizontal, Check
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useSettings } from '../context/SettingsContext';
@@ -88,59 +88,54 @@ const LogTransaction = () => {
     }
   };
 
+  const isFormValid = amount && parseFloat(amount) > 0 && date && (type === 'income' || category);
+
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100%', fontSize: '0.85rem', width: '100%' }}>
-      <header className="responsive-header" style={{ marginBottom: '2rem' }}>
-        <div>
-          <h1 className="header-title">Transactions</h1>
-          <p className="header-subtitle">Record a new expense or income</p>
-        </div>
+    <div className="flex flex-col w-full h-full pb-10">
+      
+      <header className="mb-6 md:mb-8">
+        <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-foreground mb-1">Log Transaction</h1>
+        <p className="text-sm md:text-base text-muted-foreground font-medium">Record a new expense or income to your ledger</p>
       </header>
 
-      <div className="responsive-grid-2-1" style={{ alignItems: 'start' }}>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
 
         {/* Left Column: Log Form */}
-        <div className="card" style={{ padding: '0', overflow: 'hidden' }}>
-
+        <div className="lg:col-span-2 bg-card rounded-2xl border border-border shadow-sm overflow-hidden">
+          
           {/* Header Toggle */}
-          <div style={{ display: 'flex', borderBottom: '1px solid var(--border-color)' }}>
+          <div className="flex border-b border-border bg-muted/30">
             <button
               type="button"
               onClick={() => { setType('expense'); }}
-              style={{
-                flex: 1, padding: '1rem', border: 'none', background: type === 'expense' ? 'var(--bg-panel)' : 'var(--bg-main)',
-                color: type === 'expense' ? 'var(--primary-color)' : 'var(--text-muted)',
-                fontWeight: type === 'expense' ? '700' : '500', fontSize: '0.95rem', cursor: 'pointer',
-                borderBottom: type === 'expense' ? '2px solid var(--primary-color)' : '2px solid transparent',
-                transition: 'all 0.2s'
-              }}
+              className={`flex-1 py-4 text-center font-bold text-sm transition-colors border-b-2 ${
+                type === 'expense' 
+                  ? 'border-primary text-primary bg-card' 
+                  : 'border-transparent text-muted-foreground hover:bg-muted/50 hover:text-foreground'
+              }`}
             >
               Add Expense
             </button>
             <button
               type="button"
               onClick={() => { setType('income'); }}
-              style={{
-                flex: 1, padding: '1rem', border: 'none', background: type === 'income' ? 'var(--bg-panel)' : 'var(--bg-main)',
-                color: type === 'income' ? 'var(--success)' : 'var(--text-muted)',
-                fontWeight: type === 'income' ? '700' : '500', fontSize: '0.95rem', cursor: 'pointer',
-                borderBottom: type === 'income' ? '2px solid var(--success)' : '2px solid transparent',
-                transition: 'all 0.2s'
-              }}
+              className={`flex-1 py-4 text-center font-bold text-sm transition-colors border-b-2 ${
+                type === 'income' 
+                  ? 'border-emerald-500 text-emerald-500 bg-card' 
+                  : 'border-transparent text-muted-foreground hover:bg-muted/50 hover:text-foreground'
+              }`}
             >
               Add Income
             </button>
           </div>
 
-          <form onSubmit={handleSubmit} style={{ padding: '1.5rem' }}>
-
+          <form onSubmit={handleSubmit} className="p-5 md:p-8 space-y-8">
+            
             {/* Amount Input */}
-            <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
-              <label style={{ display: 'block', color: 'var(--text-muted)', fontWeight: '600', marginBottom: '0.25rem', fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '1px' }}>
-                Enter Amount
-              </label>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.25rem' }}>
-                <span style={{ fontSize: '1.75rem', fontWeight: '800', color: type === 'expense' ? 'var(--text-main)' : 'var(--success)' }}>{currencySymbol}</span>
+            <div className="flex flex-col items-center justify-center">
+              <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-2">Enter Amount</label>
+              <div className="flex items-center justify-center text-4xl md:text-6xl font-black">
+                <span className={`${type === 'expense' ? 'text-foreground' : 'text-emerald-500'}`}>{currencySymbol}</span>
                 <input
                   type="number"
                   step="0.01"
@@ -149,89 +144,78 @@ const LogTransaction = () => {
                   placeholder="0"
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
-                  className="amount-input"
-                  style={{
-                    fontSize: '2.5rem', fontWeight: '800', border: 'none', background: 'transparent',
-                    width: amount ? `calc(${amount.length}ch + 15px)` : '2ch',
-                    color: type === 'expense' ? 'var(--text-main)' : 'var(--success)',
-                    outline: 'none', textAlign: 'center', padding: 0
-                  }}
+                  className={`bg-transparent border-none outline-none text-center p-0 ml-1 appearance-none ${type === 'expense' ? 'text-foreground' : 'text-emerald-500'}`}
+                  style={{ width: amount ? `calc(${amount.length}ch + 0.5ch)` : '1.5ch' }}
                 />
               </div>
               
               {/* Number in words */}
               {amount > 0 && (
-                <div style={{ textAlign: 'center', marginTop: '0.25rem', fontSize: '0.75rem', color: 'var(--text-muted)', fontStyle: 'italic', opacity: 0.8 }}>
+                <div className="mt-2 text-xs text-muted-foreground font-medium italic opacity-80 text-center">
                   {numberToWords(parseFloat(amount), currency)}
                 </div>
               )}
             </div>
 
-            <div className="responsive-grid-2" style={{ marginBottom: '2rem' }}>
-              <div>
-                <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-main)', fontWeight: '600', fontSize: '0.85rem' }}>Date</label>
+            {/* Date & Note Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div className="space-y-2">
+                <label className="text-sm font-semibold text-foreground">Date</label>
                 <input
                   type="date"
-                  className="input-field"
                   value={date}
                   onChange={(e) => setDate(e.target.value)}
                   required
-                  style={{ padding: '0.75rem', background: 'var(--bg-main)', border: '1px solid var(--border-color)', fontSize: '0.85rem' }}
+                  className="w-full bg-background border border-border rounded-xl px-4 py-3 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
                 />
               </div>
 
-              <div>
-                <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-main)', fontWeight: '600', fontSize: '0.85rem' }}>
+              <div className="space-y-2">
+                <label className="text-sm font-semibold text-foreground">
                   {type === 'expense' ? 'Note / Description' : 'Note (Optional)'}
                 </label>
                 <input
                   type="text"
-                  className="input-field"
                   placeholder="What was this for?"
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   required={type === 'expense' && category === 'other'}
-                  style={{ padding: '0.75rem', background: 'var(--bg-main)', border: '1px solid var(--border-color)', fontSize: '0.85rem' }}
+                  className="w-full bg-background border border-border rounded-xl px-4 py-3 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
                 />
               </div>
             </div>
 
             {/* Category Selector */}
-            <div style={{ marginBottom: '1.5rem' }}>
-              <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-main)', fontWeight: '600', fontSize: '0.85rem' }}>
-                Select Category
+            <div className="space-y-3">
+              <label className="text-sm font-semibold text-foreground">
+                Select {type === 'expense' ? 'Category' : 'Source'}
               </label>
 
               {type === 'expense' ? (
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: '0.5rem', width: '100%' }}>
+                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3">
                   {categories.map((c, index) => {
-                    const COLORS = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8C8', '#F7DC6F', '#BB8FCE', '#F1948A', '#A9DFBF', '#F5B041'];
+                    const COLORS = ['#ef4444', '#f97316', '#f59e0b', '#84cc16', '#10b981', '#06b6d4', '#3b82f6', '#6366f1', '#8b5cf6', '#d946ef', '#f43f5e'];
                     const color = COLORS[index % COLORS.length];
                     const isSelected = category === c.name;
                     return (
                       <div
                         key={c.id}
                         onClick={() => setCategory(c.name)}
-                        style={{
-                          display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.25rem',
-                          padding: '0.75rem 0.25rem', borderRadius: 'var(--radius-md)', cursor: 'pointer',
-                          width: '100%', boxSizing: 'border-box', overflow: 'hidden',
-                          background: isSelected ? `${color}1A` : 'var(--bg-main)',
-                          border: `2px solid ${isSelected ? color : 'transparent'}`,
-                          transition: 'all 0.2s',
-                          boxShadow: isSelected ? 'none' : 'inset 0 0 0 1px var(--border-color)'
-                        }}
+                        className={`flex flex-col items-center justify-center p-3 rounded-xl cursor-pointer transition-all border-2 select-none ${
+                          isSelected ? 'bg-primary/5 border-primary shadow-sm' : 'bg-muted/30 border-transparent hover:bg-muted/60'
+                        }`}
                       >
-                        <div style={{
-                          width: '32px', height: '32px', borderRadius: '50%',
-                          background: isSelected ? color : '#fff',
-                          color: isSelected ? '#fff' : color,
-                          display: 'flex', alignItems: 'center', justifyContent: 'center',
-                          boxShadow: isSelected ? `0 2px 8px rgba(0,0,0,0.2)` : 'var(--shadow-sm)'
-                        }}>
-                          {getIconForCategory(c, 16)}
+                        <div 
+                          className="w-10 h-10 rounded-full flex items-center justify-center shadow-sm mb-2 transition-transform duration-200"
+                          style={{ 
+                            backgroundColor: isSelected ? color : 'var(--card)', 
+                            color: isSelected ? '#fff' : color,
+                            transform: isSelected ? 'scale(1.1)' : 'scale(1)'
+                          }}
+                        >
+                          {getIconForCategory(c, 18)}
                         </div>
-                        <span style={{ fontSize: '0.7rem', fontWeight: isSelected ? '700' : '500', color: isSelected ? 'var(--text-main)' : 'var(--text-muted)', textAlign: 'center', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', width: '100%' }}>
+                        <span className={`text-[11px] text-center font-bold w-full truncate ${isSelected ? 'text-primary' : 'text-muted-foreground'}`}>
                           {c.name}
                         </span>
                       </div>
@@ -239,7 +223,7 @@ const LogTransaction = () => {
                   })}
                 </div>
               ) : (
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: '0.5rem', width: '100%' }}>
+                <div className="grid grid-cols-3 gap-3">
                   {INCOME_SOURCES.map((c) => {
                     const Icon = c.icon;
                     const isSelected = incomeSource === c.value;
@@ -247,26 +231,21 @@ const LogTransaction = () => {
                       <div
                         key={c.value}
                         onClick={() => setIncomeSource(c.value)}
-                        style={{
-                          display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.25rem',
-                          padding: '0.75rem 0.25rem', borderRadius: 'var(--radius-md)', cursor: 'pointer',
-                          width: '100%', boxSizing: 'border-box', overflow: 'hidden',
-                          background: isSelected ? `${c.color}15` : 'var(--bg-main)',
-                          border: `2px solid ${isSelected ? c.color : 'transparent'}`,
-                          transition: 'all 0.2s',
-                          boxShadow: isSelected ? 'none' : 'inset 0 0 0 1px var(--border-color)'
-                        }}
+                        className={`flex flex-col items-center justify-center p-3 rounded-xl cursor-pointer transition-all border-2 select-none ${
+                          isSelected ? 'bg-emerald-500/5 border-emerald-500 shadow-sm' : 'bg-muted/30 border-transparent hover:bg-muted/60'
+                        }`}
                       >
-                        <div style={{
-                          width: '32px', height: '32px', borderRadius: '50%',
-                          background: isSelected ? c.color : '#fff',
-                          color: isSelected ? '#fff' : c.color,
-                          display: 'flex', alignItems: 'center', justifyContent: 'center',
-                          boxShadow: isSelected ? `0 2px 8px ${c.color}40` : 'var(--shadow-sm)'
-                        }}>
-                          <Icon size={16} />
+                        <div 
+                          className="w-12 h-12 rounded-full flex items-center justify-center shadow-sm mb-2 transition-transform duration-200"
+                          style={{ 
+                            backgroundColor: isSelected ? c.color : 'var(--card)', 
+                            color: isSelected ? '#fff' : c.color,
+                            transform: isSelected ? 'scale(1.1)' : 'scale(1)'
+                          }}
+                        >
+                          <Icon size={20} />
                         </div>
-                        <span style={{ fontSize: '0.75rem', fontWeight: isSelected ? '700' : '500', color: isSelected ? 'var(--text-main)' : 'var(--text-muted)', textAlign: 'center', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', width: '100%' }}>
+                        <span className={`text-xs text-center font-bold w-full truncate ${isSelected ? 'text-emerald-500' : 'text-muted-foreground'}`}>
                           {c.label}
                         </span>
                       </div>
@@ -276,57 +255,59 @@ const LogTransaction = () => {
               )}
             </div>
 
-            <div style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.75rem', background: 'var(--bg-main)', borderRadius: 'var(--radius-sm)' }}>
+            {/* Recurring Toggle */}
+            <label className="flex items-center gap-3 p-4 bg-muted/40 rounded-xl cursor-pointer hover:bg-muted/60 transition-colors border border-border/50">
+              <div className={`w-5 h-5 rounded-md flex items-center justify-center transition-colors border ${isRecurring ? 'bg-primary border-primary' : 'bg-background border-input'}`}>
+                {isRecurring && <Check size={14} className="text-primary-foreground" />}
+              </div>
               <input
                 type="checkbox"
-                id="recurringCheck"
                 checked={isRecurring}
                 onChange={(e) => setIsRecurring(e.target.checked)}
-                style={{ width: '16px', height: '16px', accentColor: 'var(--primary-color)', cursor: 'pointer' }}
+                className="hidden"
               />
-              <label htmlFor="recurringCheck" style={{ fontSize: '0.8rem', color: 'var(--text-main)', fontWeight: '600', cursor: 'pointer' }}>
-                Mark as Recurring (automatically log this every month)
-              </label>
-            </div>
+              <span className="text-sm font-semibold text-foreground select-none">
+                Mark as Recurring <span className="text-muted-foreground font-medium ml-1">(log automatically every month)</span>
+              </span>
+            </label>
 
+            {/* Submit Button */}
             <button
               type="submit"
-              className="btn"
-              disabled={submitting}
-              style={{
-                width: '100%',
-                padding: '0.85rem',
-                fontSize: '0.95rem',
-                fontWeight: 700,
-                borderRadius: 'var(--radius-md)',
-                background: type === 'expense' ? 'var(--primary-color)' : 'var(--success)',
-                boxShadow: type === 'expense' ? '0 4px 14px -2px rgba(124, 58, 237, 0.4)' : '0 4px 14px -2px rgba(16, 185, 129, 0.4)'
-              }}
+              disabled={submitting || !isFormValid}
+              className={`w-full flex items-center justify-center gap-2 py-4 rounded-xl text-base font-bold text-white transition-all shadow-md active:scale-[0.98] ${
+                !isFormValid || submitting 
+                  ? 'bg-muted-foreground/40 cursor-not-allowed shadow-none'
+                  : type === 'expense' 
+                    ? 'bg-primary hover:bg-primary/90 hover:shadow-primary/25 shadow-lg' 
+                    : 'bg-emerald-500 hover:bg-emerald-600 hover:shadow-emerald-500/25 shadow-lg'
+              }`}
             >
-              <Save size={16} style={{ marginRight: '0.5rem' }} />
+              <Save size={18} />
               {submitting ? 'Processing...' : `Confirm ${type === 'expense' ? 'Expense' : 'Income'}`}
             </button>
+            
           </form>
         </div>
 
         {/* Right Column: Mini History Feed */}
-        <div style={{ position: 'sticky', top: '1rem' }}>
-          <div className="card" style={{ padding: '1.5rem', height: 'fit-content' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-              <h3 style={{ fontSize: '0.95rem', display: 'flex', alignItems: 'center', gap: '0.5rem', margin: 0 }}>
-                <History size={16} className="text-primary" /> Recent Activity
+        <div className="lg:sticky lg:top-6">
+          <div className="bg-card rounded-2xl border border-border p-5 md:p-6 shadow-sm">
+            <div className="flex justify-between items-center mb-6">
+              <h3 className="text-base font-bold text-foreground flex items-center gap-2">
+                <History size={18} className="text-primary" /> Recent Activity
               </h3>
               <button
                 onClick={() => navigate('/history')}
-                style={{ background: 'none', border: 'none', color: 'var(--primary-color)', fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.2rem' }}
+                className="text-xs font-bold text-primary hover:text-primary/80 flex items-center gap-1 transition-colors"
               >
-                View All <ArrowRight size={12} />
+                View All <ArrowRight size={14} />
               </button>
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            <div className="space-y-4">
               {recentTransactions.length === 0 ? (
-                <div style={{ padding: '2rem 1rem', textAlign: 'center', color: 'var(--text-muted)', fontSize: '0.85rem' }}>
+                <div className="py-8 text-center text-sm font-medium text-muted-foreground bg-muted/20 rounded-xl">
                   No recent transactions found.
                 </div>
               ) : (
@@ -340,21 +321,22 @@ const LogTransaction = () => {
                     if (sourceObj) { iconElement = <sourceObj.icon size={16} />; bgColor = sourceObj.color; }
                   } else {
                     const catObj = categories.find(c => c.name.toLowerCase() === t.category.toLowerCase());
-                    if (catObj) { iconElement = getIconForCategory(catObj, 16); bgColor = 'var(--primary-color)'; }
+                    if (catObj) { iconElement = getIconForCategory(catObj, 16); bgColor = 'var(--primary)'; }
                   }
 
                   return (
-                    <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '1rem', paddingBottom: '1rem', borderBottom: idx !== recentTransactions.length - 1 ? '1px solid var(--border-color)' : 'none' }}>
-                      <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: `${bgColor}15`, color: bgColor, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <div key={idx} className="flex items-center gap-3">
+                      <div 
+                        className="w-10 h-10 rounded-full flex items-center justify-center shrink-0" 
+                        style={{ backgroundColor: isInc ? '#10b98115' : 'var(--primary-light, rgba(59, 130, 246, 0.1))', color: isInc ? '#10b981' : 'var(--primary)' }}
+                      >
                         {iconElement}
                       </div>
-                      <div style={{ flex: 1, minWidth: 0 }}>
-                        <div style={{ fontWeight: 600, fontSize: '0.85rem', color: 'var(--text-main)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                          {t.displayTitle}
-                        </div>
-                        <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>{t.date}</div>
+                      <div className="flex-1 min-w-0">
+                        <div className="font-semibold text-sm text-foreground truncate">{t.displayTitle}</div>
+                        <div className="text-[11px] text-muted-foreground mt-0.5">{t.date}</div>
                       </div>
-                      <div style={{ fontWeight: 700, fontSize: '0.9rem', color: isInc ? 'var(--success)' : 'var(--text-main)' }}>
+                      <div className={`font-bold text-sm ${isInc ? 'text-emerald-500' : 'text-foreground'}`}>
                         {isInc ? '+' : '-'}{formatCurrency(t.amount)}
                       </div>
                     </div>
