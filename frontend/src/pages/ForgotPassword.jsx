@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../services/api';
-import { PiEnvelopeDuotone, PiArrowRight, PiSunDuotone, PiMoonDuotone, PiArrowLeft, PiCheckCircle } from "react-icons/pi";
+import { PiEnvelopeDuotone, PiArrowRight, PiSunDuotone, PiMoonDuotone, PiArrowLeft, PiCheckCircle , PiSpinnerGap } from "react-icons/pi";
 import { useSettings } from '../context/SettingsContext';
 
 const ForgotPassword = () => {
@@ -77,7 +77,7 @@ const ForgotPassword = () => {
         {success ? (
           <div className="text-center py-8 px-4">
             <PiCheckCircle size={48} className="text-emerald-500 mx-auto mb-4" />
-            <h3 className="text-xl font-bold mb-2 text-foreground">PiCheck your email</h3>
+            <h3 className="text-xl font-bold mb-2 text-foreground">Check your email</h3>
             <p className="text-sm font-medium text-muted-foreground mb-8">
               We've sent a password reset link to <strong className="text-foreground">{email}</strong>. Please check your inbox (and terminal in dev mode).
             </p>
@@ -103,9 +103,10 @@ const ForgotPassword = () => {
             </div>
 
             <button type="submit" disabled={loading} className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-3.5 rounded transition-all  active:scale-[0.98] flex items-center justify-center gap-2 mt-2">
-              {loading ? 'Sending link...' : (
+              {loading && <PiSpinnerGap className="animate-spin" size={18} />}
+              
                 <>Send Reset Link <PiArrowRight size={18} /></>
-              )}
+              
             </button>
           </form>
         )}

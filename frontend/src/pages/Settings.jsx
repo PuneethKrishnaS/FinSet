@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useSettings } from '../context/SettingsContext';
-import { PiMoonDuotone, PiSunDuotone, PiGlobeDuotone, PiFloppyDisk, PiPlus, PiTrash, PiBellDuotone, PiGear as SettingsIcon, PiColumnsDuotone, PiCurrencyDollarDuotone } from "react-icons/pi";
+import { PiMoonDuotone, PiSunDuotone, PiGlobeDuotone, PiFloppyDisk, PiPlus, PiTrash, PiBellDuotone, PiGear as SettingsIcon, PiColumnsDuotone, PiCurrencyDollarDuotone , PiSpinnerGap } from "react-icons/pi";
 import toast from 'react-hot-toast';
 import api from '../services/api';
 import { ICON_MAP, PREDEFINED_CATEGORIES, getCategoryIcon, getIconForCategory } from '../utils/CategoryIcons';
@@ -16,7 +16,7 @@ const CURRENCIES = [
   { code: 'CAD', label: 'Canadian Dollar (C$)' },
 ];
 
-const PiGear = () => {
+const Settings = () => {
   const { currency, updateCurrency, theme, toggleTheme } = useSettings();
   const [selectedCurrency, setSelectedCurrency] = useState(currency);
   const [saving, setSaving] = useState(false);
@@ -191,7 +191,7 @@ const PiGear = () => {
                 disabled={saving || selectedCurrency === currency}
                 className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-3 px-8 rounded transition-colors  text-sm flex items-center gap-2"
               >
-                <PiFloppyDisk size={18} /> {saving ? 'Saving...' : 'PiFloppyDisk Preferences'}
+                <PiFloppyDisk size={18} /> {saving ? 'Saving...' : 'Save Preferences'}
               </button>
             </div>
           </div>
@@ -316,4 +316,4 @@ const PiGear = () => {
   );
 };
 
-export default PiGear;
+export default Settings;

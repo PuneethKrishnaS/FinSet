@@ -170,7 +170,7 @@ const History = () => {
             <PiMagnifyingGlass size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground" />
             <input 
               type="text" 
-              placeholder="PiMagnifyingGlass descriptions..." 
+              placeholder="Search descriptions..." 
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full bg-card border border-border rounded pl-11 pr-4 py-3 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 "
@@ -223,7 +223,7 @@ const History = () => {
         )}
 
         {/* Transaction List (Edge-to-Edge on Mobile) */}
-        <div className="-mx-4 md:mx-0 flex-1 px-5">
+        <div className="-mx-4 md:mx-0 flex-1 ">
           {loading ? (
             <div className="text-center p-12 text-muted-foreground">Loading history...</div>
           ) : filteredTransactions.length === 0 ? (

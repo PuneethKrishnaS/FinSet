@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import api from '../services/api';
 import toast from 'react-hot-toast';
 import { useSettings } from '../context/SettingsContext';
-import { PiChartPieDuotone, PiPlus, PiCalendarDuotone, PiCaretRight, PiTargetDuotone, PiInfo, PiPencilSimple } from "react-icons/pi";
+import { PiChartPieDuotone, PiPlus, PiCalendarDuotone, PiCaretRight, PiTargetDuotone, PiInfo, PiPencilSimple , PiSpinnerGap } from "react-icons/pi";
 import useFinanceStore from '../store/useFinanceStore';
 
 const ChitFunds = () => {

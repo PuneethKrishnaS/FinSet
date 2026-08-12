@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import api from '../services/api';
-import { PiUserDuotone, PiLock, PiArrowRight, PiSunDuotone, PiMoonDuotone } from "react-icons/pi";
+import { PiUserDuotone, PiLock, PiArrowRight, PiSunDuotone, PiMoonDuotone , PiSpinnerGap } from "react-icons/pi";
 import { useSettings } from '../context/SettingsContext';
 
 const Login = () => {
@@ -115,9 +115,10 @@ const Login = () => {
           </div>
 
           <button type="submit" disabled={loading} className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-3.5 rounded transition-all  active:scale-[0.98] flex items-center justify-center gap-2 mt-2">
-            {loading ? 'Authenticating...' : (
+            {loading && <PiSpinnerGap className="animate-spin" size={18} />}
+              
               <>Sign In <PiArrowRight size={18} /></>
-            )}
+            
           </button>
         </form>
 

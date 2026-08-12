@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import api from '../services/api';
-import { PiLock, PiArrowRight, PiSunDuotone, PiMoonDuotone, PiArrowLeft, PiCheckCircle } from "react-icons/pi";
+import { PiLock, PiArrowRight, PiSunDuotone, PiMoonDuotone, PiArrowLeft, PiCheckCircle , PiSpinnerGap } from "react-icons/pi";
 import { useSettings } from '../context/SettingsContext';
 
 const ResetPassword = () => {
@@ -158,9 +158,10 @@ const ResetPassword = () => {
             </div>
 
             <button type="submit" disabled={loading} className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-3.5 rounded transition-all  active:scale-[0.98] flex items-center justify-center gap-2 mt-2">
-              {loading ? 'Resetting...' : (
+              {loading && <PiSpinnerGap className="animate-spin" size={18} />}
+              
                 <>Reset Password <PiArrowRight size={18} /></>
-              )}
+              
             </button>
           </form>
         )}

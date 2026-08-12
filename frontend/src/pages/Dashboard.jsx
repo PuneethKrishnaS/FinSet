@@ -42,7 +42,7 @@ const CalendarOverlay = ({ isOpen, onClose, transactions, formatCurrency }) => {
             <div className="w-10 h-10 rounded bg-primary/10 text-primary flex items-center justify-center">
               <CalendarIcon size={20} />
             </div>
-            <h2 className="text-xl font-bold text-foreground m-0">Transaction PiCalendarDuotone</h2>
+            <h2 className="text-xl font-bold text-foreground m-0">Transaction Calendar</h2>
           </div>
           <button onClick={onClose} className="w-10 h-10 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors">
             <PiX size={20} />
@@ -287,7 +287,7 @@ const Dashboard = () => {
                   <PiClockCounterClockwiseDuotone size={28} className="text-slate-600 dark:text-slate-300 relative z-10" />
                   <div className="absolute inset-0 bg-white/20 dark:bg-white/5" />
                 </div>
-                <span className="text-xs font-semibold text-foreground text-center">Passbook<br/>PiClockCounterClockwiseDuotone</span>
+                <span className="text-xs font-semibold text-foreground text-center">Passbook<br/>History</span>
               </button>
             </div>
           </section>

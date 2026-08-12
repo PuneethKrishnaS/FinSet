@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
-import { PiUserDuotone, PiEnvelopeDuotone, PiLock, PiDownload, PiTrash, PiCheckCircle, PiWarningDuotone, PiX, PiPencilSimple } from "react-icons/pi";
+import { PiUserDuotone, PiEnvelopeDuotone, PiLock, PiDownload, PiTrash, PiCheckCircle, PiWarningDuotone, PiX, PiPencilSimple , PiSpinnerGap } from "react-icons/pi";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -144,7 +144,7 @@ const Profile = () => {
               </div>
               <div>
                 <h2 className="text-2xl font-bold text-foreground mb-1">
-                  {(profileData.first_name || profileData.last_name) ? `${profileData.first_name} ${profileData.last_name}` : 'FinSet PiUserDuotone'}
+                  {(profileData.first_name || profileData.last_name) ? `${profileData.first_name} ${profileData.last_name}` : 'FinSet User'}
                 </h2>
                 <p className="text-muted-foreground flex items-center gap-2 font-medium">
                   <PiEnvelopeDuotone size={16} /> {profileData.email}
@@ -283,7 +283,7 @@ const Profile = () => {
             <div>
               <p className="font-bold text-foreground text-base mb-1">Export Financial Data</p>
               <p className="text-muted-foreground text-sm font-medium leading-relaxed max-w-xl">
-                PiDownload all your incomes, expenses, budgets, and chit fund data in a clean JSON format for your own records.
+                Download all your incomes, expenses, budgets, and chit fund data in a clean JSON format for your own records.
               </p>
             </div>
             <button 

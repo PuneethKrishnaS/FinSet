@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSettings } from '../context/SettingsContext';
 import api from '../services/api';
 import toast from 'react-hot-toast';
-import { PiUsersDuotone, PiPlus, PiCheckCircle, PiTrash, PiArrowUpRight, PiArrowDownRight, PiTrendUpDuotone, PiCaretDown, PiCaretUp, PiClockCounterClockwiseDuotone } from "react-icons/pi";
+import { PiUsersDuotone, PiPlus, PiCheckCircle, PiTrash, PiArrowUpRight, PiArrowDownRight, PiTrendUpDuotone, PiCaretDown, PiCaretUp, PiClockCounterClockwiseDuotone , PiSpinnerGap } from "react-icons/pi";
 import useFinanceStore from '../store/useFinanceStore';
 import ConfirmDialog from '../components/ConfirmDialog';
 
@@ -421,11 +421,11 @@ const Debts = () => {
 
                       </div>
 
-                      {/* Payment PiClockCounterClockwiseDuotone Table */}
+                      {/* Payment History Table */}
                       <div className="bg-card border border-border rounded overflow-hidden">
                         <div className="px-5 py-4 border-b border-border flex items-center gap-2">
                           <PiClockCounterClockwiseDuotone size={16} className="text-primary" />
-                          <h4 className="text-sm font-bold text-foreground">Payment PiClockCounterClockwiseDuotone</h4>
+                          <h4 className="text-sm font-bold text-foreground">Payment History</h4>
                         </div>
                         <div className="overflow-x-auto">
                           <table className="w-full text-left text-sm whitespace-nowrap">
