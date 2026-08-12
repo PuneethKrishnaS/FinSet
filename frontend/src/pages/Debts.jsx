@@ -1,3 +1,4 @@
+import Button from '../components/Button';
 import React, { useState, useEffect } from 'react';
 import { useSettings } from '../context/SettingsContext';
 import api from '../services/api';
@@ -193,20 +194,20 @@ const Debts = () => {
           <form onSubmit={handleCreateDebt} className="space-y-4">
             
             <div className="flex bg-muted/40 p-1.5 rounded border border-border/50">
-              <button 
+              <Button 
                 type="button" 
                 onClick={() => setType('lent')}
                 className={`flex-1 py-2 text-sm font-bold rounded transition-all ${type === 'lent' ? 'bg-emerald-500 text-white ' : 'text-muted-foreground hover:bg-muted/80'}`}
               >
                 I Lent Money
-              </button>
-              <button 
+              </Button>
+              <Button 
                 type="button" 
                 onClick={() => setType('borrowed')}
                 className={`flex-1 py-2 text-sm font-bold rounded transition-all ${type === 'borrowed' ? 'bg-destructive text-white ' : 'text-muted-foreground hover:bg-muted/80'}`}
               >
                 I Borrowed
-              </button>
+              </Button>
             </div>
 
             <div>
@@ -278,12 +279,12 @@ const Debts = () => {
               </div>
             </div>
 
-            <button 
+            <Button 
               type="submit" 
               className={`w-full font-bold py-3 px-4 rounded transition-all  active:scale-[0.98] ${type === 'lent' ? 'bg-emerald-500 hover:bg-emerald-600 text-white shadow-emerald-500/20' : 'bg-destructive hover:bg-destructive/90 text-white shadow-destructive/20'}`}
             >
               Save Record
-            </button>
+            </Button>
           </form>
         </div>
 
@@ -374,9 +375,9 @@ const Debts = () => {
                                 <label className="block text-xs font-semibold text-foreground mb-1.5">Note (Optional)</label>
                                 <input type="text" value={paymentNote} onChange={e => setPaymentNote(e.target.value)} className="w-full bg-background border border-border rounded px-3 py-2 text-sm text-foreground focus:ring-2 focus:ring-primary/50 outline-none" placeholder="e.g. Jan Interest" />
                               </div>
-                              <button type="submit" disabled={paymentLoading} className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-2.5 rounded transition-colors text-sm">
+                              <Button type="submit" disabled={paymentLoading} className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-2.5 rounded transition-colors text-sm">
                                 Save Payment
-                              </button>
+                              </Button>
                             </form>
                           </div>
                         )}
@@ -403,19 +404,19 @@ const Debts = () => {
 
                           <div className="flex gap-3">
                             {!d.is_settled && (
-                              <button 
+                              <Button 
                                 onClick={() => handleSettle(d)} 
                                 className="flex-1 flex items-center justify-center gap-2 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 border border-emerald-500/20 py-2.5 rounded text-sm font-bold transition-colors"
                               >
                                 <PiCheckCircle size={16} /> Settle Debt
-                              </button>
+                              </Button>
                             )}
-                            <button 
+                            <Button 
                               onClick={() => confirmDelete(d.id, 'debt')} 
                               className="flex-1 flex items-center justify-center gap-2 bg-destructive/10 hover:bg-destructive/20 text-destructive border border-destructive/20 py-2.5 rounded text-sm font-bold transition-colors"
                             >
                               <PiTrash size={16} /> Delete
-                            </button>
+                            </Button>
                           </div>
                         </div>
 
@@ -449,12 +450,12 @@ const Debts = () => {
                                       {formatCurrency(p.amount)}
                                     </td>
                                     <td className="px-5 py-3 text-right">
-                                      <button 
+                                      <Button 
                                         onClick={() => confirmDelete(p.id, 'payment')} 
                                         className="p-1.5 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded transition-colors"
                                       >
                                         <PiTrash size={14} />
-                                      </button>
+                                      </Button>
                                     </td>
                                   </tr>
                                 ))

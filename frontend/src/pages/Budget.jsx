@@ -1,3 +1,4 @@
+import Button from '../components/Button';
 import React, { useState, useEffect } from 'react';
 import { useSettings } from '../context/SettingsContext';
 import api from '../services/api';
@@ -182,12 +183,12 @@ const Budget = () => {
 
                   {/* Right Actions */}
                   <div className="flex flex-col items-end gap-2 shrink-0">
-                    <button 
+                    <Button 
                       onClick={() => confirmDeleteBudget(b.id)}
                       className="p-2 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-full transition-colors opacity-0 group-hover:opacity-100"
                     >
                       <PiTrash size={18} />
-                    </button>
+                    </Button>
                     <div className={`text-xs font-bold px-2.5 py-1 rounded-full ${
                       isOver ? 'bg-destructive/10 text-destructive' : isWarning ? 'bg-amber-500/10 text-amber-600' : 'bg-emerald-500/10 text-emerald-600'
                     }`}>
@@ -267,12 +268,12 @@ const Budget = () => {
                   />
                 </div>
               </div>
-              <button 
+              <Button 
                 type="submit" 
                 className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-3 rounded transition-colors  active:scale-[0.98]"
               >
                 PiFloppyDisk Budget
-              </button>
+              </Button>
             </form>
           </div>
 

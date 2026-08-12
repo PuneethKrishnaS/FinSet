@@ -1,3 +1,4 @@
+import Button from '../components/Button';
 import React, { useState, useEffect } from 'react';
 import api from '../services/api';
 import toast from 'react-hot-toast';
@@ -106,12 +107,12 @@ const ChitFunds = () => {
       
       <div className="flex flex-col gap-4 mb-6 relative z-10">
         <div className="flex justify-end">
-          <button 
+          <Button 
             onClick={() => setShowCreateForm(!showCreateForm)}
             className="bg-primary hover:bg-primary/90 text-primary-foreground text-sm font-bold py-2 px-4 rounded transition-colors  active:scale-[0.98] flex items-center gap-2"
           >
             {showCreateForm ? 'Cancel' : <><PiPlus size={16} /> New Chit Fund</>}
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -168,9 +169,9 @@ const ChitFunds = () => {
                 />
               </div>
               <div className="lg:col-span-5 flex justify-end mt-2">
-                <button type="submit" className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-2.5 px-6 rounded transition-colors ">
+                <Button type="submit" className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-2.5 px-6 rounded transition-colors ">
                   Create
-                </button>
+                </Button>
               </div>
             </form>
           </div>
@@ -276,8 +277,8 @@ const ChitFunds = () => {
                           <input type="date" required value={contribution.date} onChange={e => setContribution({...contribution, date: e.target.value})} className="w-40 bg-background border border-border rounded px-3 py-2.5 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50" />
                         </div>
                         <div className="flex gap-2">
-                          <button type="submit" className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-2.5 px-5 rounded transition-colors text-sm">Save</button>
-                          <button type="button" onClick={() => setSelectedChitId(null)} className="bg-muted hover:bg-muted/80 text-foreground font-bold py-2.5 px-5 rounded transition-colors text-sm">Cancel</button>
+                          <Button type="submit" className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-2.5 px-5 rounded transition-colors text-sm">Save</Button>
+                          <Button type="button" onClick={() => setSelectedChitId(null)} className="bg-muted hover:bg-muted/80 text-foreground font-bold py-2.5 px-5 rounded transition-colors text-sm">Cancel</Button>
                         </div>
                       </form>
                     </div>
@@ -285,12 +286,12 @@ const ChitFunds = () => {
                     <div className="flex flex-col gap-4">
                       <div className="flex justify-between items-center">
                         <h4 className="text-base font-bold text-foreground">Contribution Log</h4>
-                        <button onClick={() => {
+                        <Button onClick={() => {
                           setSelectedChitId(chit.id);
                           setContribution({ ...contribution, month_number: monthsPaid + 1 });
                         }} className="bg-primary/10 hover:bg-primary/20 text-primary text-xs font-bold py-1.5 px-3 rounded transition-colors flex items-center gap-1.5">
                           <PiPlus size={14} /> Log Payment
-                        </button>
+                        </Button>
                       </div>
                       
                       <div className="overflow-x-auto rounded border border-border">
@@ -330,8 +331,8 @@ const ChitFunds = () => {
                                           <input type="number" step="0.01" required value={editingContributionData.amount} onChange={e => setEditingContributionData({...editingContributionData, amount: e.target.value})} className="w-24 bg-background border border-border rounded pl-6 pr-2 py-1.5 text-xs text-foreground font-medium" />
                                         </div>
                                         <div className="flex gap-1 ml-auto">
-                                          <button type="submit" className="bg-primary text-primary-foreground text-xs font-bold py-1.5 px-3 rounded">Save</button>
-                                          <button type="button" onClick={() => setEditingContributionId(null)} className="bg-muted text-foreground text-xs font-bold py-1.5 px-3 rounded">Cancel</button>
+                                          <Button type="submit" className="bg-primary text-primary-foreground text-xs font-bold py-1.5 px-3 rounded">Save</Button>
+                                          <Button type="button" onClick={() => setEditingContributionId(null)} className="bg-muted text-foreground text-xs font-bold py-1.5 px-3 rounded">Cancel</Button>
                                         </div>
                                       </form>
                                     </td>
@@ -346,16 +347,16 @@ const ChitFunds = () => {
                                     <td className="px-4 py-3 font-semibold text-muted-foreground">{formatCurrency(totalPool)}</td>
                                     <td className="px-4 py-3 text-right">
                                       {isEditable ? (
-                                        <button onClick={() => {
+                                        <Button onClick={() => {
                                           setEditingContributionId(c.id);
                                           setEditingContributionData({ amount: c.amount, date: c.date, month_number: c.month_number });
                                         }} className="text-primary hover:text-primary/80 transition-colors p-1" title="Edit Contribution">
                                           <PiPencilSimple size={14} />
-                                        </button>
+                                        </Button>
                                       ) : (
-                                        <button disabled className="text-muted-foreground opacity-30 p-1 cursor-not-allowed" title="Can only edit within 24 hours">
+                                        <Button disabled className="text-muted-foreground opacity-30 p-1 cursor-not-allowed" title="Can only edit within 24 hours">
                                           <PiPencilSimple size={14} />
-                                        </button>
+                                        </Button>
                                       )}
                                     </td>
                                   </tr>
