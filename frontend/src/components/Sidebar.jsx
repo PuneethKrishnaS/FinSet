@@ -47,7 +47,7 @@ const Sidebar = () => {
   const navItems = [
     { name: 'Dashboard', icon: PiSquaresFourDuotone, path: '/dashboard' },
     { name: 'Transactions', icon: PiArrowsLeftRight, path: '/log-transaction' },
-    { name: 'PiClockCounterClockwiseDuotone', icon: HistoryIcon, path: '/history' },
+    { name: 'History', icon: HistoryIcon, path: '/history' },
     { name: 'Budgets', icon: PiTargetDuotone, path: '/budgets' },
     { name: 'Debts', icon: PiUsersDuotone, path: '/debts' },
     { name: 'Chits', icon: PiChartPieDuotone, path: '/chits' },
@@ -89,7 +89,7 @@ const Sidebar = () => {
                 )}
               </Link>
               <Link to="/settings" onClick={closeMenu} className="flex items-center gap-3 px-4 py-2 text-sm text-popover-foreground hover:bg-accent hover:text-accent-foreground transition-colors">
-                <SettingsIcon size={16} /> PiGear
+                <SettingsIcon size={16} /> Settings
               </Link>
               <div className="h-px bg-border my-1"></div>
               <button onClick={handleLogout} className="w-full flex items-center gap-3 px-4 py-2 text-sm text-destructive hover:bg-destructive/10 transition-colors">
@@ -142,7 +142,7 @@ const Sidebar = () => {
             )}
           </Link>
           <Link to="/settings" className={`flex items-center gap-3 px-4 py-2.5 rounded text-sm font-medium transition-colors ${location.pathname === '/settings' ? 'bg-sidebar-primary text-sidebar-primary-foreground' : 'text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground'}`}>
-            <SettingsIcon size={18} /> PiGear
+            <SettingsIcon size={18} /> Settings
           </Link>
           <button onClick={handleLogout} className="w-full flex items-center gap-3 px-4 py-2.5 rounded text-sm font-medium text-sidebar-foreground hover:bg-destructive/10 hover:text-destructive transition-colors">
             <PiSignOut size={18} /> Log out

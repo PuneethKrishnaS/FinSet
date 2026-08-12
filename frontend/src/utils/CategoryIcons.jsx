@@ -23,7 +23,30 @@ export const ICON_MAP = {
   'PiWrenchDuotone': PiWrenchDuotone,
   'PiMusicNoteDuotone': PiMusicNoteDuotone,
   'PiScissorsDuotone': PiScissorsDuotone,
-  'PiTicketDuotone': PiTicketDuotone
+  'PiTicketDuotone': PiTicketDuotone,
+  // Backwards compatibility for icons stored in the database
+  'Home': PiHouseDuotone,
+  'Coffee': PiCoffeeDuotone,
+  'Car': PiCarDuotone,
+  'Zap': PiLightningDuotone,
+  'Film': PiFilmStripDuotone,
+  'ShoppingBag': PiToteDuotone,
+  'HeartPulse': PiHeartbeatDuotone,
+  'MoreHorizontal': PiDotsThree,
+  'Book': PiBookDuotone,
+  'GraduationCap': PiGraduationCapDuotone,
+  'Briefcase': PiBriefcaseDuotone,
+  'Monitor': PiMonitorDuotone,
+  'Smartphone': PiDeviceMobileDuotone,
+  'Plane': PiAirplaneDuotone,
+  'Gift': PiGiftDuotone,
+  'Heart': PiHeartDuotone,
+  'DollarSign': PiCurrencyDollarDuotone,
+  'Shirt': PiTShirtDuotone,
+  'Wrench': PiWrenchDuotone,
+  'Music': PiMusicNoteDuotone,
+  'Scissors': PiScissorsDuotone,
+  'Ticket': PiTicketDuotone
 };
 
 export const PREDEFINED_CATEGORIES = [

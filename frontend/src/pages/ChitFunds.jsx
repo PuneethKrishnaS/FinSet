@@ -214,7 +214,7 @@ const ChitFunds = () => {
                         <PiCalendarDuotone size={14} /> Started {chit.start_date}
                       </span>
                       <span className="flex items-center gap-1.5 bg-muted/50 px-2 py-0.5 rounded">
-                        <PiTargetDuotone size={14} /> PiTargetDuotone: <strong className="text-foreground">{targetStr}</strong>
+                        <PiTargetDuotone size={14} /> Target: <strong className="text-foreground">{targetStr}</strong>
                       </span>
                     </div>
                   </div>
