@@ -114,9 +114,9 @@ const Sidebar = () => {
 
       {/* --- DESKTOP SIDEBAR --- */}
       <aside className="hidden md:flex flex-col w-[260px] bg-sidebar border-r border-sidebar-border h-screen shrink-0">
-        <div className="flex items-center gap-3 px-6 h-20 border-b border-sidebar-border shrink-0">
+        <div className="flex items-center gap-3 px-6 h-20 border-b border-sidebar-border shrink-0 w-full justify-center">
           <img src="/FinSet_Logo.svg" alt="FinSet" className="h-8" />
-          <span className="text-2xl font-bold text-sidebar-foreground tracking-tight">FinSet</span>
+          <span className="text-2xl font-bold text-sidebar-foreground tracking-tight ">FinSet</span>
         </div>
 
         <nav className="flex-1  py-6 flex flex-col gap-1 overflow-y-auto">
@@ -132,14 +132,14 @@ const Sidebar = () => {
                     : 'text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground'
                 }`}
               >
-                <item.icon size={18} className={isActive ? 'text-sidebar-primary-foreground' : 'text-sidebar-foreground/70'} />
+                <item.icon size={18} className={isActive ? 'text-sidebar-primary-foreground ' : 'text-sidebar-foreground/70'} />
                 {item.name}
               </Link>
             )
           })}
         </nav>
 
-        <div className=" border-t border-sidebar-border flex flex-col gap-1 shrink-0">
+        <div className="border-t border-sidebar-border flex flex-col gap-1 shrink-0">
           <Link to="/profile" className={`flex items-center gap-3 px-4 py-2.5 rounded text-sm font-medium transition-colors ${location.pathname === '/profile' ? 'bg-sidebar-primary text-sidebar-primary-foreground' : 'text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground'}`}>
             <User size={18} /> Profile
           </Link>

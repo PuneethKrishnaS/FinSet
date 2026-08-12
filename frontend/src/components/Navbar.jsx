@@ -24,7 +24,7 @@ const Navbar = () => {
   if (isAuthPage) return null;
 
   return (
-    <header className="flex items-center justify-between px-6 md:px-8 h-16 md:h-20 border-b border-border bg-background shrink-0 w-full z-20">
+    <header className="hidden md:flex items-center justify-between px-6 md:px-8 h-16 md:h-20 border-b border-border bg-background shrink-0 w-full z-20">
       <div>
         <h1 className="text-xl md:text-2xl font-extrabold tracking-tight text-foreground m-0 leading-none">{title}</h1>
         {desc && <p className="text-xs md:text-sm text-muted-foreground font-medium mt-1">{desc}</p>}
