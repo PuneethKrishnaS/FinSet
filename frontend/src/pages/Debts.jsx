@@ -156,7 +156,7 @@ const Debts = () => {
             <div className="flex items-center justify-between mb-3">
               <span className="text-sm font-bold text-muted-foreground uppercase tracking-wider">People Owe Me</span>
               <div className="w-10 h-10 rounded-full bg-emerald-500/10 text-emerald-500 flex items-center justify-center">
-                <ArrowUpRight size={20} />
+                <PiArrowUpRight size={20} />
               </div>
             </div>
             <div className="text-3xl font-black text-emerald-500">
@@ -172,7 +172,7 @@ const Debts = () => {
             <div className="flex items-center justify-between mb-3">
               <span className="text-sm font-bold text-muted-foreground uppercase tracking-wider">I Owe People</span>
               <div className="w-10 h-10 rounded-full bg-destructive/10 text-destructive flex items-center justify-center">
-                <ArrowDownRight size={20} />
+                <PiArrowDownRight size={20} />
               </div>
             </div>
             <div className="text-3xl font-black text-destructive">
@@ -188,7 +188,7 @@ const Debts = () => {
         {/* Create Form */}
         <div className="bg-card border border-border rounded p-6  lg:sticky lg:top-6">
           <h3 className="text-base font-bold text-foreground mb-5 flex items-center gap-2">
-            <Plus size={18} className="text-primary" /> New Record
+            <PiPlus size={18} className="text-primary" /> New Record
           </h3>
           <form onSubmit={handleCreateDebt} className="space-y-4">
             
@@ -251,7 +251,7 @@ const Debts = () => {
             
             <div className="bg-muted/20 p-4 rounded border border-border">
               <label className="flex items-center gap-1.5 text-xs font-bold text-primary uppercase tracking-wider mb-3">
-                <TrendingUp size={14} /> Interest (Optional)
+                <PiTrendUpDuotone size={14} /> Interest (Optional)
               </label>
               <div className="flex gap-3">
                 <div className="flex-1 relative flex items-center">
@@ -290,7 +290,7 @@ const Debts = () => {
         {/* Debts Accordion List */}
         <div className="lg:col-span-2 flex flex-col gap-4">
           <h3 className="text-base font-bold text-foreground mb-1 flex items-center gap-2">
-            <Users size={18} className="text-primary" /> Active Records
+            <PiUsersDuotone size={18} className="text-primary" /> Active Records
           </h3>
           
           {!debtsLoaded ? (
@@ -298,7 +298,7 @@ const Debts = () => {
           ) : debts.length === 0 ? (
             <div className="bg-card border border-border rounded p-12 text-center flex flex-col items-center justify-center">
               <div className="w-16 h-16 bg-muted/50 rounded-full flex items-center justify-center mb-4">
-                <Users size={32} className="text-muted-foreground/50" />
+                <PiUsersDuotone size={32} className="text-muted-foreground/50" />
               </div>
               <p className="font-bold text-lg text-foreground mb-2">No records found</p>
               <p className="text-sm text-muted-foreground">Use the form to log a new lending or borrowing record.</p>
@@ -342,7 +342,7 @@ const Debts = () => {
                         )}
                       </div>
                       <div className="text-muted-foreground group-hover:text-foreground transition-colors shrink-0">
-                        <ChevronDown size={20} className={`transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`} />
+                        <PiCaretDown size={20} className={`transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`} />
                       </div>
                     </div>
                   </div>
@@ -357,7 +357,7 @@ const Debts = () => {
                         {!d.is_settled && (
                           <div className="bg-card border border-border p-5 rounded">
                             <h4 className="text-sm font-bold text-foreground mb-4 flex items-center gap-2">
-                              <Plus size={16} className="text-primary" /> Log a Payment
+                              <PiPlus size={16} className="text-primary" /> Log a Payment
                             </h4>
                             <form onSubmit={(e) => handleAddPayment(e, d.id)} className="space-y-4">
                               <div className="grid grid-cols-2 gap-4">
@@ -407,25 +407,25 @@ const Debts = () => {
                                 onClick={() => handleSettle(d)} 
                                 className="flex-1 flex items-center justify-center gap-2 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 border border-emerald-500/20 py-2.5 rounded text-sm font-bold transition-colors"
                               >
-                                <CheckCircle size={16} /> Settle Debt
+                                <PiCheckCircle size={16} /> Settle Debt
                               </button>
                             )}
                             <button 
                               onClick={() => confirmDelete(d.id, 'debt')} 
                               className="flex-1 flex items-center justify-center gap-2 bg-destructive/10 hover:bg-destructive/20 text-destructive border border-destructive/20 py-2.5 rounded text-sm font-bold transition-colors"
                             >
-                              <Trash2 size={16} /> Delete
+                              <PiTrash size={16} /> Delete
                             </button>
                           </div>
                         </div>
 
                       </div>
 
-                      {/* Payment History Table */}
+                      {/* Payment PiClockCounterClockwiseDuotone Table */}
                       <div className="bg-card border border-border rounded overflow-hidden">
                         <div className="px-5 py-4 border-b border-border flex items-center gap-2">
-                          <History size={16} className="text-primary" />
-                          <h4 className="text-sm font-bold text-foreground">Payment History</h4>
+                          <PiClockCounterClockwiseDuotone size={16} className="text-primary" />
+                          <h4 className="text-sm font-bold text-foreground">Payment PiClockCounterClockwiseDuotone</h4>
                         </div>
                         <div className="overflow-x-auto">
                           <table className="w-full text-left text-sm whitespace-nowrap">
@@ -453,7 +453,7 @@ const Debts = () => {
                                         onClick={() => confirmDelete(p.id, 'payment')} 
                                         className="p-1.5 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded transition-colors"
                                       >
-                                        <Trash2 size={14} />
+                                        <PiTrash size={14} />
                                       </button>
                                     </td>
                                   </tr>

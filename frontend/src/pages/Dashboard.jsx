@@ -11,7 +11,7 @@ import { getIconForCategory } from '../utils/CategoryIcons';
 
 const COLORS = ['#4f46e5', '#8b5cf6', '#ec4899', '#f59e0b', '#10b981', '#14b8a6', '#3b82f6', '#6366f1'];
 
-// --- Calendar Overlay Component ---
+// --- PiCalendarDuotone Overlay Component ---
 const CalendarOverlay = ({ isOpen, onClose, transactions, formatCurrency }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
 
@@ -36,31 +36,31 @@ const CalendarOverlay = ({ isOpen, onClose, transactions, formatCurrency }) => {
     <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
       <div className="bg-background w-full max-w-4xl max-h-full flex flex-col overflow-hidden border border-border">
         
-        {/* Calendar Header */}
+        {/* PiCalendarDuotone Header */}
         <div className="flex justify-between items-center p-4 border-b border-border bg-muted/30">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded bg-primary/10 text-primary flex items-center justify-center">
               <CalendarIcon size={20} />
             </div>
-            <h2 className="text-xl font-bold text-foreground m-0">Transaction Calendar</h2>
+            <h2 className="text-xl font-bold text-foreground m-0">Transaction PiCalendarDuotone</h2>
           </div>
           <button onClick={onClose} className="w-10 h-10 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors">
-            <X size={20} />
+            <PiX size={20} />
           </button>
         </div>
 
-        {/* Calendar Controls */}
+        {/* PiCalendarDuotone Controls */}
         <div className="flex justify-between items-center p-4 bg-background border-b border-border">
           <h3 className="text-lg font-bold text-foreground m-0">
             {monthNames[month]} {year}
           </h3>
           <div className="flex gap-2">
-            <button onClick={prevMonth} className="w-8 h-8 rounded-full bg-muted/50 flex items-center justify-center text-foreground hover:bg-muted"><ChevronLeft size={16} /></button>
-            <button onClick={nextMonth} className="w-8 h-8 rounded-full bg-muted/50 flex items-center justify-center text-foreground hover:bg-muted"><ChevronRight size={16} /></button>
+            <button onClick={prevMonth} className="w-8 h-8 rounded-full bg-muted/50 flex items-center justify-center text-foreground hover:bg-muted"><PiCaretLeft size={16} /></button>
+            <button onClick={nextMonth} className="w-8 h-8 rounded-full bg-muted/50 flex items-center justify-center text-foreground hover:bg-muted"><PiCaretRight size={16} /></button>
           </div>
         </div>
 
-        {/* Calendar Grid */}
+        {/* PiCalendarDuotone Grid */}
         <div className="flex-1 flex flex-col bg-border gap-[1px] min-h-0">
           {/* Days Header */}
           <div className="grid grid-cols-7 bg-muted/50 gap-[1px]">
@@ -71,7 +71,7 @@ const CalendarOverlay = ({ isOpen, onClose, transactions, formatCurrency }) => {
             ))}
           </div>
           
-          {/* Calendar Body */}
+          {/* PiCalendarDuotone Body */}
           <div className="flex-1 grid grid-cols-7 auto-rows-fr bg-border gap-[1px] overflow-y-auto">
             {blanks.map((_, i) => (
               <div key={`blank-${i}`} className="bg-background opacity-50"></div>
@@ -231,7 +231,7 @@ const Dashboard = () => {
             <div className="grid grid-cols-3 gap-4 pt-6 border-t border-border">
               <div className="flex flex-col">
                 <div className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-500 mb-1">
-                  <TrendingUp size={16} strokeWidth={2.5} />
+                  <PiTrendUpDuotone size={16} strokeWidth={2.5} />
                   <span className="text-[10px] font-bold uppercase tracking-widest">Income</span>
                 </div>
                 <div className="text-lg md:text-xl font-bold text-foreground">{formatCurrency(dashboardData.total_income)}</div>
@@ -239,7 +239,7 @@ const Dashboard = () => {
               
               <div className="flex flex-col">
                 <div className="flex items-center gap-1.5 text-destructive mb-1">
-                  <TrendingDown size={16} strokeWidth={2.5} />
+                  <PiTrendDownDuotone size={16} strokeWidth={2.5} />
                   <span className="text-[10px] font-bold uppercase tracking-widest">Spent</span>
                 </div>
                 <div className="text-lg md:text-xl font-bold text-foreground">{formatCurrency(dashboardData.total_expense)}</div>
@@ -247,7 +247,7 @@ const Dashboard = () => {
 
               <div className="flex flex-col">
                 <div className="flex items-center gap-1.5 text-primary mb-1">
-                  <Wallet size={16} strokeWidth={2.5} />
+                  <PiWalletDuotone size={16} strokeWidth={2.5} />
                   <span className="text-[10px] font-bold uppercase tracking-widest">Savings</span>
                 </div>
                 <div className="text-lg md:text-xl font-bold text-foreground">{formatCurrency(netSavings)}</div>
@@ -260,7 +260,7 @@ const Dashboard = () => {
             <div className="grid grid-cols-4 gap-4 md:gap-6">
               <button onClick={() => navigate('/log?type=expense')} className="flex flex-col items-center justify-center gap-3 group">
                 <div className="w-14 h-14 rounded bg-gradient-to-br from-red-100 to-red-50 dark:from-red-900/30 dark:to-red-900/10 flex items-center justify-center  group-active:scale-95 transition-transform relative overflow-hidden">
-                  <MinusCircle size={28} className="text-red-500 relative z-10" />
+                  <PiMinusCircle size={28} className="text-red-500 relative z-10" />
                   <div className="absolute inset-0 bg-white/20 dark:bg-white/5" />
                 </div>
                 <span className="text-xs font-semibold text-foreground text-center">Add<br/>Expense</span>
@@ -268,7 +268,7 @@ const Dashboard = () => {
               
               <button onClick={() => navigate('/log?type=income')} className="flex flex-col items-center justify-center gap-3 group">
                 <div className="w-14 h-14 rounded bg-gradient-to-br from-emerald-100 to-emerald-50 dark:from-emerald-900/30 dark:to-emerald-900/10 flex items-center justify-center  group-active:scale-95 transition-transform relative overflow-hidden">
-                  <PlusCircle size={28} className="text-emerald-500 relative z-10" />
+                  <PiPlusCircle size={28} className="text-emerald-500 relative z-10" />
                   <div className="absolute inset-0 bg-white/20 dark:bg-white/5" />
                 </div>
                 <span className="text-xs font-semibold text-foreground text-center">Add<br/>Income</span>
@@ -276,7 +276,7 @@ const Dashboard = () => {
               
               <button onClick={() => navigate('/budgets')} className="flex flex-col items-center justify-center gap-3 group">
                 <div className="w-14 h-14 rounded bg-gradient-to-br from-blue-100 to-blue-50 dark:from-blue-900/30 dark:to-blue-900/10 flex items-center justify-center  group-active:scale-95 transition-transform relative overflow-hidden">
-                  <Target size={28} className="text-blue-500 relative z-10" />
+                  <PiTargetDuotone size={28} className="text-blue-500 relative z-10" />
                   <div className="absolute inset-0 bg-white/20 dark:bg-white/5" />
                 </div>
                 <span className="text-xs font-semibold text-foreground text-center">Track<br/>Budgets</span>
@@ -284,10 +284,10 @@ const Dashboard = () => {
               
               <button onClick={() => navigate('/history')} className="flex flex-col items-center justify-center gap-3 group">
                 <div className="w-14 h-14 rounded bg-gradient-to-br from-slate-100 to-slate-50 dark:from-slate-800/50 dark:to-slate-800/20 flex items-center justify-center  group-active:scale-95 transition-transform relative overflow-hidden">
-                  <History size={28} className="text-slate-600 dark:text-slate-300 relative z-10" />
+                  <PiClockCounterClockwiseDuotone size={28} className="text-slate-600 dark:text-slate-300 relative z-10" />
                   <div className="absolute inset-0 bg-white/20 dark:bg-white/5" />
                 </div>
-                <span className="text-xs font-semibold text-foreground text-center">Passbook<br/>History</span>
+                <span className="text-xs font-semibold text-foreground text-center">Passbook<br/>PiClockCounterClockwiseDuotone</span>
               </button>
             </div>
           </section>
@@ -346,7 +346,7 @@ const Dashboard = () => {
                 
                 <div className="flex flex-col gap-1">
                   {processedData.pieData.slice(0, 5).map((cat, i) => {
-                    const icon = cat ? getIconForCategory(cat, 18) : <MoreHorizontal size={18} />;
+                    const icon = cat ? getIconForCategory(cat, 18) : <PiDotsThree size={18} />;
                     const percentage = ((cat.value / dashboardData.total_expense) * 100).toFixed(0);
                     return (
                       <div key={i} className="flex items-center justify-between py-3 border-b border-border/50 last:border-0 hover:bg-muted/30 transition-colors px-2 rounded cursor-default">
@@ -400,7 +400,7 @@ const Dashboard = () => {
                   return (
                     <div key={i} className="flex items-center gap-3 py-3 border-b border-border/50 last:border-0 hover:bg-muted/30 transition-colors px-1 rounded cursor-pointer">
                       <div className="w-10 h-10 rounded-full flex items-center justify-center shrink-0" style={{ backgroundColor: `${bgColor}15`, color: bgColor }}>
-                        {isInc ? <ArrowDownRight size={18} /> : getIconForCategory({ name: typeLabel, color: bgColor }, 18)}
+                        {isInc ? <PiArrowDownRight size={18} /> : getIconForCategory({ name: typeLabel, color: bgColor }, 18)}
                       </div>
                       
                       <div className="flex-1 min-w-0 flex flex-col justify-center">

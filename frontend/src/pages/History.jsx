@@ -9,9 +9,9 @@ import { getCategoryIcon, getIconForCategory } from '../utils/CategoryIcons';
 import ConfirmDialog from '../components/ConfirmDialog';
 
 const INCOME_SOURCES = [
-  { value: 'salary', label: 'Salary', icon: Briefcase, color: '#10b981' },
-  { value: 'investment', label: 'Investment', icon: TrendingUp, color: '#3b82f6' },
-  { value: 'other', label: 'Other', icon: MoreHorizontal, color: '#64748b' },
+  { value: 'salary', label: 'Salary', icon: PiBriefcaseDuotone, color: '#10b981' },
+  { value: 'investment', label: 'Investment', icon: PiTrendUpDuotone, color: '#3b82f6' },
+  { value: 'other', label: 'Other', icon: PiDotsThree, color: '#64748b' },
 ];
 
 const History = () => {
@@ -122,16 +122,16 @@ const History = () => {
             onClick={handleExportCSV} 
             className="bg-secondary hover:bg-secondary/80 text-secondary-foreground text-sm font-bold py-2 px-4 rounded transition-colors  active:scale-[0.98] flex items-center gap-2 border border-border"
           >
-            <Download size={16} /> Export CSV
+            <PiDownload size={16} /> Export CSV
           </button>
         </div>
       </div>
 
-      {/* Dynamic Filter Stats */}
+      {/* Dynamic PiFunnel Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-6 md:mb-8">
         <div className="bg-card border border-border rounded p-5  flex items-center gap-4">
           <div className="w-12 h-12 rounded-full bg-emerald-500/10 text-emerald-500 flex items-center justify-center shrink-0">
-            <TrendingUp size={24} />
+            <PiTrendUpDuotone size={24} />
           </div>
           <div>
             <div className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-0.5">Filtered Income</div>
@@ -141,7 +141,7 @@ const History = () => {
 
         <div className="bg-card border border-border rounded p-5  flex items-center gap-4">
           <div className="w-12 h-12 rounded-full bg-destructive/10 text-destructive flex items-center justify-center shrink-0">
-            <TrendingDown size={24} />
+            <PiTrendDownDuotone size={24} />
           </div>
           <div>
             <div className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-0.5">Filtered Expenses</div>
@@ -151,7 +151,7 @@ const History = () => {
 
         <div className="bg-card border border-border rounded p-5  flex items-center gap-4">
           <div className={`w-12 h-12 rounded-full flex items-center justify-center shrink-0 ${filteredNet >= 0 ? 'bg-primary/10 text-primary' : 'bg-destructive/10 text-destructive'}`}>
-            <Wallet size={24} />
+            <PiWalletDuotone size={24} />
           </div>
           <div>
             <div className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-0.5">Net Flow</div>
@@ -167,10 +167,10 @@ const History = () => {
         {/* Modern Filters Bar */}
         <div className="flex flex-col sm:flex-row gap-4 mb-6">
           <div className="relative flex-1">
-            <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground" />
+            <PiMagnifyingGlass size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground" />
             <input 
               type="text" 
-              placeholder="Search descriptions..." 
+              placeholder="PiMagnifyingGlass descriptions..." 
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full bg-card border border-border rounded pl-11 pr-4 py-3 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 "
@@ -228,7 +228,7 @@ const History = () => {
             <div className="text-center p-12 text-muted-foreground">Loading history...</div>
           ) : filteredTransactions.length === 0 ? (
             <div className="text-center p-16">
-              <Filter size={48} className="mx-auto mb-4 text-muted-foreground/30" />
+              <PiFunnel size={48} className="mx-auto mb-4 text-muted-foreground/30" />
               <div className="font-bold text-lg text-foreground mb-1">No transactions found</div>
               <div className="text-sm text-muted-foreground">Try adjusting your search or filters.</div>
             </div>
@@ -258,7 +258,7 @@ const History = () => {
                     <div className="flex flex-col divide-y divide-border bg-background md:bg-transparent">
                       {group.transactions.map((t, tIndex) => {
                         const isInc = t.type === 'income';
-                        let iconElement = <MoreHorizontal size={20} />;
+                        let iconElement = <PiDotsThree size={20} />;
                         let bgColor = '#64748b';
                         let typeLabel = 'Other';
                         
@@ -269,7 +269,7 @@ const History = () => {
                         } else {
                           const catObj = categories.find(c => c.name.toLowerCase() === t.categoryKey);
                           typeLabel = catObj ? catObj.name : t.category;
-                          iconElement = catObj ? getIconForCategory(catObj, 20) : <MoreHorizontal size={20} />;
+                          iconElement = catObj ? getIconForCategory(catObj, 20) : <PiDotsThree size={20} />;
                           bgColor = catObj ? (catObj.color || '#64748b') : '#64748b';
                         }
 
@@ -311,7 +311,7 @@ const History = () => {
                                 className="p-2 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-full transition-colors opacity-0 md:group-hover:opacity-100 flex items-center justify-center focus:opacity-100"
                                 title="Delete Transaction"
                               >
-                                <Trash2 size={16} />
+                                <PiTrash size={16} />
                               </button>
                             </div>
 

@@ -45,12 +45,12 @@ const Sidebar = () => {
   const closeMenu = () => setIsOpen(false);
 
   const navItems = [
-    { name: 'Dashboard', icon: LayoutDashboard, path: '/dashboard' },
-    { name: 'Transactions', icon: ArrowRightLeft, path: '/log-transaction' },
-    { name: 'History', icon: HistoryIcon, path: '/history' },
-    { name: 'Budgets', icon: Target, path: '/budgets' },
-    { name: 'Debts', icon: Users, path: '/debts' },
-    { name: 'Chits', icon: PieChart, path: '/chits' },
+    { name: 'Dashboard', icon: PiSquaresFourDuotone, path: '/dashboard' },
+    { name: 'Transactions', icon: PiArrowsLeftRight, path: '/log-transaction' },
+    { name: 'PiClockCounterClockwiseDuotone', icon: HistoryIcon, path: '/history' },
+    { name: 'Budgets', icon: PiTargetDuotone, path: '/budgets' },
+    { name: 'Debts', icon: PiUsersDuotone, path: '/debts' },
+    { name: 'Chits', icon: PiChartPieDuotone, path: '/chits' },
   ];
 
   return (
@@ -67,7 +67,7 @@ const Sidebar = () => {
             onClick={() => setIsOpen(!isOpen)} 
             className="p-2 text-sidebar-foreground relative hover:bg-sidebar-accent rounded-full transition-colors"
           >
-            <MoreVertical size={24} />
+            <PiDotsThreeVertical size={24} />
             {unreadCount > 0 && !isOpen && (
               <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-destructive rounded-full border-2 border-sidebar"></span>
             )}
@@ -76,11 +76,11 @@ const Sidebar = () => {
           {isOpen && (
             <div className="absolute right-0 top-full mt-1 w-48 bg-popover border border-border rounded  py-2 z-50">
               <Link to="/profile" onClick={closeMenu} className="flex items-center gap-3 px-4 py-2 text-sm text-popover-foreground hover:bg-accent hover:text-accent-foreground transition-colors">
-                <User size={16} /> Profile
+                <PiUserDuotone size={16} /> Profile
               </Link>
               <Link to="/notifications" onClick={closeMenu} className="flex items-center justify-between px-4 py-2 text-sm text-popover-foreground hover:bg-accent hover:text-accent-foreground transition-colors">
                 <div className="flex items-center gap-3">
-                  <Bell size={16} /> Notifications
+                  <PiBellDuotone size={16} /> Notifications
                 </div>
                 {unreadCount > 0 && (
                   <span className="bg-primary text-primary-foreground text-[10px] font-bold px-1.5 py-0.5 rounded-full">
@@ -89,11 +89,11 @@ const Sidebar = () => {
                 )}
               </Link>
               <Link to="/settings" onClick={closeMenu} className="flex items-center gap-3 px-4 py-2 text-sm text-popover-foreground hover:bg-accent hover:text-accent-foreground transition-colors">
-                <SettingsIcon size={16} /> Settings
+                <SettingsIcon size={16} /> PiGear
               </Link>
               <div className="h-px bg-border my-1"></div>
               <button onClick={handleLogout} className="w-full flex items-center gap-3 px-4 py-2 text-sm text-destructive hover:bg-destructive/10 transition-colors">
-                <LogOut size={16} /> Log out
+                <PiSignOut size={16} /> Log out
               </button>
             </div>
           )}
@@ -129,11 +129,11 @@ const Sidebar = () => {
 
         <div className="border-t border-sidebar-border flex flex-col gap-1 shrink-0">
           <Link to="/profile" className={`flex items-center gap-3 px-4 py-2.5 rounded text-sm font-medium transition-colors ${location.pathname === '/profile' ? 'bg-sidebar-primary text-sidebar-primary-foreground' : 'text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground'}`}>
-            <User size={18} /> Profile
+            <PiUserDuotone size={18} /> Profile
           </Link>
           <Link to="/notifications" className={`flex items-center justify-between px-4 py-2.5 rounded text-sm font-medium transition-colors ${location.pathname === '/notifications' ? 'bg-sidebar-primary text-sidebar-primary-foreground' : 'text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground'}`}>
             <div className="flex items-center gap-3">
-              <Bell size={18} /> Notifications
+              <PiBellDuotone size={18} /> Notifications
             </div>
             {unreadCount > 0 && (
               <span className="bg-primary text-primary-foreground text-xs font-bold px-2 py-0.5 rounded-full">
@@ -142,10 +142,10 @@ const Sidebar = () => {
             )}
           </Link>
           <Link to="/settings" className={`flex items-center gap-3 px-4 py-2.5 rounded text-sm font-medium transition-colors ${location.pathname === '/settings' ? 'bg-sidebar-primary text-sidebar-primary-foreground' : 'text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground'}`}>
-            <SettingsIcon size={18} /> Settings
+            <SettingsIcon size={18} /> PiGear
           </Link>
           <button onClick={handleLogout} className="w-full flex items-center gap-3 px-4 py-2.5 rounded text-sm font-medium text-sidebar-foreground hover:bg-destructive/10 hover:text-destructive transition-colors">
-            <LogOut size={18} /> Log out
+            <PiSignOut size={18} /> Log out
           </button>
         </div>
       </aside>

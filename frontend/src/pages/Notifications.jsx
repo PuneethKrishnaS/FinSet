@@ -151,13 +151,13 @@ const Notifications = () => {
               onClick={markAllAsRead} 
               className="bg-transparent border border-primary text-primary hover:bg-primary/10 text-xs font-bold py-2 px-4 rounded transition-colors flex items-center gap-2"
             >
-              <Check size={16} /> Mark read
+              <PiCheck size={16} /> Mark read
             </button>
             <button 
               onClick={clearAll} 
               className="bg-transparent border border-destructive text-destructive hover:bg-destructive/10 text-xs font-bold py-2 px-4 rounded transition-colors flex items-center gap-2"
             >
-              <Trash2 size={16} /> Clear all
+              <PiTrash size={16} /> Clear all
             </button>
           </div>
         )}
@@ -167,7 +167,7 @@ const Notifications = () => {
         <div className="bg-card border border-border rounded p-5 flex flex-wrap justify-between items-center gap-4 mb-6 ">
           <div>
             <h4 className="flex items-center gap-2 text-foreground font-bold text-sm mb-1">
-              <Smartphone size={18} className="text-primary" /> Enable Push Alerts
+              <PiDeviceMobileDuotone size={18} className="text-primary" /> Enable Push Alerts
             </h4>
             <p className="text-xs font-medium text-muted-foreground">Get instant alerts on this device when important updates happen.</p>
           </div>
@@ -184,7 +184,7 @@ const Notifications = () => {
         {notifications.length === 0 ? (
           <div className="bg-card border border-border rounded p-12 text-center flex flex-col items-center justify-center">
             <div className="w-16 h-16 bg-muted/50 rounded-full flex items-center justify-center mb-4">
-              <Bell size={32} className="text-muted-foreground/30" />
+              <PiBellDuotone size={32} className="text-muted-foreground/30" />
             </div>
             <p className="font-bold text-lg text-foreground mb-2">You're all caught up!</p>
             <p className="text-sm text-muted-foreground">You have no notifications right now.</p>

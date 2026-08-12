@@ -75,7 +75,7 @@ const Register = () => {
           className="absolute top-6 right-6 p-2 text-muted-foreground hover:text-foreground hover:bg-muted/50 rounded-full transition-colors"
           title="Toggle Theme"
         >
-          {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
+          {theme === 'light' ? <PiMoonDuotone size={20} /> : <PiSunDuotone size={20} />}
         </button>
         
         <div className="mb-8">
@@ -95,7 +95,7 @@ const Register = () => {
             <div className="space-y-1.5">
               <label className="text-[11px] font-bold text-foreground uppercase tracking-wider">First Name</label>
               <div className="relative">
-                <User size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
+                <PiUserDuotone size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
                 <input 
                   type="text" 
                   placeholder="John" 
@@ -110,7 +110,7 @@ const Register = () => {
             <div className="space-y-1.5">
               <label className="text-[11px] font-bold text-foreground uppercase tracking-wider">Last Name</label>
               <div className="relative">
-                <User size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
+                <PiUserDuotone size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
                 <input 
                   type="text" 
                   placeholder="Doe" 
@@ -126,7 +126,7 @@ const Register = () => {
           <div className="space-y-1.5">
             <label className="text-[11px] font-bold text-foreground uppercase tracking-wider">Email Address</label>
             <div className="relative">
-              <Mail size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
+              <PiEnvelopeDuotone size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
               <input 
                 type="email" 
                 placeholder="name@example.com" 
@@ -141,7 +141,7 @@ const Register = () => {
           <div className="space-y-1.5">
             <label className="text-[11px] font-bold text-foreground uppercase tracking-wider">Password</label>
             <div className="relative">
-              <Lock size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
+              <PiLock size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
               <input 
                 type="password" 
                 placeholder="Create a strong password" 
@@ -155,7 +155,7 @@ const Register = () => {
 
           <button type="submit" disabled={loading} className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-3.5 rounded transition-all  active:scale-[0.98] flex items-center justify-center gap-2 mt-4">
             {loading ? 'Creating account...' : (
-              <>Sign Up <UserPlus size={18} /></>
+              <>Sign Up <PiUserPlusDuotone size={18} /></>
             )}
           </button>
         </form>

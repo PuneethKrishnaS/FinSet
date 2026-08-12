@@ -110,7 +110,7 @@ const ChitFunds = () => {
             onClick={() => setShowCreateForm(!showCreateForm)}
             className="bg-primary hover:bg-primary/90 text-primary-foreground text-sm font-bold py-2 px-4 rounded transition-colors  active:scale-[0.98] flex items-center gap-2"
           >
-            {showCreateForm ? 'Cancel' : <><Plus size={16} /> New Chit Fund</>}
+            {showCreateForm ? 'Cancel' : <><PiPlus size={16} /> New Chit Fund</>}
           </button>
         </div>
       </div>
@@ -121,7 +121,7 @@ const ChitFunds = () => {
           <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-50"></div>
           <div className="relative z-10">
             <h3 className="text-lg font-bold text-foreground mb-5 flex items-center gap-2">
-              <Target size={20} className="text-primary" /> Start a New Chit Fund
+              <PiTargetDuotone size={20} className="text-primary" /> Start a New Chit Fund
             </h3>
             <form onSubmit={handleCreateChit} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 items-end">
               <div className="lg:col-span-2">
@@ -135,7 +135,7 @@ const ChitFunds = () => {
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-foreground mb-1.5">Target Amount</label>
+                <label className="block text-xs font-semibold text-foreground mb-1.5">PiTargetDuotone Amount</label>
                 <div className="relative flex items-center">
                   <span className="absolute left-3 text-muted-foreground font-bold">{currencySymbol}</span>
                   <input 
@@ -184,7 +184,7 @@ const ChitFunds = () => {
         ) : chits.length === 0 ? (
           <div className="bg-card border border-border rounded p-12 text-center flex flex-col items-center justify-center">
             <div className="w-16 h-16 bg-muted/50 rounded-full flex items-center justify-center mb-4">
-              <PieChart size={32} className="text-muted-foreground/50" />
+              <PiChartPieDuotone size={32} className="text-muted-foreground/50" />
             </div>
             <p className="font-bold text-lg text-foreground mb-2">No Chit Funds yet</p>
             <p className="text-sm text-muted-foreground">Create one to start tracking your monthly community contributions.</p>
@@ -203,18 +203,18 @@ const ChitFunds = () => {
                   className="p-5 md:p-6 flex flex-wrap gap-6 justify-between items-center cursor-pointer group hover:bg-muted/10 transition-colors"
                 >
                   
-                  {/* Left Info */}
+                  {/* Left PiInfo */}
                   <div className="flex-1 min-w-[280px]">
                     <h2 className="text-lg md:text-xl font-bold text-foreground mb-1.5 flex items-center gap-2">
-                      <PieChart className="text-primary shrink-0" size={22} />
+                      <PiChartPieDuotone className="text-primary shrink-0" size={22} />
                       {chit.name}
                     </h2>
                     <div className="flex gap-4 text-xs font-semibold text-muted-foreground mt-2">
                       <span className="flex items-center gap-1.5">
-                        <Calendar size={14} /> Started {chit.start_date}
+                        <PiCalendarDuotone size={14} /> Started {chit.start_date}
                       </span>
                       <span className="flex items-center gap-1.5 bg-muted/50 px-2 py-0.5 rounded">
-                        <Target size={14} /> Target: <strong className="text-foreground">{targetStr}</strong>
+                        <PiTargetDuotone size={14} /> PiTargetDuotone: <strong className="text-foreground">{targetStr}</strong>
                       </span>
                     </div>
                   </div>
@@ -246,7 +246,7 @@ const ChitFunds = () => {
                       </div>
                     </div>
                     <div className="text-muted-foreground group-hover:text-foreground transition-colors shrink-0">
-                      <ChevronRight size={24} className={`transition-transform duration-200 ${expandedChitId === chit.id ? 'rotate-90' : ''}`} />
+                      <PiCaretRight size={24} className={`transition-transform duration-200 ${expandedChitId === chit.id ? 'rotate-90' : ''}`} />
                     </div>
                   </div>
                   
@@ -289,14 +289,14 @@ const ChitFunds = () => {
                           setSelectedChitId(chit.id);
                           setContribution({ ...contribution, month_number: monthsPaid + 1 });
                         }} className="bg-primary/10 hover:bg-primary/20 text-primary text-xs font-bold py-1.5 px-3 rounded transition-colors flex items-center gap-1.5">
-                          <Plus size={14} /> Log Payment
+                          <PiPlus size={14} /> Log Payment
                         </button>
                       </div>
                       
                       <div className="overflow-x-auto rounded border border-border">
                         {chit.contributions.length === 0 ? (
                           <div className="flex items-center justify-center gap-2 py-8 text-sm text-muted-foreground bg-muted/20">
-                            <Info size={16} /> No contributions logged yet.
+                            <PiInfo size={16} /> No contributions logged yet.
                           </div>
                         ) : (
                           <table className="w-full text-left text-sm whitespace-nowrap">
@@ -350,11 +350,11 @@ const ChitFunds = () => {
                                           setEditingContributionId(c.id);
                                           setEditingContributionData({ amount: c.amount, date: c.date, month_number: c.month_number });
                                         }} className="text-primary hover:text-primary/80 transition-colors p-1" title="Edit Contribution">
-                                          <Edit2 size={14} />
+                                          <PiPencilSimple size={14} />
                                         </button>
                                       ) : (
                                         <button disabled className="text-muted-foreground opacity-30 p-1 cursor-not-allowed" title="Can only edit within 24 hours">
-                                          <Edit2 size={14} />
+                                          <PiPencilSimple size={14} />
                                         </button>
                                       )}
                                     </td>

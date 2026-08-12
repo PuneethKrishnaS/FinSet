@@ -9,9 +9,9 @@ import { getCategoryIcon, getIconForCategory } from '../utils/CategoryIcons';
 import { numberToWords } from '../utils/numberToWords';
 
 const INCOME_SOURCES = [
-  { value: 'salary', label: 'Salary', icon: Briefcase, color: '#10b981' },
-  { value: 'investment', label: 'Investment', icon: TrendingUp, color: '#3b82f6' },
-  { value: 'other', label: 'Other', icon: MoreHorizontal, color: '#64748b' },
+  { value: 'salary', label: 'Salary', icon: PiBriefcaseDuotone, color: '#10b981' },
+  { value: 'investment', label: 'Investment', icon: PiTrendUpDuotone, color: '#3b82f6' },
+  { value: 'other', label: 'Other', icon: PiDotsThree, color: '#64748b' },
 ];
 
 const LogTransaction = () => {
@@ -253,7 +253,7 @@ const LogTransaction = () => {
             {/* Recurring Toggle */}
             <label className="flex items-center gap-3 p-4 bg-muted/40 rounded cursor-pointer hover:bg-muted/60 transition-colors border border-border/50">
               <div className={`w-5 h-5 rounded flex items-center justify-center transition-colors border ${isRecurring ? 'bg-primary border-primary' : 'bg-background border-input'}`}>
-                {isRecurring && <Check size={14} className="text-primary-foreground" />}
+                {isRecurring && <PiCheck size={14} className="text-primary-foreground" />}
               </div>
               <input
                 type="checkbox"
@@ -278,25 +278,25 @@ const LogTransaction = () => {
                     : 'bg-emerald-500 hover:bg-emerald-600 hover:shadow-emerald-500/25 '
               }`}
             >
-              <Save size={18} />
+              <PiFloppyDisk size={18} />
               {submitting ? 'Processing...' : `Confirm ${type === 'expense' ? 'Expense' : 'Income'}`}
             </button>
             
           </form>
         </div>
 
-        {/* Right Column: Mini History Feed */}
+        {/* Right Column: Mini PiClockCounterClockwiseDuotone Feed */}
         <div className="lg:sticky lg:top-6">
           <div className="bg-card rounded border border-border p-5 md:p-6 ">
             <div className="flex justify-between items-center mb-6">
               <h3 className="text-base font-bold text-foreground flex items-center gap-2">
-                <History size={18} className="text-primary" /> Recent Activity
+                <PiClockCounterClockwiseDuotone size={18} className="text-primary" /> Recent Activity
               </h3>
               <button
                 onClick={() => navigate('/history')}
                 className="text-xs font-bold text-primary hover:text-primary/80 flex items-center gap-1 transition-colors"
               >
-                View All <ArrowRight size={14} />
+                View All <PiArrowRight size={14} />
               </button>
             </div>
 
@@ -308,7 +308,7 @@ const LogTransaction = () => {
               ) : (
                 recentTransactions.map((t, idx) => {
                   const isInc = t.type === 'income';
-                  let iconElement = <MoreHorizontal size={16} />;
+                  let iconElement = <PiDotsThree size={16} />;
                   let bgColor = '#64748b';
 
                   if (isInc) {

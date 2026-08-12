@@ -141,7 +141,7 @@ const Budget = () => {
           ) : budgets.length === 0 ? (
             <div className="bg-card border border-border rounded p-12 text-center flex flex-col items-center justify-center">
               <div className="w-16 h-16 bg-muted/50 rounded-full flex items-center justify-center mb-4">
-                <Target size={32} className="text-muted-foreground/50" />
+                <PiTargetDuotone size={32} className="text-muted-foreground/50" />
               </div>
               <p className="font-bold text-lg text-foreground mb-2">No budgets set</p>
               <p className="text-sm text-muted-foreground">Use the control panel to create your first monthly budget.</p>
@@ -155,7 +155,7 @@ const Budget = () => {
               const isWarning = percentage >= 80 && !isOver;
               const catObj = categories.find(c => c.name.toLowerCase() === b.category.toLowerCase());
               const catLabel = catObj ? catObj.name : b.category;
-              const icon = catObj ? getIconForCategory(catObj, 20) : <Target size={20} />;
+              const icon = catObj ? getIconForCategory(catObj, 20) : <PiTargetDuotone size={20} />;
 
               return (
                 <div key={b.id} className="bg-card border border-border rounded p-5 flex items-center gap-5 hover: transition-shadow group">
@@ -170,7 +170,7 @@ const Budget = () => {
                     <div className="flex items-center gap-2 mb-1">
                       <div className="text-muted-foreground bg-muted/30 p-1.5 rounded">{icon}</div>
                       <span className="font-bold text-base text-foreground truncate">{catLabel}</span>
-                      {isOver && <AlertCircle size={16} className="text-destructive shrink-0" />}
+                      {isOver && <PiWarningCircleDuotone size={16} className="text-destructive shrink-0" />}
                     </div>
                     <div className="text-sm text-muted-foreground flex items-baseline gap-1 truncate">
                       <span className={`font-bold ${isOver ? 'text-destructive' : 'text-foreground'}`}>
@@ -186,7 +186,7 @@ const Budget = () => {
                       onClick={() => confirmDeleteBudget(b.id)}
                       className="p-2 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-full transition-colors opacity-0 group-hover:opacity-100"
                     >
-                      <Trash2 size={18} />
+                      <PiTrash size={18} />
                     </button>
                     <div className={`text-xs font-bold px-2.5 py-1 rounded-full ${
                       isOver ? 'bg-destructive/10 text-destructive' : isWarning ? 'bg-amber-500/10 text-amber-600' : 'bg-emerald-500/10 text-emerald-600'
@@ -210,7 +210,7 @@ const Budget = () => {
               <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-4 flex justify-between items-center">
                 Month Overview
                 <span className="flex items-center gap-1.5 text-primary bg-primary/10 px-2 py-1 rounded normal-case text-[11px]">
-                  <Calendar size={14} /> {daysLeft} days left
+                  <PiCalendarDuotone size={14} /> {daysLeft} days left
                 </span>
               </h3>
               
@@ -237,7 +237,7 @@ const Budget = () => {
           {/* Create Form Panel */}
           <div className="bg-card border border-border rounded p-6 ">
             <h3 className="text-base font-bold text-foreground mb-5 flex items-center gap-2">
-              <Plus size={18} className="text-primary" /> Create Budget
+              <PiPlus size={18} className="text-primary" /> Create Budget
             </h3>
             <form onSubmit={handleCreateBudget} className="space-y-4">
               <div>
@@ -271,7 +271,7 @@ const Budget = () => {
                 type="submit" 
                 className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-3 rounded transition-colors  active:scale-[0.98]"
               >
-                Save Budget
+                PiFloppyDisk Budget
               </button>
             </form>
           </div>

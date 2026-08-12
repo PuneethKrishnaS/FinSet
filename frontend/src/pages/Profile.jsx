@@ -140,14 +140,14 @@ const Profile = () => {
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
             <div className="flex items-center gap-5">
               <div className="w-20 h-20 rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 text-white flex items-center justify-center text-3xl font-bold  shadow-purple-500/20 shrink-0">
-                {profileData.first_name ? profileData.first_name[0].toUpperCase() : <User size={36} />}
+                {profileData.first_name ? profileData.first_name[0].toUpperCase() : <PiUserDuotone size={36} />}
               </div>
               <div>
                 <h2 className="text-2xl font-bold text-foreground mb-1">
-                  {(profileData.first_name || profileData.last_name) ? `${profileData.first_name} ${profileData.last_name}` : 'FinSet User'}
+                  {(profileData.first_name || profileData.last_name) ? `${profileData.first_name} ${profileData.last_name}` : 'FinSet PiUserDuotone'}
                 </h2>
                 <p className="text-muted-foreground flex items-center gap-2 font-medium">
-                  <Mail size={16} /> {profileData.email}
+                  <PiEnvelopeDuotone size={16} /> {profileData.email}
                 </p>
               </div>
             </div>
@@ -156,7 +156,7 @@ const Profile = () => {
                 onClick={() => setIsEditing(true)}
                 className="bg-transparent border border-border hover:bg-muted text-foreground text-sm font-bold py-2.5 px-5 rounded transition-colors flex items-center gap-2 "
               >
-                <Edit2 size={16} /> Edit Profile
+                <PiPencilSimple size={16} /> Edit Profile
               </button>
             )}
           </div>
@@ -208,7 +208,7 @@ const Profile = () => {
         <div className="bg-card border border-border rounded p-6 md:p-8 ">
           <div className="mb-8">
             <h3 className="flex items-center gap-3 text-xl font-bold text-foreground mb-2">
-              <div className="p-2 bg-primary/10 text-primary rounded"><Lock size={20} /></div>
+              <div className="p-2 bg-primary/10 text-primary rounded"><PiLock size={20} /></div>
               Security & Password
             </h3>
             <p className="text-muted-foreground font-medium text-sm">Keep your account secure by updating your password regularly.</p>
@@ -220,7 +220,7 @@ const Profile = () => {
                 ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20' 
                 : 'bg-destructive/10 text-destructive border-destructive/20'
             }`}>
-              {passwordMessage.type === 'success' ? <CheckCircle2 size={20} /> : <AlertTriangle size={20} />}
+              {passwordMessage.type === 'success' ? <PiCheckCircle size={20} /> : <PiWarningDuotone size={20} />}
               {passwordMessage.text}
             </div>
           )}
@@ -283,7 +283,7 @@ const Profile = () => {
             <div>
               <p className="font-bold text-foreground text-base mb-1">Export Financial Data</p>
               <p className="text-muted-foreground text-sm font-medium leading-relaxed max-w-xl">
-                Download all your incomes, expenses, budgets, and chit fund data in a clean JSON format for your own records.
+                PiDownload all your incomes, expenses, budgets, and chit fund data in a clean JSON format for your own records.
               </p>
             </div>
             <button 
@@ -291,7 +291,7 @@ const Profile = () => {
               disabled={exportLoading}
               className="bg-secondary hover:bg-secondary/80 text-secondary-foreground border border-border font-bold py-2.5 px-5 rounded transition-colors  text-sm flex items-center gap-2 whitespace-nowrap shrink-0"
             >
-              <Download size={18} /> {exportLoading ? 'Exporting...' : 'Export Data'}
+              <PiDownload size={18} /> {exportLoading ? 'Exporting...' : 'Export Data'}
             </button>
           </div>
 
@@ -306,7 +306,7 @@ const Profile = () => {
               onClick={() => setShowDeleteConfirm(true)}
               className="bg-destructive hover:bg-destructive/90 text-destructive-foreground font-bold py-2.5 px-5 rounded transition-colors  text-sm flex items-center gap-2 whitespace-nowrap shrink-0"
             >
-              <Trash2 size={18} /> Delete Account
+              <PiTrash size={18} /> Delete Account
             </button>
           </div>
         </div>
@@ -320,7 +320,7 @@ const Profile = () => {
             <div className="flex justify-between items-start mb-6">
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded bg-destructive/10 text-destructive flex items-center justify-center">
-                  <AlertTriangle size={24} />
+                  <PiWarningDuotone size={24} />
                 </div>
                 <h2 className="text-xl font-bold text-foreground">Delete Account?</h2>
               </div>
@@ -328,7 +328,7 @@ const Profile = () => {
                 onClick={() => setShowDeleteConfirm(false)} 
                 className="text-muted-foreground hover:text-foreground transition-colors p-1"
               >
-                <X size={24} />
+                <PiX size={24} />
               </button>
             </div>
             

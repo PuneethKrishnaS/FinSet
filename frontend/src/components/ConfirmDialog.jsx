@@ -56,7 +56,7 @@ const ConfirmDialog = ({ isOpen, onClose, onConfirm, title, message, confirmText
                 padding: '0.25rem'
               }}
             >
-              <X size={20} />
+              <PiX size={20} />
             </button>
 
             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
@@ -69,7 +69,7 @@ const ConfirmDialog = ({ isOpen, onClose, onConfirm, title, message, confirmText
                 alignItems: 'center',
                 justifyContent: 'center'
               }}>
-                {isDanger ? <AlertTriangle size={24} /> : null}
+                {isDanger ? <PiWarningDuotone size={24} /> : null}
               </div>
               <h3 style={{ margin: 0, fontSize: '1.25rem', color: 'var(--text-main)' }}>{title}</h3>
             </div>

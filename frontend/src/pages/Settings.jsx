@@ -16,13 +16,13 @@ const CURRENCIES = [
   { code: 'CAD', label: 'Canadian Dollar (C$)' },
 ];
 
-const Settings = () => {
+const PiGear = () => {
   const { currency, updateCurrency, theme, toggleTheme } = useSettings();
   const [selectedCurrency, setSelectedCurrency] = useState(currency);
   const [saving, setSaving] = useState(false);
   const [categories, setCategories] = useState([]);
   const [newCategoryName, setNewCategoryName] = useState('');
-  const [newCategoryIcon, setNewCategoryIcon] = useState('DollarSign');
+  const [newCategoryIcon, setNewCategoryIcon] = useState('PiCurrencyDollarDuotone');
   const [showIconPicker, setShowIconPicker] = useState(false);
   const { markDataDirty } = useFinanceStore();
 
@@ -53,7 +53,7 @@ const Settings = () => {
       const res = await api.post('/categories/', { name: newCategoryName.trim(), type: 'expense', icon: newCategoryIcon });
       setCategories([...categories, res.data]);
       setNewCategoryName('');
-      setNewCategoryIcon('DollarSign');
+      setNewCategoryIcon('PiCurrencyDollarDuotone');
       setShowIconPicker(false);
       markDataDirty();
       toast.success('Category added');
@@ -137,7 +137,7 @@ const Settings = () => {
             }`} 
             onClick={() => setActiveTab('categories')}
           >
-            <Layout size={16} /> Categories
+            <PiColumnsDuotone size={16} /> Categories
           </button>
         </div>
 
@@ -147,7 +147,7 @@ const Settings = () => {
 
             <div className="bg-card border border-border rounded p-6 md:p-8 ">
               <h3 className="flex items-center gap-3 text-xl font-bold text-foreground mb-6">
-                <div className="p-2 bg-primary/10 text-primary rounded"><Sun size={20} /></div>
+                <div className="p-2 bg-primary/10 text-primary rounded"><PiSunDuotone size={20} /></div>
                 Appearance
               </h3>
 
@@ -165,7 +165,7 @@ const Settings = () => {
 
             <div className="bg-card border border-border rounded p-6 md:p-8 ">
               <h3 className="flex items-center gap-3 text-xl font-bold text-foreground mb-6">
-                <div className="p-2 bg-primary/10 text-primary rounded"><Globe size={20} /></div>
+                <div className="p-2 bg-primary/10 text-primary rounded"><PiGlobeDuotone size={20} /></div>
                 Regional Preferences
               </h3>
 
@@ -191,7 +191,7 @@ const Settings = () => {
                 disabled={saving || selectedCurrency === currency}
                 className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-3 px-8 rounded transition-colors  text-sm flex items-center gap-2"
               >
-                <Save size={18} /> {saving ? 'Saving...' : 'Save Preferences'}
+                <PiFloppyDisk size={18} /> {saving ? 'Saving...' : 'PiFloppyDisk Preferences'}
               </button>
             </div>
           </div>
@@ -202,7 +202,7 @@ const Settings = () => {
           <div className="bg-card border border-border rounded p-6 md:p-8 ">
             <div className="mb-8">
               <h3 className="flex items-center gap-3 text-xl font-bold text-foreground mb-2">
-                <div className="p-2 bg-primary/10 text-primary rounded"><Layout size={20} /></div>
+                <div className="p-2 bg-primary/10 text-primary rounded"><PiColumnsDuotone size={20} /></div>
                 Manage Categories
               </h3>
               <p className="text-muted-foreground font-medium text-sm">Organize your transactions with custom categories.</p>
@@ -259,7 +259,7 @@ const Settings = () => {
                   type="submit"
                   className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-3 px-6 rounded transition-colors  text-sm flex items-center justify-center gap-2 shrink-0"
                 >
-                  <Plus size={18} /> Add
+                  <PiPlus size={18} /> Add
                 </button>
               </div>
 
@@ -298,7 +298,7 @@ const Settings = () => {
                     className="text-muted-foreground hover:text-destructive hover:bg-destructive/10 p-2 rounded transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100"
                     title="Delete Category"
                   >
-                    <Trash2 size={16} />
+                    <PiTrash size={16} />
                   </button>
                 </div>
               ))}
@@ -316,4 +316,4 @@ const Settings = () => {
   );
 };
 
-export default Settings;
+export default PiGear;

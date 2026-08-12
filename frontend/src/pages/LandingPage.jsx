@@ -15,31 +15,31 @@ const LandingPage = () => {
 
   const features = [
     {
-      icon: <LayoutDashboard size={32} className="text-purple-400" />,
+      icon: <PiSquaresFourDuotone size={32} className="text-purple-400" />,
       title: "Advanced Analytics Dashboard",
       description: "Visualise your entire financial life with beautiful charts, intelligent analytics, and real-time data nodes. Instantly see your net worth, monthly cash flow, and spending patterns in one glance.",
       color: "#a855f7"
     },
     {
-      icon: <Target size={32} className="text-pink-400" />,
+      icon: <PiTargetDuotone size={32} className="text-pink-400" />,
       title: "Strict Budgeting Engine",
       description: "Set strict monthly limits per category. Get visual warnings when you are close to overspending. Never wonder where your money went at the end of the month again.",
       color: "#ec4899"
     },
     {
-      icon: <CreditCard size={32} className="text-emerald-400" />,
+      icon: <PiCreditCardDuotone size={32} className="text-emerald-400" />,
       title: "Debt & Loan Manager",
       description: "Track money you have lent out or borrowed. Includes built-in interest calculations over time so you always know exactly what is owed and what has been paid off.",
       color: "#10b981"
     },
     {
-      icon: <Users size={32} className="text-blue-400" />,
+      icon: <PiUsersDuotone size={32} className="text-blue-400" />,
       title: "Chit Fund Organizer",
       description: "A unique feature tailored for community saving schemes. Track your monthly contributions, scheme durations, and total payouts seamlessly without messy spreadsheets.",
       color: "#3b82f6"
     },
     {
-      icon: <Activity size={32} className="text-orange-400" />,
+      icon: <PiPulseDuotone size={32} className="text-orange-400" />,
       title: "Transaction Ledger",
       description: "A highly filterable, lightning-fast ledger of every cent moving in or out of your accounts. Easily categorize, search, and audit your financial history.",
       color: "#f97316"
@@ -90,7 +90,7 @@ const LandingPage = () => {
             </p>
             <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
               <Link to="/register" style={{ background: 'linear-gradient(135deg, #7c3aed 0%, #ec4899 100%)', color: 'white', padding: '1.2rem 2.5rem', borderRadius: '30px', textDecoration: 'none', fontWeight: 700, fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '0.5rem', boxShadow: '0 10px 25px rgba(124, 58, 237, 0.4)' }}>
-                Start For Free <ArrowRight size={20} />
+                Start For Free <PiArrowRight size={20} />
               </Link>
             </div>
           </motion.div>
@@ -162,7 +162,7 @@ const LandingPage = () => {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
               {['No hidden fees', 'Secure data encryption', 'Cross-device sync', 'Dark mode included'].map((text, i) => (
                 <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', color: '#cbd5e1' }}>
-                  <CheckCircle2 size={20} color="#10b981" />
+                  <PiCheckCircle size={20} color="#10b981" />
                   <span style={{ fontWeight: 500 }}>{text}</span>
                 </div>
               ))}
