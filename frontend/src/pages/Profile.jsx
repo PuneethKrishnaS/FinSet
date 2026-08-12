@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
 import { PiUserDuotone, PiEnvelopeDuotone, PiLock, PiDownload, PiTrash, PiCheckCircle, PiWarningDuotone, PiX, PiPencilSimple , PiSpinnerGap } from "react-icons/pi";
+import Button from '../components/Button';
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -152,12 +153,12 @@ const Profile = () => {
               </div>
             </div>
             {!isEditing && (
-              <button 
+              <Button 
                 onClick={() => setIsEditing(true)}
                 className="bg-transparent border border-border hover:bg-muted text-foreground text-sm font-bold py-2.5 px-5 rounded transition-colors flex items-center gap-2 "
               >
                 <PiPencilSimple size={16} /> Edit Profile
-              </button>
+              </Button>
             )}
           </div>
 
@@ -185,20 +186,20 @@ const Profile = () => {
                 </div>
               </div>
               <div className="flex gap-3 justify-end">
-                <button 
+                <Button 
                   type="button" 
                   onClick={() => setIsEditing(false)} 
                   className="bg-transparent border border-border hover:bg-background text-foreground text-sm font-bold py-2.5 px-6 rounded transition-colors"
                 >
                   Cancel
-                </button>
-                <button 
+                </Button>
+                <Button 
                   type="submit" 
-                  disabled={editLoading}
+                  isLoading={editLoading}
                   className="bg-primary hover:bg-primary/90 text-primary-foreground text-sm font-bold py-2.5 px-6 rounded transition-colors "
                 >
-                  {editLoading ? 'Saving...' : 'Save Changes'}
-                </button>
+                  Save Changes
+                </Button>
               </div>
             </form>
           )}
@@ -263,13 +264,13 @@ const Profile = () => {
               </div>
             </div>
             
-            <button 
+            <Button 
               type="submit" 
-              disabled={passwordLoading}
+              isLoading={passwordLoading}
               className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-2.5 px-6 rounded transition-colors  text-sm"
             >
-              {passwordLoading ? 'Updating Password...' : 'Update Password'}
-            </button>
+              Update Password
+            </Button>
           </form>
         </div>
 
@@ -286,13 +287,13 @@ const Profile = () => {
                 Download all your incomes, expenses, budgets, and chit fund data in a clean JSON format for your own records.
               </p>
             </div>
-            <button 
+            <Button 
               onClick={handleExportData}
-              disabled={exportLoading}
+              isLoading={exportLoading}
               className="bg-secondary hover:bg-secondary/80 text-secondary-foreground border border-border font-bold py-2.5 px-5 rounded transition-colors  text-sm flex items-center gap-2 whitespace-nowrap shrink-0"
             >
-              <PiDownload size={18} /> {exportLoading ? 'Exporting...' : 'Export Data'}
-            </button>
+              <PiDownload size={18} /> Export Data
+            </Button>
           </div>
 
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 p-6 bg-destructive/5 rounded border border-destructive/20">
@@ -302,12 +303,12 @@ const Profile = () => {
                 Permanently delete your account and all associated financial data. This action is irreversible.
               </p>
             </div>
-            <button 
+            <Button 
               onClick={() => setShowDeleteConfirm(true)}
               className="bg-destructive hover:bg-destructive/90 text-destructive-foreground font-bold py-2.5 px-5 rounded transition-colors  text-sm flex items-center gap-2 whitespace-nowrap shrink-0"
             >
               <PiTrash size={18} /> Delete Account
-            </button>
+            </Button>
           </div>
         </div>
 
@@ -324,12 +325,12 @@ const Profile = () => {
                 </div>
                 <h2 className="text-xl font-bold text-foreground">Delete Account?</h2>
               </div>
-              <button 
+              <Button 
                 onClick={() => setShowDeleteConfirm(false)} 
                 className="text-muted-foreground hover:text-foreground transition-colors p-1"
               >
                 <PiX size={24} />
-              </button>
+              </Button>
             </div>
             
             <p className="text-muted-foreground text-sm font-medium leading-relaxed mb-8">
@@ -337,20 +338,20 @@ const Profile = () => {
             </p>
             
             <div className="grid grid-cols-2 gap-3">
-              <button 
+              <Button 
                 onClick={() => setShowDeleteConfirm(false)}
                 disabled={deleteLoading}
                 className="bg-transparent border border-border hover:bg-muted text-foreground text-sm font-bold py-3 rounded transition-colors"
               >
                 Cancel
-              </button>
-              <button 
+              </Button>
+              <Button 
                 onClick={handleDeleteAccount}
-                disabled={deleteLoading}
+                isLoading={deleteLoading}
                 className="bg-destructive hover:bg-destructive/90 text-destructive-foreground text-sm font-bold py-3 rounded transition-colors  shadow-destructive/20"
               >
-                {deleteLoading ? 'Deleting...' : 'Yes, Delete'}
-              </button>
+                Yes, Delete
+              </Button>
             </div>
           </div>
         </div>

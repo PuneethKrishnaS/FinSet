@@ -3,11 +3,16 @@ import { PiBellDuotone, PiCheck, PiTrash, PiDeviceMobileDuotone } from "react-ic
 import api from '../services/api';
 import toast from 'react-hot-toast';
 import useFinanceStore from '../store/useFinanceStore';
+import Button from '../components/Button';
 
 const Notifications = () => {
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [isPushEnabled, setIsPushEnabled] = useState(true); // default true to avoid flicker
+  const [isPushEnabled, setIsPushEnabled] = useState(true);
+  const [markingAll, setMarkingAll] = useState(false);
+  const [clearingAll, setClearingAll] = useState(false);
+  const [markingId, setMarkingId] = useState(null);
+  const [pushLoading, setPushLoading] = useState(false);
   const { dataVersion, markDataDirty } = useFinanceStore();
 
   useEffect(() => {
@@ -92,6 +97,7 @@ const Notifications = () => {
   };
 
   const subscribeToPush = async () => {
+    setPushLoading(true);
     if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
       toast.error('Push notifications are not supported in this browser.');
       return false;
@@ -147,18 +153,18 @@ const Notifications = () => {
       <div className="flex justify-end mb-6">
         {notifications.length > 0 && (
           <div className="flex gap-4 items-center">
-            <button 
-              onClick={markAllAsRead} 
+            <Button 
+              onClick={markAllAsRead} isLoading={markingAll} 
               className="bg-transparent border border-primary text-primary hover:bg-primary/10 text-xs font-bold py-2 px-4 rounded transition-colors flex items-center gap-2"
             >
               <PiCheck size={16} /> Mark read
-            </button>
-            <button 
-              onClick={clearAll} 
+            </Button>
+            <Button 
+              onClick={clearAll} isLoading={clearingAll} 
               className="bg-transparent border border-destructive text-destructive hover:bg-destructive/10 text-xs font-bold py-2 px-4 rounded transition-colors flex items-center gap-2"
             >
               <PiTrash size={16} /> Clear all
-            </button>
+            </Button>
           </div>
         )}
       </div>
@@ -171,12 +177,12 @@ const Notifications = () => {
             </h4>
             <p className="text-xs font-medium text-muted-foreground">Get instant alerts on this device when important updates happen.</p>
           </div>
-          <button 
-            onClick={subscribeToPush} 
+          <Button 
+            onClick={subscribeToPush} isLoading={pushLoading} 
             className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-2 px-5 rounded transition-colors text-sm whitespace-nowrap "
           >
             Enable
-          </button>
+          </Button>
         </div>
       )}
 
@@ -215,12 +221,12 @@ const Notifications = () => {
                   </span>
                 </div>
                 {!notif.is_read && (
-                  <button
-                    onClick={() => markAsRead(notif.id)}
+                  <Button
+                    onClick={() => markAsRead(notif.id)} isLoading={markingId === notif.id}
                     className="text-primary hover:text-primary/80 text-xs font-bold whitespace-nowrap py-1 px-2 transition-colors shrink-0"
                   >
                     Mark read
-                  </button>
+                  </Button>
                 )}
               </div>
             ))}

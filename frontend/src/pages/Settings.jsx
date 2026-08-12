@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useSettings } from '../context/SettingsContext';
+import Button from '../components/Button';
 import { PiMoonDuotone, PiSunDuotone, PiGlobeDuotone, PiFloppyDisk, PiPlus, PiTrash, PiBellDuotone, PiGear as SettingsIcon, PiColumnsDuotone, PiCurrencyDollarDuotone , PiSpinnerGap } from "react-icons/pi";
 import toast from 'react-hot-toast';
 import api from '../services/api';
@@ -119,7 +120,7 @@ const Settings = () => {
 
         {/* Tabs */}
         <div className="flex gap-4 border-b border-border mb-2 overflow-x-auto">
-          <button 
+          <Button 
             className={`py-3 px-6 text-sm flex items-center gap-2 whitespace-nowrap transition-all border-b-2 font-bold ${
               activeTab === 'general' 
                 ? 'border-primary text-primary bg-primary/5 rounded-t' 
@@ -128,8 +129,8 @@ const Settings = () => {
             onClick={() => setActiveTab('general')}
           >
             <SettingsIcon size={16} /> General
-          </button>
-          <button 
+          </Button>
+          <Button 
             className={`py-3 px-6 text-sm flex items-center gap-2 whitespace-nowrap transition-all border-b-2 font-bold ${
               activeTab === 'categories' 
                 ? 'border-primary text-primary bg-primary/5 rounded-t' 
@@ -138,7 +139,7 @@ const Settings = () => {
             onClick={() => setActiveTab('categories')}
           >
             <PiColumnsDuotone size={16} /> Categories
-          </button>
+          </Button>
         </div>
 
         {/* General Tab */}
@@ -186,13 +187,13 @@ const Settings = () => {
             </div>
 
             <div className="flex justify-end mt-2">
-              <button
+              <Button
                 onClick={handleSave}
                 disabled={saving || selectedCurrency === currency}
                 className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-3 px-8 rounded transition-colors  text-sm flex items-center gap-2"
               >
                 <PiFloppyDisk size={18} /> {saving ? 'Saving...' : 'Save Preferences'}
-              </button>
+              </Button>
             </div>
           </div>
         )}
@@ -215,7 +216,7 @@ const Settings = () => {
                 {PREDEFINED_CATEGORIES.map(predef => {
                   const alreadyAdded = categories.some(c => c.name.toLowerCase() === predef.name.toLowerCase());
                   return (
-                    <button
+                    <Button
                       key={predef.name}
                       onClick={() => handleAddPredefined(predef)}
                       disabled={alreadyAdded}
@@ -227,7 +228,7 @@ const Settings = () => {
                     >
                       {getCategoryIcon(predef.icon, 16, 'currentColor')}
                       {predef.name}
-                    </button>
+                    </Button>
                   );
                 })}
               </div>
@@ -239,14 +240,14 @@ const Settings = () => {
             <form onSubmit={handleAddCategory} className="flex flex-col gap-4 mb-8 bg-background p-6 rounded border border-border ">
 
               <div className="flex flex-col md:flex-row gap-4">
-                <button
+                <Button
                   type="button"
                   onClick={() => setShowIconPicker(!showIconPicker)}
                   className="w-12 h-12 flex items-center justify-center bg-card border border-border rounded text-primary hover:bg-muted/50 transition-colors  shrink-0"
                   title="Choose Icon"
                 >
                   {getCategoryIcon(newCategoryIcon, 20)}
-                </button>
+                </Button>
                 <input
                   type="text"
                   value={newCategoryName}
@@ -255,18 +256,18 @@ const Settings = () => {
                   className="flex-1 bg-card border border-border rounded px-4 py-3 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 "
                   required
                 />
-                <button
+                <Button
                   type="submit"
                   className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-3 px-6 rounded transition-colors  text-sm flex items-center justify-center gap-2 shrink-0"
                 >
                   <PiPlus size={18} /> Add
-                </button>
+                </Button>
               </div>
 
               {showIconPicker && (
                 <div className="flex flex-wrap gap-2 p-4 bg-card rounded border border-border mt-2 ">
                   {Object.keys(ICON_MAP).map(iconName => (
-                    <button
+                    <Button
                       key={iconName}
                       type="button"
                       onClick={() => { setNewCategoryIcon(iconName); setShowIconPicker(false); }}
@@ -277,7 +278,7 @@ const Settings = () => {
                       }`}
                     >
                       {getCategoryIcon(iconName, 20)}
-                    </button>
+                    </Button>
                   ))}
                 </div>
               )}
@@ -293,13 +294,13 @@ const Settings = () => {
                     </div>
                     <span className="truncate">{cat.name}</span>
                   </span>
-                  <button
+                  <Button
                     onClick={() => handleDeleteCategory(cat.id)}
                     className="text-muted-foreground hover:text-destructive hover:bg-destructive/10 p-2 rounded transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100"
                     title="Delete Category"
                   >
                     <PiTrash size={16} />
-                  </button>
+                  </Button>
                 </div>
               ))}
               {categories.length === 0 && (

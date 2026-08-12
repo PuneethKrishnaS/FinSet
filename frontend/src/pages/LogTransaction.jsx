@@ -1,3 +1,4 @@
+import Button from '../components/Button';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
@@ -100,7 +101,7 @@ const LogTransaction = () => {
           
           {/* Header Toggle */}
           <div className="flex border-b border-border bg-muted/30">
-            <button
+            <Button
               type="button"
               onClick={() => { setType('expense'); }}
               className={`flex-1 py-4 text-center font-bold text-sm transition-colors border-b-2 ${
@@ -110,8 +111,8 @@ const LogTransaction = () => {
               }`}
             >
               Add Expense
-            </button>
-            <button
+            </Button>
+            <Button
               type="button"
               onClick={() => { setType('income'); }}
               className={`flex-1 py-4 text-center font-bold text-sm transition-colors border-b-2 ${
@@ -121,7 +122,7 @@ const LogTransaction = () => {
               }`}
             >
               Add Income
-            </button>
+            </Button>
           </div>
 
           <form onSubmit={handleSubmit} className="p-5 md:p-8 space-y-8">
@@ -267,9 +268,9 @@ const LogTransaction = () => {
             </label>
 
             {/* Submit Button */}
-            <button
+            <Button
               type="submit"
-              disabled={submitting || !isFormValid}
+              isLoading={submitting} disabled={!isFormValid}
               className={`w-full flex items-center justify-center gap-2 py-4 rounded text-base font-bold text-white transition-all  active:scale-[0.98] ${
                 !isFormValid || submitting 
                   ? 'bg-muted-foreground/40 cursor-not-allowed shadow-none'
@@ -280,7 +281,7 @@ const LogTransaction = () => {
             >
               <PiFloppyDisk size={18} />
               {submitting ? 'Processing...' : `Confirm ${type === 'expense' ? 'Expense' : 'Income'}`}
-            </button>
+            </Button>
             
           </form>
         </div>
@@ -292,12 +293,12 @@ const LogTransaction = () => {
               <h3 className="text-base font-bold text-foreground flex items-center gap-2">
                 <PiClockCounterClockwiseDuotone size={18} className="text-primary" /> Recent Activity
               </h3>
-              <button
+              <Button
                 onClick={() => navigate('/history')}
                 className="text-xs font-bold text-primary hover:text-primary/80 flex items-center gap-1 transition-colors"
               >
                 View All <PiArrowRight size={14} />
-              </button>
+              </Button>
             </div>
 
             <div className="space-y-4">

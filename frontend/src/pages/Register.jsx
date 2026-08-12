@@ -1,3 +1,4 @@
+import Button from '../components/Button';
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import api from '../services/api';
@@ -69,14 +70,14 @@ const Register = () => {
           <img src="/FinSet_Logo.svg" alt="FinSet" className="h-8" />
         </div>
 
-        <button 
+        <Button 
           type="button"
           onClick={toggleTheme} 
           className="absolute top-6 right-6 p-2 text-muted-foreground hover:text-foreground hover:bg-muted/50 rounded-full transition-colors"
           title="Toggle Theme"
         >
           {theme === 'light' ? <PiMoonDuotone size={20} /> : <PiSunDuotone size={20} />}
-        </button>
+        </Button>
         
         <div className="mb-8">
           <h2 className="text-2xl md:text-3xl font-black text-foreground mb-2">Create Account</h2>
@@ -153,12 +154,12 @@ const Register = () => {
             </div>
           </div>
 
-          <button type="submit" disabled={loading} className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-3.5 rounded transition-all  active:scale-[0.98] flex items-center justify-center gap-2 mt-4">
+          <Button type="submit" isLoading={loading} className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-3.5 rounded transition-all  active:scale-[0.98] flex items-center justify-center gap-2 mt-4">
             {loading && <PiSpinnerGap className="animate-spin" size={18} />}
               
               <>Sign Up <PiUserPlusDuotone size={18} /></>
             
-          </button>
+          </Button>
         </form>
 
         <div className="mt-8 text-center text-sm font-medium text-muted-foreground">
