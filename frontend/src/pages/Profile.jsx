@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
-import { User, Mail, Lock, Download, Trash2, CheckCircle2, AlertTriangle, X, Edit2 } from 'lucide-react';
+import { PiUserDuotone, PiEnvelopeDuotone, PiLock, PiDownload, PiTrash, PiCheckCircle, PiWarningDuotone, PiX, PiPencilSimple } from "react-icons/pi";
 
 const Profile = () => {
   const navigate = useNavigate();

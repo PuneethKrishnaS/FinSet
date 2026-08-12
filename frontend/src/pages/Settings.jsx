@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useSettings } from '../context/SettingsContext';
-import { Moon, Sun, Globe, Save, Plus, Trash2, Bell, Settings as SettingsIcon, Layout, DollarSign } from 'lucide-react';
+import { PiMoonDuotone, PiSunDuotone, PiGlobeDuotone, PiFloppyDisk, PiPlus, PiTrash, PiBellDuotone, PiGear as SettingsIcon, PiColumnsDuotone, PiCurrencyDollarDuotone } from "react-icons/pi";
 import toast from 'react-hot-toast';
 import api from '../services/api';
 import { ICON_MAP, PREDEFINED_CATEGORIES, getCategoryIcon, getIconForCategory } from '../utils/CategoryIcons';

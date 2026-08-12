@@ -1,18 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import {
-  LayoutDashboard,
-  ArrowRightLeft,
-  History as HistoryIcon,
-  Target,
-  Users,
-  Settings as SettingsIcon,
-  LogOut,
-  User,
-  PieChart,
-  Bell,
-  MoreVertical
-} from 'lucide-react';
+import { PiSquaresFourDuotone, PiArrowsLeftRight, PiClockCounterClockwiseDuotone as HistoryIcon, PiTargetDuotone, PiUsersDuotone, PiGear as SettingsIcon, PiSignOut, PiUserDuotone, PiChartPieDuotone, PiBellDuotone, PiDotsThreeVertical } from "react-icons/pi";
 import api from '../services/api';
 import useFinanceStore from '../store/useFinanceStore';
 

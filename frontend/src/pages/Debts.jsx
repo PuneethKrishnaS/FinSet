@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSettings } from '../context/SettingsContext';
 import api from '../services/api';
 import toast from 'react-hot-toast';
-import { Users, Plus, CheckCircle, Trash2, ArrowUpRight, ArrowDownRight, TrendingUp, ChevronDown, ChevronUp, History } from 'lucide-react';
+import { PiUsersDuotone, PiPlus, PiCheckCircle, PiTrash, PiArrowUpRight, PiArrowDownRight, PiTrendUpDuotone, PiCaretDown, PiCaretUp, PiClockCounterClockwiseDuotone } from "react-icons/pi";
 import useFinanceStore from '../store/useFinanceStore';
 import ConfirmDialog from '../components/ConfirmDialog';
 

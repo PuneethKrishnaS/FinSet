@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import api from '../services/api';
-import { Lock, ArrowRight, Sun, Moon, ArrowLeft, CheckCircle2 } from 'lucide-react';
+import { PiLock, PiArrowRight, PiSunDuotone, PiMoonDuotone, PiArrowLeft, PiCheckCircle } from "react-icons/pi";
 import { useSettings } from '../context/SettingsContext';
 
 const ResetPassword = () => {

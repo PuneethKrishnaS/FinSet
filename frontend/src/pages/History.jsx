@@ -2,12 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSettings } from '../context/SettingsContext';
 import api from '../services/api';
 import toast from 'react-hot-toast';
-import { 
-  Download, Search, Trash2, Filter,
-  Home, Coffee, Car, Zap, 
-  Film, ShoppingBag, HeartPulse, MoreHorizontal,
-  Briefcase, TrendingUp, TrendingDown, Wallet, ChevronRight
-} from 'lucide-react';
+import { PiDownload, PiMagnifyingGlass, PiTrash, PiFunnel, PiHouseDuotone, PiCoffeeDuotone, PiCarDuotone, PiLightningDuotone, PiFilmStripDuotone, PiToteDuotone, PiHeartbeatDuotone, PiDotsThree, PiBriefcaseDuotone, PiTrendUpDuotone, PiTrendDownDuotone, PiWalletDuotone, PiCaretRight } from "react-icons/pi";
 import { motion, AnimatePresence } from 'framer-motion';
 import useFinanceStore from '../store/useFinanceStore';
 import { getCategoryIcon, getIconForCategory } from '../utils/CategoryIcons';

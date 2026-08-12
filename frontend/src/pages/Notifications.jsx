@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Bell, Check, Trash2, Smartphone } from 'lucide-react';
+import { PiBellDuotone, PiCheck, PiTrash, PiDeviceMobileDuotone } from "react-icons/pi";
 import api from '../services/api';
 import toast from 'react-hot-toast';
 import useFinanceStore from '../store/useFinanceStore';

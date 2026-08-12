@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import api from '../services/api';
-import { User, Lock, ArrowRight, Sun, Moon } from 'lucide-react';
+import { PiUserDuotone, PiLock, PiArrowRight, PiSunDuotone, PiMoonDuotone } from "react-icons/pi";
 import { useSettings } from '../context/SettingsContext';
 
 const Login = () => {

@@ -1,9 +1,5 @@
 import React from 'react';
-import { 
-  Home, Coffee, Car, Zap, Film, ShoppingBag, HeartPulse, MoreHorizontal, 
-  Book, GraduationCap, Briefcase, Monitor, Smartphone, Plane, 
-  Gift, Heart, DollarSign, Shirt, Wrench, Music, Scissors, Ticket
-} from 'lucide-react';
+import { PiHouseDuotone, PiCoffeeDuotone, PiCarDuotone, PiLightningDuotone, PiFilmStripDuotone, PiToteDuotone, PiHeartbeatDuotone, PiDotsThree, PiBookDuotone, PiGraduationCapDuotone, PiBriefcaseDuotone, PiMonitorDuotone, PiDeviceMobileDuotone, PiAirplaneDuotone, PiGiftDuotone, PiHeartDuotone, PiCurrencyDollarDuotone, PiTShirtDuotone, PiWrenchDuotone, PiMusicNoteDuotone, PiScissorsDuotone, PiTicketDuotone } from "react-icons/pi";
 
 export const ICON_MAP = {
   'Home': Home,

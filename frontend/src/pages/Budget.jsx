@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSettings } from '../context/SettingsContext';
 import api from '../services/api';
 import toast from 'react-hot-toast';
-import { Target, Plus, Save, Trash2, Calendar, AlertCircle } from 'lucide-react';
+import { PiTargetDuotone, PiPlus, PiFloppyDisk, PiTrash, PiCalendarDuotone, PiWarningCircleDuotone } from "react-icons/pi";
 import useFinanceStore from '../store/useFinanceStore';
 import { getIconForCategory } from '../utils/CategoryIcons';
 import ConfirmDialog from '../components/ConfirmDialog';

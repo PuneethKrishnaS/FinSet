@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
-import {
-  Save, Briefcase, TrendingUp, History, ArrowRight, MoreHorizontal, Check
-} from 'lucide-react';
+import { PiFloppyDisk, PiBriefcaseDuotone, PiTrendUpDuotone, PiClockCounterClockwiseDuotone, PiArrowRight, PiDotsThree, PiCheck } from "react-icons/pi";
 import toast from 'react-hot-toast';
 import { useSettings } from '../context/SettingsContext';
 import useFinanceStore from '../store/useFinanceStore';

@@ -4,12 +4,7 @@ import {
   ResponsiveContainer, AreaChart, Area, PieChart, Pie, Cell,
   XAxis, YAxis, CartesianGrid, Tooltip
 } from 'recharts';
-import api from '../services/api';
-import {
-  ArrowDownRight, TrendingDown, TrendingUp, Wallet, Target,
-  History, Calendar as CalendarIcon, X, ChevronLeft, ChevronRight, MoreHorizontal,
-  PlusCircle, MinusCircle
-} from 'lucide-react';
+import { PiArrowDownRight, PiTrendDownDuotone, PiTrendUpDuotone, PiWalletDuotone, PiTargetDuotone, PiClockCounterClockwiseDuotone, PiCalendarDuotone as CalendarIcon, PiX, PiCaretLeft, PiCaretRight, PiDotsThree, PiPlusCircle, PiMinusCircle } from "react-icons/pi";
 import { useSettings } from '../context/SettingsContext';
 import useFinanceStore from '../store/useFinanceStore';
 import { getIconForCategory } from '../utils/CategoryIcons';

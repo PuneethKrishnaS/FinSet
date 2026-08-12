@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import api from '../services/api';
-import { UserPlus, User, Lock, Mail, Sun, Moon } from 'lucide-react';
+import { PiUserPlusDuotone, PiUserDuotone, PiLock, PiEnvelopeDuotone, PiSunDuotone, PiMoonDuotone } from "react-icons/pi";
 import { useSettings } from '../context/SettingsContext';
 
 const Register = () => {

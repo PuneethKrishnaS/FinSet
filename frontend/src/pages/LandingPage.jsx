@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { LayoutDashboard, Wallet, CreditCard, Users, ArrowRight, Target, Activity, CheckCircle2 } from 'lucide-react';
+import { PiSquaresFourDuotone, PiWalletDuotone, PiCreditCardDuotone, PiUsersDuotone, PiArrowRight, PiTargetDuotone, PiPulseDuotone, PiCheckCircle } from "react-icons/pi";
 
 const LandingPage = () => {
   const heroRef = useRef(null);

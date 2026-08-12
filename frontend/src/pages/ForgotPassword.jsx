@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../services/api';
-import { Mail, ArrowRight, Sun, Moon, ArrowLeft, CheckCircle2 } from 'lucide-react';
+import { PiEnvelopeDuotone, PiArrowRight, PiSunDuotone, PiMoonDuotone, PiArrowLeft, PiCheckCircle } from "react-icons/pi";
 import { useSettings } from '../context/SettingsContext';
 
 const ForgotPassword = () => {
