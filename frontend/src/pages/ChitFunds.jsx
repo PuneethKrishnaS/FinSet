@@ -36,6 +36,10 @@ const ChitFunds = () => {
   });
 
   const [expandedChitId, setExpandedChitId] = useState(null);
+  const [creatingChit, setCreatingChit] = useState(false);
+  const [joiningId, setJoiningId] = useState(null);
+  const [savingContribution, setSavingContribution] = useState(false);
+  const [deletingId, setDeletingId] = useState(null);
 
   const currencySymbol = new Intl.NumberFormat('en-US', { style: 'currency', currency: currency }).formatToParts(1).find(x => x.type === 'currency').value;
 
@@ -169,7 +173,7 @@ const ChitFunds = () => {
                 />
               </div>
               <div className="lg:col-span-5 flex justify-end mt-2">
-                <Button type="submit" className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-2.5 px-6 rounded transition-colors ">
+                <Button type="submit" isLoading={creatingChit} className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-2.5 px-6 rounded transition-colors ">
                   Create
                 </Button>
               </div>
@@ -277,7 +281,7 @@ const ChitFunds = () => {
                           <input type="date" required value={contribution.date} onChange={e => setContribution({...contribution, date: e.target.value})} className="w-40 bg-background border border-border rounded px-3 py-2.5 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50" />
                         </div>
                         <div className="flex gap-2">
-                          <Button type="submit" className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-2.5 px-5 rounded transition-colors text-sm">Save</Button>
+                          <Button type="submit" isLoading={savingContribution} className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-2.5 px-5 rounded transition-colors text-sm">Save</Button>
                           <Button type="button" onClick={() => setSelectedChitId(null)} className="bg-muted hover:bg-muted/80 text-foreground font-bold py-2.5 px-5 rounded transition-colors text-sm">Cancel</Button>
                         </div>
                       </form>
@@ -331,7 +335,7 @@ const ChitFunds = () => {
                                           <input type="number" step="0.01" required value={editingContributionData.amount} onChange={e => setEditingContributionData({...editingContributionData, amount: e.target.value})} className="w-24 bg-background border border-border rounded pl-6 pr-2 py-1.5 text-xs text-foreground font-medium" />
                                         </div>
                                         <div className="flex gap-1 ml-auto">
-                                          <Button type="submit" className="bg-primary text-primary-foreground text-xs font-bold py-1.5 px-3 rounded">Save</Button>
+                                          <Button type="submit" isLoading={savingContribution} className="bg-primary text-primary-foreground text-xs font-bold py-1.5 px-3 rounded">Save</Button>
                                           <Button type="button" onClick={() => setEditingContributionId(null)} className="bg-muted text-foreground text-xs font-bold py-1.5 px-3 rounded">Cancel</Button>
                                         </div>
                                       </form>

@@ -1,8 +1,9 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { PiWarningDuotone, PiX } from "react-icons/pi";
+import Button from './Button';
 
-const ConfirmDialog = ({ isOpen, onClose, onConfirm, title, message, confirmText = "Confirm", cancelText = "Cancel", isDanger = true }) => {
+const ConfirmDialog = ({ isOpen, onClose, onConfirm, title, message, confirmText = "Confirm", cancelText = "Cancel", isDanger = true, isLoading = false }) => {
   return (
     <AnimatePresence>
       {isOpen && (
@@ -79,8 +80,9 @@ const ConfirmDialog = ({ isOpen, onClose, onConfirm, title, message, confirmText
             </p>
 
             <div style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-end' }}>
-              <button 
+              <Button 
                 onClick={onClose}
+                disabled={isLoading}
                 className="btn"
                 style={{
                   background: 'transparent',
@@ -89,12 +91,17 @@ const ConfirmDialog = ({ isOpen, onClose, onConfirm, title, message, confirmText
                 }}
               >
                 {cancelText}
-              </button>
-              <button 
-                onClick={() => {
+              </Button>
+              <Button 
+                onClick={(e) => {
+                  e.preventDefault();
                   onConfirm();
-                  onClose();
+                  // Don't close immediately if we have a loading state, let the parent close it.
+                  if (!isLoading) {
+                    onClose();
+                  }
                 }}
+                isLoading={isLoading}
                 className="btn"
                 style={{
                   background: isDanger ? 'var(--danger)' : 'var(--primary-color)',
@@ -103,7 +110,7 @@ const ConfirmDialog = ({ isOpen, onClose, onConfirm, title, message, confirmText
                 }}
               >
                 {confirmText}
-              </button>
+              </Button>
             </div>
           </motion.div>
         </motion.div>

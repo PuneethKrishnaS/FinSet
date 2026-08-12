@@ -25,6 +25,9 @@ const Debts = () => {
   const [paymentDate, setPaymentDate] = useState(new Date().toISOString().split('T')[0]);
   const [paymentNote, setPaymentNote] = useState('');
   const [paymentLoading, setPaymentLoading] = useState(false);
+  const [creatingDebt, setCreatingDebt] = useState(false);
+  const [settlingId, setSettlingId] = useState(null);
+  const [deletingId, setDeletingId] = useState(null);
 
   const [deleteConfirmInfo, setDeleteConfirmInfo] = useState({ isOpen: false, id: null, type: null });
 
@@ -375,7 +378,7 @@ const Debts = () => {
                                 <label className="block text-xs font-semibold text-foreground mb-1.5">Note (Optional)</label>
                                 <input type="text" value={paymentNote} onChange={e => setPaymentNote(e.target.value)} className="w-full bg-background border border-border rounded px-3 py-2 text-sm text-foreground focus:ring-2 focus:ring-primary/50 outline-none" placeholder="e.g. Jan Interest" />
                               </div>
-                              <Button type="submit" disabled={paymentLoading} className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-2.5 rounded transition-colors text-sm">
+                              <Button type="submit" isLoading={paymentLoading} className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-2.5 rounded transition-colors text-sm">
                                 Save Payment
                               </Button>
                             </form>

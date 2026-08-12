@@ -61,6 +61,8 @@ const Budget = () => {
   const [category, setCategory] = useState('');
   const [amount, setAmount] = useState('');
   const [deleteConfirmId, setDeleteConfirmId] = useState(null);
+  const [creating, setCreating] = useState(false);
+  const [deletingId, setDeletingId] = useState(null);
 
   const currencySymbol = new Intl.NumberFormat('en-US', { style: 'currency', currency: currency }).formatToParts(1).find(x => x.type === 'currency').value;
 
@@ -272,7 +274,7 @@ const Budget = () => {
                 type="submit" 
                 className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-3 rounded transition-colors  active:scale-[0.98]"
               >
-                PiFloppyDisk Budget
+                Create Budget
               </Button>
             </form>
           </div>
