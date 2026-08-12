@@ -49,6 +49,7 @@ const ChitFunds = () => {
 
   const handleCreateChit = async (e) => {
     e.preventDefault();
+    setCreatingChit(true);
     try {
       await api.post('/chit-funds/', {
         ...newChit,
@@ -70,6 +71,7 @@ const ChitFunds = () => {
 
   const handleAddContribution = async (e, chitId) => {
     e.preventDefault();
+    setSavingContribution(true);
     try {
       await api.post('/chit-contributions/', {
         ...contribution,
@@ -92,6 +94,7 @@ const ChitFunds = () => {
 
   const handleEditContributionSubmit = async (e, id) => {
     e.preventDefault();
+    setSavingContribution(true);
     try {
       await api.patch(`/chit-contributions/${id}/`, {
         amount: parseFloat(editingContributionData.amount),
@@ -173,7 +176,7 @@ const ChitFunds = () => {
                 />
               </div>
               <div className="lg:col-span-5 flex justify-end mt-2">
-                <Button type="submit" isLoading={creatingChit} className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-2.5 px-6 rounded transition-colors ">
+                <Button type="submit" isLoading={creatingChit} className="w-full flex items-center justify-center gap-2 py-4 rounded text-base font-bold text-white transition-all active:scale-[0.98] bg-primary hover:bg-primary/90 hover:shadow-primary/25">
                   Create
                 </Button>
               </div>

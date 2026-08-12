@@ -272,7 +272,8 @@ const Budget = () => {
               </div>
               <Button 
                 type="submit" 
-                className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-3 rounded transition-colors  active:scale-[0.98]"
+                isLoading={creating}
+                className="w-full flex items-center justify-center gap-2 py-4 rounded text-base font-bold text-white transition-all active:scale-[0.98] bg-primary hover:bg-primary/90 hover:shadow-primary/25"
               >
                 Create Budget
               </Button>

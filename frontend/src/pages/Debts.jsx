@@ -39,6 +39,7 @@ const Debts = () => {
 
   const handleCreateDebt = async (e) => {
     e.preventDefault();
+    setCreatingDebt(true);
     try {
       await api.post('/debts/', {
         person_name: personName,
@@ -57,10 +58,11 @@ const Debts = () => {
       markDataDirty();
     } catch (err) {
       toast.error('Failed to record debt.');
-    }
+    } finally { setCreatingDebt(false); }
   };
 
   const handleSettle = async (debt) => {
+    setSettlingId(debt.id);
     try {
       await api.put(`/debts/${debt.id}/`, { ...debt, is_settled: true });
       toast.success(`${debt.person_name}'s debt settled!`);
@@ -284,7 +286,8 @@ const Debts = () => {
 
             <Button 
               type="submit" 
-              className={`w-full font-bold py-3 px-4 rounded transition-all  active:scale-[0.98] ${type === 'lent' ? 'bg-emerald-500 hover:bg-emerald-600 text-white shadow-emerald-500/20' : 'bg-destructive hover:bg-destructive/90 text-white shadow-destructive/20'}`}
+              isLoading={creatingDebt}
+              className={`w-full flex items-center justify-center gap-2 py-4 rounded text-base font-bold text-white transition-all active:scale-[0.98] ${type === 'lent' ? 'bg-emerald-500 hover:bg-emerald-600 hover:shadow-emerald-500/25' : 'bg-destructive hover:bg-destructive/90 hover:shadow-destructive/25'}`}
             >
               Save Record
             </Button>
