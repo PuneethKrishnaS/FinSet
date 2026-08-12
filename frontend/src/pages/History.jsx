@@ -1,3 +1,4 @@
+import Button from '../components/Button';
 import React, { useState, useEffect } from 'react';
 import { useSettings } from '../context/SettingsContext';
 import api from '../services/api';
@@ -19,6 +20,7 @@ const History = () => {
   const { incomes, incomesLoaded, fetchIncomes, expenses, expensesLoaded, fetchExpenses, categories, fetchCategories, dataVersion, markDataDirty } = useFinanceStore();
   
   const [deleteConfirmInfo, setDeleteConfirmInfo] = useState({ isOpen: false, id: null, type: null });
+  const [deletingId, setDeletingId] = useState(null);
   
   // Filters
   const [searchTerm, setSearchTerm] = useState('');
@@ -118,12 +120,12 @@ const History = () => {
       
       <div className="flex flex-col gap-4 mb-6 relative z-10">
         <div className="flex justify-end">
-          <button 
+          <Button 
             onClick={handleExportCSV} 
             className="bg-secondary hover:bg-secondary/80 text-secondary-foreground text-sm font-bold py-2 px-4 rounded transition-colors  active:scale-[0.98] flex items-center gap-2 border border-border"
           >
             <PiDownload size={16} /> Export CSV
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -178,45 +180,45 @@ const History = () => {
           </div>
           
           <div className="flex bg-muted/40 p-1.5 rounded border border-border/50 shrink-0 overflow-x-auto">
-            <button 
+            <Button 
               onClick={() => { setFilterType('all'); setFilterCategory('all'); }}
               className={`px-4 py-2 text-sm font-bold rounded transition-all whitespace-nowrap ${filterType === 'all' ? 'bg-background text-foreground ' : 'text-muted-foreground hover:text-foreground'}`}
             >
               All
-            </button>
-            <button 
+            </Button>
+            <Button 
               onClick={() => { setFilterType('income'); setFilterCategory('all'); }}
               className={`px-4 py-2 text-sm font-bold rounded transition-all whitespace-nowrap ${filterType === 'income' ? 'bg-background text-emerald-500 ' : 'text-muted-foreground hover:text-foreground'}`}
             >
               Income
-            </button>
-            <button 
+            </Button>
+            <Button 
               onClick={() => { setFilterType('expense'); setFilterCategory('all'); }}
               className={`px-4 py-2 text-sm font-bold rounded transition-all whitespace-nowrap ${filterType === 'expense' ? 'bg-background text-destructive ' : 'text-muted-foreground hover:text-foreground'}`}
             >
               Expenses
-            </button>
+            </Button>
           </div>
         </div>
 
         {filterType === 'expense' && (
           <div className="flex gap-2 mb-6 overflow-x-auto pb-2 scrollbar-hide">
-            <button
+            <Button
               onClick={() => setFilterCategory('all')}
               className={`flex items-center gap-2 px-4 py-2 rounded text-sm font-bold whitespace-nowrap transition-colors ${filterCategory === 'all' ? 'bg-primary text-primary-foreground ' : 'bg-card border border-border text-muted-foreground hover:bg-muted/50'}`}
             >
               All Categories
-            </button>
+            </Button>
             {categories.map(c => {
               const isSelected = filterCategory === c.name.toLowerCase();
               return (
-                <button
+                <Button
                   key={c.id}
                   onClick={() => setFilterCategory(c.name.toLowerCase())}
                   className={`flex items-center gap-2 px-4 py-2 rounded text-sm font-bold whitespace-nowrap transition-colors ${isSelected ? 'bg-primary text-primary-foreground ' : 'bg-card border border-border text-muted-foreground hover:bg-muted/50'}`}
                 >
                   {getIconForCategory(c, 16, isSelected ? '#fff' : 'currentColor')} {c.name}
-                </button>
+                </Button>
               );
             })}
           </div>
@@ -306,13 +308,13 @@ const History = () => {
                               <div className={`font-black text-lg ${isInc ? 'text-emerald-500' : 'text-foreground'}`}>
                                 {isInc ? '+' : '-'} {formatCurrency(t.amount)}
                               </div>
-                              <button 
+                              <Button 
                                 onClick={() => confirmDelete(t.id, t.type)} 
                                 className="p-2 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-full transition-colors opacity-0 md:group-hover:opacity-100 flex items-center justify-center focus:opacity-100"
                                 title="Delete Transaction"
                               >
                                 <PiTrash size={16} />
-                              </button>
+                              </Button>
                             </div>
 
                           </motion.div>
