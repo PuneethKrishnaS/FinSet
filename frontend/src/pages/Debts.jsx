@@ -119,18 +119,37 @@ const Debts = () => {
     const principal = parseFloat(d.amount);
     const paymentsTotal = d.payments ? d.payments.reduce((sum, p) => sum + parseFloat(p.amount), 0) : 0;
     
-    // Fixed interest calculation
-    let fixedInterestAmount = 0;
+    let totalInterestAccumulated = 0;
+    let interestPerPeriod = 0;
+
     if (d.interest_rate) {
       const rate = parseFloat(d.interest_rate);
-      fixedInterestAmount = principal * (rate / 100);
+      interestPerPeriod = principal * (rate / 100);
+      
+      const startDate = new Date(d.date);
+      const todaysDate = new Date();
+      
+      if (d.interest_period === 'monthly') {
+        const differenceYear = (todaysDate.getFullYear() - startDate.getFullYear()) * 12;
+        let differenceMonth = differenceYear + (todaysDate.getMonth() - startDate.getMonth());
+        if (differenceMonth < 0) differenceMonth = 0;
+        totalInterestAccumulated = differenceMonth * interestPerPeriod;
+      } else if (d.interest_period === 'yearly') {
+        let differenceYear = todaysDate.getFullYear() - startDate.getFullYear();
+        if (differenceYear < 0) differenceYear = 0;
+        totalInterestAccumulated = differenceYear * interestPerPeriod;
+      }
     }
+
+    const totalOwed = principal + totalInterestAccumulated;
+    const remaining = totalOwed - paymentsTotal;
 
     return {
       principal,
       paymentsTotal,
-      remaining: principal - paymentsTotal,
-      fixedInterestAmount,
+      remaining,
+      totalInterestAccumulated,
+      interestPerPeriod,
       interestLabel: d.interest_period === 'monthly' ? 'per month' : 'per year'
     };
   };
@@ -140,8 +159,8 @@ const Debts = () => {
       setExpandedId(null);
     } else {
       setExpandedId(d.id);
-      const { fixedInterestAmount } = calculateDebtTotals(d);
-      setPaymentAmount(fixedInterestAmount > 0 ? fixedInterestAmount.toString() : '');
+      const { interestPerPeriod } = calculateDebtTotals(d);
+      setPaymentAmount(interestPerPeriod > 0 ? interestPerPeriod.toString() : '');
       setPaymentDate(new Date().toISOString().split('T')[0]);
       setPaymentNote('');
     }
@@ -313,7 +332,7 @@ const Debts = () => {
           ) : (
             debts.map(d => {
               const isExpanded = expandedId === d.id;
-              const { principal, paymentsTotal, remaining, fixedInterestAmount, interestLabel } = calculateDebtTotals(d);
+              const { principal, paymentsTotal, remaining, totalInterestAccumulated, interestPerPeriod, interestLabel } = calculateDebtTotals(d);
               
               return (
                 <div key={d.id} className={`bg-card border border-border rounded overflow-hidden transition-all ${d.is_settled ? 'opacity-60 grayscale' : 'hover:'}`}>
@@ -344,7 +363,7 @@ const Debts = () => {
                         <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider mt-0.5">Remaining</div>
                         {d.interest_rate && (
                           <div className="text-[10px] font-bold text-primary mt-1">
-                            {d.interest_rate}% ({formatCurrency(fixedInterestAmount)} {interestLabel})
+                            {d.interest_rate}% ({formatCurrency(interestPerPeriod)} {interestLabel})
                           </div>
                         )}
                       </div>
@@ -397,9 +416,15 @@ const Debts = () => {
                                 <span className="text-muted-foreground">Principal:</span>
                                 <span className="text-foreground">{formatCurrency(principal)}</span>
                               </div>
+                              {totalInterestAccumulated > 0 && (
+                                <div className="flex justify-between text-sm font-medium">
+                                  <span className="text-muted-foreground">Accumulated Interest:</span>
+                                  <span className="text-amber-500 font-bold">+{formatCurrency(totalInterestAccumulated)}</span>
+                                </div>
+                              )}
                               <div className="flex justify-between text-sm font-medium">
                                 <span className="text-muted-foreground">Total Paid:</span>
-                                <span className="text-primary font-bold">{formatCurrency(paymentsTotal)}</span>
+                                <span className="text-primary font-bold">-{formatCurrency(paymentsTotal)}</span>
                               </div>
                               <div className="flex justify-between text-base font-black pt-3 border-t border-border/50">
                                 <span className="text-foreground">Balance:</span>
