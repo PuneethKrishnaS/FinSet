@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useSettings } from '../context/SettingsContext';
 import api from '../services/api';
 import toast from 'react-hot-toast';
-import { PiUsersDuotone, PiPlus, PiCheckCircle, PiTrash, PiArrowUpRight, PiArrowDownRight, PiTrendUpDuotone, PiCaretDown, PiCaretUp, PiClockCounterClockwiseDuotone , PiSpinnerGap } from "react-icons/pi";
+import { PiUsersDuotone, PiPlus, PiCheckCircle, PiTrash, PiArrowUpRight, PiArrowDownRight, PiTrendUpDuotone, PiCaretDown, PiCaretUp, PiClockCounterClockwiseDuotone, PiSpinnerGap } from "react-icons/pi";
 import useFinanceStore from '../store/useFinanceStore';
 import ConfirmDialog from '../components/ConfirmDialog';
 
@@ -118,17 +118,17 @@ const Debts = () => {
   const calculateDebtTotals = (d) => {
     const principal = parseFloat(d.amount);
     const paymentsTotal = d.payments ? d.payments.reduce((sum, p) => sum + parseFloat(p.amount), 0) : 0;
-    
+
     let totalInterestAccumulated = 0;
     let interestPerPeriod = 0;
 
     if (d.interest_rate) {
       const rate = parseFloat(d.interest_rate);
       interestPerPeriod = principal * (rate / 100);
-      
+
       const startDate = new Date(d.date);
       const todaysDate = new Date();
-      
+
       if (d.interest_period === 'monthly') {
         const differenceYear = (todaysDate.getFullYear() - startDate.getFullYear()) * 12;
         let differenceMonth = differenceYear + (todaysDate.getMonth() - startDate.getMonth());
@@ -190,7 +190,7 @@ const Debts = () => {
             <div className="text-xs font-semibold text-muted-foreground mt-1">Total outstanding balance</div>
           </div>
         </div>
-        
+
         <div className="bg-card border border-border rounded p-6  flex flex-col justify-center relative overflow-hidden group">
           <div className="absolute inset-0 bg-destructive/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
           <div className="relative z-10">
@@ -209,24 +209,24 @@ const Debts = () => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
-        
+
         {/* Create Form */}
+        <h3 className="text-base font-bold text-foreground mb-5 flex items-center gap-2">
+          <PiPlus size={18} className="text-primary" /> New Record
+        </h3>
         <div className="bg-card border border-border rounded p-6  lg:sticky lg:top-6">
-          <h3 className="text-base font-bold text-foreground mb-5 flex items-center gap-2">
-            <PiPlus size={18} className="text-primary" /> New Record
-          </h3>
           <form onSubmit={handleCreateDebt} className="space-y-4">
-            
+
             <div className="flex bg-muted/40 p-1.5 rounded border border-border/50">
-              <Button 
-                type="button" 
+              <Button
+                type="button"
                 onClick={() => setType('lent')}
                 className={`flex-1 py-2 text-sm font-bold rounded transition-all ${type === 'lent' ? 'bg-emerald-500 text-white ' : 'text-muted-foreground hover:bg-muted/80'}`}
               >
                 I Lent Money
               </Button>
-              <Button 
-                type="button" 
+              <Button
+                type="button"
                 onClick={() => setType('borrowed')}
                 className={`flex-1 py-2 text-sm font-bold rounded transition-all ${type === 'borrowed' ? 'bg-destructive text-white ' : 'text-muted-foreground hover:bg-muted/80'}`}
               >
@@ -236,8 +236,8 @@ const Debts = () => {
 
             <div>
               <label className="block text-xs font-semibold text-foreground mb-1.5">Person's Name</label>
-              <input 
-                type="text" 
+              <input
+                type="text"
                 required
                 placeholder="e.g. John Doe"
                 value={personName}
@@ -245,14 +245,14 @@ const Debts = () => {
                 className="w-full bg-background border border-border rounded px-4 py-2.5 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50"
               />
             </div>
-            
+
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-xs font-semibold text-foreground mb-1.5">Principal Amount</label>
                 <div className="relative flex items-center">
                   <span className="absolute left-3 text-muted-foreground font-bold">{currencySymbol}</span>
-                  <input 
-                    type="number" 
+                  <input
+                    type="number"
                     step="0.01"
                     required
                     placeholder="0.00"
@@ -264,8 +264,8 @@ const Debts = () => {
               </div>
               <div>
                 <label className="block text-xs font-semibold text-foreground mb-1.5">Date Issued</label>
-                <input 
-                  type="date" 
+                <input
+                  type="date"
                   required
                   value={date}
                   onChange={(e) => setDate(e.target.value)}
@@ -273,15 +273,15 @@ const Debts = () => {
                 />
               </div>
             </div>
-            
+
             <div className="bg-muted/20 p-4 rounded border border-border">
               <label className="flex items-center gap-1.5 text-xs font-bold text-primary uppercase tracking-wider mb-3">
                 <PiTrendUpDuotone size={14} /> Interest (Optional)
               </label>
               <div className="flex gap-3">
                 <div className="flex-1 relative flex items-center">
-                  <input 
-                    type="number" 
+                  <input
+                    type="number"
                     step="0.01"
                     placeholder="Rate"
                     value={interestRate}
@@ -291,7 +291,7 @@ const Debts = () => {
                   <span className="absolute right-4 text-muted-foreground font-bold">%</span>
                 </div>
                 <div className="flex-1">
-                  <select 
+                  <select
                     value={interestPeriod}
                     onChange={(e) => setInterestPeriod(e.target.value)}
                     className="w-full bg-background border border-border rounded px-4 py-2.5 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50"
@@ -303,8 +303,8 @@ const Debts = () => {
               </div>
             </div>
 
-            <Button 
-              type="submit" 
+            <Button
+              type="submit"
               isLoading={creatingDebt}
               className={`w-full flex items-center justify-center gap-2 py-4 rounded text-base font-bold text-white transition-all active:scale-[0.98] ${type === 'lent' ? 'bg-emerald-500 hover:bg-emerald-600 hover:shadow-emerald-500/25' : 'bg-destructive hover:bg-destructive/90 hover:shadow-destructive/25'}`}
             >
@@ -318,7 +318,7 @@ const Debts = () => {
           <h3 className="text-base font-bold text-foreground mb-1 flex items-center gap-2">
             <PiUsersDuotone size={18} className="text-primary" /> Active Records
           </h3>
-          
+
           {!debtsLoaded ? (
             <div className="bg-card border border-border rounded p-8 text-center text-muted-foreground">Loading...</div>
           ) : debts.length === 0 ? (
@@ -333,12 +333,12 @@ const Debts = () => {
             debts.map(d => {
               const isExpanded = expandedId === d.id;
               const { principal, paymentsTotal, remaining, totalInterestAccumulated, interestPerPeriod, interestLabel } = calculateDebtTotals(d);
-              
+
               return (
                 <div key={d.id} className={`bg-card border border-border rounded overflow-hidden transition-all ${d.is_settled ? 'opacity-60 grayscale' : 'hover:'}`}>
-                  
+
                   {/* Card Header (Clickable) */}
-                  <div 
+                  <div
                     onClick={() => handleExpand(d)}
                     className={`p-5 md:p-6 cursor-pointer flex flex-wrap gap-4 justify-between items-center transition-colors group ${isExpanded ? 'bg-muted/10' : 'hover:bg-muted/5'}`}
                   >
@@ -354,7 +354,7 @@ const Debts = () => {
                         Issued: {new Date(d.date).toLocaleDateString()}
                       </div>
                     </div>
-                    
+
                     <div className="flex items-center gap-6">
                       <div className="text-right">
                         <div className={`text-xl font-black ${d.type === 'lent' ? 'text-emerald-500' : 'text-destructive'}`}>
@@ -376,9 +376,9 @@ const Debts = () => {
                   {/* Expanded Content */}
                   {isExpanded && (
                     <div className="p-5 md:p-6 border-t border-border bg-background/50">
-                      
+
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                        
+
                         {/* Add Payment Form */}
                         {!d.is_settled && (
                           <div className="bg-card border border-border p-5 rounded">
@@ -435,15 +435,15 @@ const Debts = () => {
 
                           <div className="flex gap-3">
                             {!d.is_settled && (
-                              <Button 
-                                onClick={() => handleSettle(d)} 
+                              <Button
+                                onClick={() => handleSettle(d)}
                                 className="flex-1 flex items-center justify-center gap-2 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 border border-emerald-500/20 py-2.5 rounded text-sm font-bold transition-colors"
                               >
                                 <PiCheckCircle size={16} /> Settle Debt
                               </Button>
                             )}
-                            <Button 
-                              onClick={() => confirmDelete(d.id, 'debt')} 
+                            <Button
+                              onClick={() => confirmDelete(d.id, 'debt')}
                               className="flex-1 flex items-center justify-center gap-2 bg-destructive/10 hover:bg-destructive/20 text-destructive border border-destructive/20 py-2.5 rounded text-sm font-bold transition-colors"
                             >
                               <PiTrash size={16} /> Delete
@@ -481,8 +481,8 @@ const Debts = () => {
                                       {formatCurrency(p.amount)}
                                     </td>
                                     <td className="px-5 py-3 text-right">
-                                      <Button 
-                                        onClick={() => confirmDelete(p.id, 'payment')} 
+                                      <Button
+                                        onClick={() => confirmDelete(p.id, 'payment')}
                                         className="p-1.5 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded transition-colors"
                                       >
                                         <PiTrash size={14} />
@@ -503,8 +503,8 @@ const Debts = () => {
           )}
         </div>
       </div>
-      
-      <ConfirmDialog 
+
+      <ConfirmDialog
         isOpen={deleteConfirmInfo.isOpen}
         onClose={() => setDeleteConfirmInfo({ isOpen: false, id: null, type: null })}
         onConfirm={executeDelete}
