@@ -119,37 +119,18 @@ const Debts = () => {
     const principal = parseFloat(d.amount);
     const paymentsTotal = d.payments ? d.payments.reduce((sum, p) => sum + parseFloat(p.amount), 0) : 0;
 
-    let totalInterestAccumulated = 0;
-    let interestPerPeriod = 0;
-
+    // Fixed interest calculation
+    let fixedInterestAmount = 0;
     if (d.interest_rate) {
       const rate = parseFloat(d.interest_rate);
-      interestPerPeriod = principal * (rate / 100);
-
-      const startDate = new Date(d.date);
-      const todaysDate = new Date();
-
-      if (d.interest_period === 'monthly') {
-        const differenceYear = (todaysDate.getFullYear() - startDate.getFullYear()) * 12;
-        let differenceMonth = differenceYear + (todaysDate.getMonth() - startDate.getMonth());
-        if (differenceMonth < 0) differenceMonth = 0;
-        totalInterestAccumulated = differenceMonth * interestPerPeriod;
-      } else if (d.interest_period === 'yearly') {
-        let differenceYear = todaysDate.getFullYear() - startDate.getFullYear();
-        if (differenceYear < 0) differenceYear = 0;
-        totalInterestAccumulated = differenceYear * interestPerPeriod;
-      }
+      fixedInterestAmount = principal * (rate / 100);
     }
-
-    const totalOwed = principal + totalInterestAccumulated;
-    const remaining = totalOwed - paymentsTotal;
 
     return {
       principal,
       paymentsTotal,
-      remaining,
-      totalInterestAccumulated,
-      interestPerPeriod,
+      remaining: principal - paymentsTotal,
+      fixedInterestAmount,
       interestLabel: d.interest_period === 'monthly' ? 'per month' : 'per year'
     };
   };
@@ -159,8 +140,8 @@ const Debts = () => {
       setExpandedId(null);
     } else {
       setExpandedId(d.id);
-      const { interestPerPeriod } = calculateDebtTotals(d);
-      setPaymentAmount(interestPerPeriod > 0 ? interestPerPeriod.toString() : '');
+      const { fixedInterestAmount } = calculateDebtTotals(d);
+      setPaymentAmount(fixedInterestAmount > 0 ? fixedInterestAmount.toString() : '');
       setPaymentDate(new Date().toISOString().split('T')[0]);
       setPaymentNote('');
     }
@@ -211,106 +192,109 @@ const Debts = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
 
         {/* Create Form */}
-        <h3 className="text-base font-bold text-foreground mb-5 flex items-center gap-2">
-          <PiPlus size={18} className="text-primary" /> New Record
-        </h3>
-        <div className="bg-card border border-border rounded p-6  lg:sticky lg:top-6">
-          <form onSubmit={handleCreateDebt} className="space-y-4">
+        <div className='lg:col-span-2 flex flex-col gap-4'>
 
-            <div className="flex bg-muted/40 p-1.5 rounded border border-border/50">
-              <Button
-                type="button"
-                onClick={() => setType('lent')}
-                className={`flex-1 py-2 text-sm font-bold rounded transition-all ${type === 'lent' ? 'bg-emerald-500 text-white ' : 'text-muted-foreground hover:bg-muted/80'}`}
-              >
-                I Lent Money
-              </Button>
-              <Button
-                type="button"
-                onClick={() => setType('borrowed')}
-                className={`flex-1 py-2 text-sm font-bold rounded transition-all ${type === 'borrowed' ? 'bg-destructive text-white ' : 'text-muted-foreground hover:bg-muted/80'}`}
-              >
-                I Borrowed
-              </Button>
-            </div>
+          <h3 className="text-base font-bold text-foreground mb-5 flex items-center gap-2">
+            <PiPlus size={18} className="text-primary" /> New Record
+          </h3>
+          <div className="bg-card border border-border rounded p-6  lg:sticky lg:top-6">
+            <form onSubmit={handleCreateDebt} className="space-y-4">
 
-            <div>
-              <label className="block text-xs font-semibold text-foreground mb-1.5">Person's Name</label>
-              <input
-                type="text"
-                required
-                placeholder="e.g. John Doe"
-                value={personName}
-                onChange={(e) => setPersonName(e.target.value)}
-                className="w-full bg-background border border-border rounded px-4 py-2.5 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50"
-              />
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-xs font-semibold text-foreground mb-1.5">Principal Amount</label>
-                <div className="relative flex items-center">
-                  <span className="absolute left-3 text-muted-foreground font-bold">{currencySymbol}</span>
-                  <input
-                    type="number"
-                    step="0.01"
-                    required
-                    placeholder="0.00"
-                    value={amount}
-                    onChange={(e) => setAmount(e.target.value)}
-                    className="w-full bg-background border border-border rounded pl-8 pr-4 py-2.5 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50"
-                  />
-                </div>
+              <div className="flex bg-muted/40 p-1.5 rounded border border-border/50">
+                <Button
+                  type="button"
+                  onClick={() => setType('lent')}
+                  className={`flex-1 py-2 text-sm font-bold rounded transition-all ${type === 'lent' ? 'bg-emerald-500 text-white ' : 'text-muted-foreground hover:bg-muted/80'}`}
+                >
+                  I Lent Money
+                </Button>
+                <Button
+                  type="button"
+                  onClick={() => setType('borrowed')}
+                  className={`flex-1 py-2 text-sm font-bold rounded transition-all ${type === 'borrowed' ? 'bg-destructive text-white ' : 'text-muted-foreground hover:bg-muted/80'}`}
+                >
+                  I Borrowed
+                </Button>
               </div>
+
               <div>
-                <label className="block text-xs font-semibold text-foreground mb-1.5">Date Issued</label>
+                <label className="block text-xs font-semibold text-foreground mb-1.5">Person's Name</label>
                 <input
-                  type="date"
+                  type="text"
                   required
-                  value={date}
-                  onChange={(e) => setDate(e.target.value)}
+                  placeholder="e.g. John Doe"
+                  value={personName}
+                  onChange={(e) => setPersonName(e.target.value)}
                   className="w-full bg-background border border-border rounded px-4 py-2.5 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50"
                 />
               </div>
-            </div>
 
-            <div className="bg-muted/20 p-4 rounded border border-border">
-              <label className="flex items-center gap-1.5 text-xs font-bold text-primary uppercase tracking-wider mb-3">
-                <PiTrendUpDuotone size={14} /> Interest (Optional)
-              </label>
-              <div className="flex gap-3">
-                <div className="flex-1 relative flex items-center">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-semibold text-foreground mb-1.5">Principal Amount</label>
+                  <div className="relative flex items-center">
+                    <span className="absolute left-3 text-muted-foreground font-bold">{currencySymbol}</span>
+                    <input
+                      type="number"
+                      step="0.01"
+                      required
+                      placeholder="0.00"
+                      value={amount}
+                      onChange={(e) => setAmount(e.target.value)}
+                      className="w-full bg-background border border-border rounded pl-8 pr-4 py-2.5 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-foreground mb-1.5">Date Issued</label>
                   <input
-                    type="number"
-                    step="0.01"
-                    placeholder="Rate"
-                    value={interestRate}
-                    onChange={(e) => setInterestRate(e.target.value)}
+                    type="date"
+                    required
+                    value={date}
+                    onChange={(e) => setDate(e.target.value)}
                     className="w-full bg-background border border-border rounded px-4 py-2.5 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50"
                   />
-                  <span className="absolute right-4 text-muted-foreground font-bold">%</span>
-                </div>
-                <div className="flex-1">
-                  <select
-                    value={interestPeriod}
-                    onChange={(e) => setInterestPeriod(e.target.value)}
-                    className="w-full bg-background border border-border rounded px-4 py-2.5 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50"
-                  >
-                    <option value="monthly">Per Month</option>
-                    <option value="yearly">Per Year</option>
-                  </select>
                 </div>
               </div>
-            </div>
 
-            <Button
-              type="submit"
-              isLoading={creatingDebt}
-              className={`w-full flex items-center justify-center gap-2 py-4 rounded text-base font-bold text-white transition-all active:scale-[0.98] ${type === 'lent' ? 'bg-emerald-500 hover:bg-emerald-600 hover:shadow-emerald-500/25' : 'bg-destructive hover:bg-destructive/90 hover:shadow-destructive/25'}`}
-            >
-              Save Record
-            </Button>
-          </form>
+              <div className="bg-muted/20 p-4 rounded border border-border">
+                <label className="flex items-center gap-1.5 text-xs font-bold text-primary uppercase tracking-wider mb-3">
+                  <PiTrendUpDuotone size={14} /> Interest (Optional)
+                </label>
+                <div className="flex gap-3">
+                  <div className="flex-1 relative flex items-center">
+                    <input
+                      type="number"
+                      step="0.01"
+                      placeholder="Rate"
+                      value={interestRate}
+                      onChange={(e) => setInterestRate(e.target.value)}
+                      className="w-full bg-background border border-border rounded px-4 py-2.5 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50"
+                    />
+                    <span className="absolute right-4 text-muted-foreground font-bold">%</span>
+                  </div>
+                  <div className="flex-1">
+                    <select
+                      value={interestPeriod}
+                      onChange={(e) => setInterestPeriod(e.target.value)}
+                      className="w-full bg-background border border-border rounded px-4 py-2.5 text-sm text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/50"
+                    >
+                      <option value="monthly">Per Month</option>
+                      <option value="yearly">Per Year</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <Button
+                type="submit"
+                isLoading={creatingDebt}
+                className={`w-full flex items-center justify-center gap-2 py-4 rounded text-base font-bold text-white transition-all active:scale-[0.98] ${type === 'lent' ? 'bg-emerald-500 hover:bg-emerald-600 hover:shadow-emerald-500/25' : 'bg-destructive hover:bg-destructive/90 hover:shadow-destructive/25'}`}
+              >
+                Save Record
+              </Button>
+            </form>
+          </div>
         </div>
 
         {/* Debts Accordion List */}
@@ -332,7 +316,7 @@ const Debts = () => {
           ) : (
             debts.map(d => {
               const isExpanded = expandedId === d.id;
-              const { principal, paymentsTotal, remaining, totalInterestAccumulated, interestPerPeriod, interestLabel } = calculateDebtTotals(d);
+              const { principal, paymentsTotal, remaining, fixedInterestAmount, interestLabel } = calculateDebtTotals(d);
 
               return (
                 <div key={d.id} className={`bg-card border border-border rounded overflow-hidden transition-all ${d.is_settled ? 'opacity-60 grayscale' : 'hover:'}`}>
@@ -363,7 +347,7 @@ const Debts = () => {
                         <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider mt-0.5">Remaining</div>
                         {d.interest_rate && (
                           <div className="text-[10px] font-bold text-primary mt-1">
-                            {d.interest_rate}% ({formatCurrency(interestPerPeriod)} {interestLabel})
+                            {d.interest_rate}% ({formatCurrency(fixedInterestAmount)} {interestLabel})
                           </div>
                         )}
                       </div>
@@ -416,15 +400,9 @@ const Debts = () => {
                                 <span className="text-muted-foreground">Principal:</span>
                                 <span className="text-foreground">{formatCurrency(principal)}</span>
                               </div>
-                              {totalInterestAccumulated > 0 && (
-                                <div className="flex justify-between text-sm font-medium">
-                                  <span className="text-muted-foreground">Accumulated Interest:</span>
-                                  <span className="text-amber-500 font-bold">+{formatCurrency(totalInterestAccumulated)}</span>
-                                </div>
-                              )}
                               <div className="flex justify-between text-sm font-medium">
                                 <span className="text-muted-foreground">Total Paid:</span>
-                                <span className="text-primary font-bold">-{formatCurrency(paymentsTotal)}</span>
+                                <span className="text-primary font-bold">{formatCurrency(paymentsTotal)}</span>
                               </div>
                               <div className="flex justify-between text-base font-black pt-3 border-t border-border/50">
                                 <span className="text-foreground">Balance:</span>
