@@ -194,7 +194,7 @@ const Debts = () => {
         {/* Create Form */}
         <div className='lg:col-span-1 flex flex-col gap-4'>
 
-          <h3 className="text-base font-bold text-foreground mb-5 flex items-center gap-2">
+          <h3 className="text-base font-bold text-foreground mb-1 flex items-center gap-2">
             <PiPlus size={18} className="text-primary" /> New Record
           </h3>
           <div className="bg-card border border-border rounded p-6  lg:sticky lg:top-6">
